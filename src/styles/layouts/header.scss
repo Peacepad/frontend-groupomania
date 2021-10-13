@@ -10,3 +10,18 @@ header {
         height: 80px;
     }
 }
+
+.header-user {
+    & ul {
+        padding-left: 0;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 200px;
+        justify-content: space-between;
+    }
+    & li {
+        list-style: none;
+
+    }
+}

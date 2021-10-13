@@ -2,6 +2,7 @@
   margin: auto;
   background-color: white;
   width: 60%;
+  border-radius: 6px;
 }
 
 .create-post {
@@ -9,8 +10,16 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  background-color: grey;
+  background-color: white;
   height: 175px;
+  border-radius: 6px;
+  margin-bottom: 50px;
+  & img {
+    height: 100px;
+    max-width: 100px;
+    border-radius: 6px;
+    object-fit: fill;
+  }
 }
 
 .create-post__text {
@@ -21,4 +30,127 @@
   padding: 5px;
   resize: none;
   font-size: 1.1em;
+}
+
+.create-post__btn-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 50%;
+}
+
+.create-post__btn-img {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  & input[type="file"] {
+    left: 0;
+    top: 0;
+    opacity: 0;
+    position: absolute;
+    font-size: 90px;
+    height: 40px;
+    width: 165px;
+  }
+  &:hover .create-post__btn {
+    background-color: darken($blue-link, 10);
+  }
+}
+
+.create-post__btn {
+  background-color: $blue-link;
+  color: white;
+  border-radius: 6px;
+  border: none;
+  font-size: 1.1em;
+  height: 40px;
+  width: 165px;
+  &:hover {
+    background-color: darken($blue-link, 10);
+  }
+}
+
+.post-list {
+  margin: auto;
+  width: 60%;
+  padding-left: 0;
+}
+
+.post-list li {
+  list-style-type: none;
+  margin-bottom: 20px;
+}
+
+.post-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  background-color: white;
+  border-radius: 6px;
+  position: relative;
+  & img {
+    max-width: 500px;
+    max-height: 600px;
+  }
+}
+
+.post-body {
+  padding: 40px;
+}
+
+.post-interact {
+  width: 100%;
+
+  padding:15px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.post-interact__like {
+  border-radius: 6px;
+  width: 49%;
+  display:flex;
+   align-content: center;
+  justify-content: center;
+  background-color: lighten($blue-link, 10);
+}
+
+.post-interact__comment {
+  border-radius: 6px;
+  width: 49%;
+  display:flex;
+   align-content: center;
+  justify-content: center;
+  background-color: lighten($blue-link, 10);
+}
+
+.post-edit {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+}
+
+.ub-btrr_4px, .ub-bltrr_4px, .ub-btlr_4px, .ub-bblr_4px {
+  border-top-right-radius: 6px;
+}
+
+
+.post-user {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+ }
+
+.post-review {
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  &__likes, &__comment {
+    width: 49%;
+    color: gray;
+    display: flex;
+    justify-content: center;
+  }
 }

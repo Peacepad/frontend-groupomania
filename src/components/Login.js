@@ -56,7 +56,7 @@ const Login = () => {
         <input
           type="email"
           id="login__email"
-          defaultValue="test@gmail.com"
+          defaultValue="admin@email.com"
           placeholder="Adresse Email"
           name="email"
           {...register("email", {
@@ -68,7 +68,7 @@ const Login = () => {
         )}
         <input
           type="password"
-          defaultValue="test884P"
+          defaultValue="Peacedu07"
           id="login__password"
           placeholder="Mot de passe"
           name="password"

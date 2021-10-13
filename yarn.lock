@@ -4896,10 +4896,10 @@
   dependencies:
     "original" "^1.0.0"
 
-"evergreen-ui@^6.5.0":
-  "integrity" "sha512-f3EGFIaeeTqe0fsRjMprY97XYMKlKiRCpo7qp/7CYyukXxac/LNCeFpraAH7/yJkJdlKB6M4o6eSTammB7jcWg=="
-  "resolved" "https://registry.npmjs.org/evergreen-ui/-/evergreen-ui-6.5.0.tgz"
-  "version" "6.5.0"
+"evergreen-ui@^6.5.1":
+  "integrity" "sha512-m0paKfwzGRTpmv7ThKjsoMeCYskLyXpBit5/IKdi3TKgqGxd9/n6WTuIjVsQiMybra5Df+RPCt57GYEx3a6CrA=="
+  "resolved" "https://registry.npmjs.org/evergreen-ui/-/evergreen-ui-6.5.1.tgz"
+  "version" "6.5.1"
   dependencies:
     "@babel/runtime" "^7.1.2"
     "@segment/react-tiny-virtual-list" "^2.2.1"
