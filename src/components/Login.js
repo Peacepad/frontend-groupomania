@@ -30,16 +30,16 @@ const Login = () => {
     })
       .then((response) => {
         if (response.status === 401) {
-          throw new Error('ça marche pas')
+          throw new Error('Erreur de connexion')
         }
-        else{
-          history.push('/')
-        }
+        
+          
+        
         return response.json();
       })
       .then((dataFromServer) => {
-        localStorage.setItem("userId", dataFromServer.token);
-
+        localStorage.setItem("token", dataFromServer.token);
+        history.push('/')
       })
       .catch(() => {
         sayResponse();
@@ -56,7 +56,7 @@ const Login = () => {
         <input
           type="email"
           id="login__email"
-          defaultValue="admin@email.com"
+          defaultValue="clement@email.com"
           placeholder="Adresse Email"
           name="email"
           {...register("email", {
@@ -68,7 +68,7 @@ const Login = () => {
         )}
         <input
           type="password"
-          defaultValue="Peacedu07"
+          defaultValue="Cobraphenix26"
           id="login__password"
           placeholder="Mot de passe"
           name="password"

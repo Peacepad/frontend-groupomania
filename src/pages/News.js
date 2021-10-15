@@ -4,7 +4,10 @@ import Posts from "../components/Posts";
 
 import Createpost from "../components/Createpost";
 
+
+
 const News = () => {
+  
   
 
   return (

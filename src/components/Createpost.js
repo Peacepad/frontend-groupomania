@@ -31,10 +31,7 @@ const Createpost = () => {
    };
    // ------------
 
-  const {
-    register,
-    handleSubmit,
-  } = useForm();
+  const {register, handleSubmit, reset} = useForm();
 
   const onSubmit = async (data) => {
 
@@ -59,13 +56,16 @@ axios({
  },
 })
   .then(function (response) {
-    //handle success
+    
     console.log(response);
   })
   .catch(function (response) {
     //handle error
     console.log(response);
   });
+
+  reset();
+  setPreview(undefined);
 }
 
  
