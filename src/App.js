@@ -42,6 +42,7 @@ function App() {
           <Route path="/login" exact component={Home} />
           <Route path="/signup" exact component={Signup} />
           <Route path="/" component={News} />
+          <Route path="/Profil?"
         </Switch>
       </BrowserRouter>
     </UidContext.Provider>

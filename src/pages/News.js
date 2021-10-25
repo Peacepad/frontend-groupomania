@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
-import Posts from "../components/Posts";
+import Posts from "../components/Post/Posts";
 
-import Createpost from "../components/Createpost";
+import Createpost from "../components/Post/Createpost";
 
 
 

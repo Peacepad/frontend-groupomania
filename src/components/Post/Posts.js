@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faThumbsUp,
   faComment,
   faEllipsisH,
 } from "@fortawesome/free-solid-svg-icons";
@@ -15,30 +14,53 @@ import {
   TrashIcon,
   Button,
 } from "evergreen-ui";
+import Like from "./Like/Like";
+import LikeButton from "./Like/LikeButton";
 
 const Posts = () => {
   const [data, setData] = useState([]);
   const [sortedData, setSortedData] = useState([]);
   const [playOnce, setPlayOnce] = useState(true);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
-    if (playOnce) {
-      axios.get("http://localhost:8000/api/post").then((res) => {
-        setData(res.data);
-        setPlayOnce(false);
-      });
-
-      const sortedPost = () => {
-        const postObj = Object.keys(data).map((i) => data[i]);
-        const sortedArray = postObj.sort((a, b) => {
-          return b.post_id - a.post_id;
+    function getData() {
+      if (playOnce) {
+        axios.get("http://localhost:8000/api/post").then((res) => {
+          setData(res.data);
+          setPlayOnce(false);
         });
-        setSortedData(sortedArray);
-        console.log(sortedArray);
-      };
-      sortedPost();
+
+        const sortedPost = () => {
+          const postObj = Object.keys(data).map((i) => data[i]);
+          const sortedArray = postObj.sort((a, b) => {
+            return b.post_id - a.post_id;
+          });
+          setSortedData(sortedArray);
+        };
+        sortedPost();
+      }
     }
+    getData();
+
+    
+
   }, [data, playOnce]);
+
+  function deletePost(post_id) {
+    axios({
+      method: "DELETE",
+      url: `http://localhost:8000/api/post/${post_id}`,
+      headers: {
+        authorization: "Bearer " + token,
+      },
+    });
+    setPlayOnce(true);
+  }
+
+  
+
+ 
 
   return (
     <div className="Posts">
@@ -59,7 +81,11 @@ const Posts = () => {
                       </Menu.Group>
                       <Menu.Divider />
                       <Menu.Group>
-                        <Menu.Item disabled icon={TrashIcon} intent="danger">
+                        <Menu.Item
+                          icon={TrashIcon}
+                          intent="danger"
+                          onClick={() => deletePost(post.post_id)}
+                        >
                           Supprimer...
                         </Menu.Item>
                       </Menu.Group>
@@ -85,7 +111,7 @@ const Posts = () => {
               <div className="post-review">
                 <div className="post-review__likes">
                   <p>
-                    0 <FontAwesomeIcon icon={faThumbsUp} />
+                  <Like post={post}/>
                   </p>
                 </div>
                 <div className="post-review__comment">
@@ -96,10 +122,11 @@ const Posts = () => {
               </div>
 
               <div className="post-interact">
-                <div className="post-interact__like">
+                <div
+                  className="post-interact__like"
+                   >
                   <p>
-                    <FontAwesomeIcon icon={faThumbsUp} className="post-like" />{" "}
-                    J'aime
+                   <LikeButton post={post}/>
                   </p>
                 </div>
 

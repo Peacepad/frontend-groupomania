@@ -1,9 +1,13 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import axios from "axios";
 
 const Createpost = () => {
+
+  const postData = useSelector((state) => state.postReducer);
+
 
    // -------------- Afficher l'image choisie
    const [selectedFile, setSelectedFile] = useState();
@@ -35,12 +39,12 @@ const Createpost = () => {
 
   const onSubmit = async (data) => {
 
-    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
 
     let formData = new FormData();    //formdata object
 
 
-    formData.append('userId', userId);
+    formData.append('userId', token);
     formData.append('text', data.text);
     formData.append('image', selectedFile);
 
@@ -52,7 +56,7 @@ axios({
   url: "http://localhost:8000/api/post/create",
   data: formData,
     headers: { "Content-Type": "multipart/form-data",
-  'authorization': 'Bearer ' + userId,
+  'authorization': 'Bearer ' + token,
  },
 })
   .then(function (response) {
