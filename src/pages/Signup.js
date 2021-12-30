@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "../components/Header";
+import Header from "../components/Header/Header";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { Link, useHistory } from "react-router-dom";

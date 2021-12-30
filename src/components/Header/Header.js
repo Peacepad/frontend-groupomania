@@ -1,14 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
 import Navigation from "./Navigation";
-
 import { Avatar } from "evergreen-ui";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-
 import MoreHeader from "./MoreHeader";
 
 const Header = () => {
-
   const token = localStorage.getItem("token");
   const userData = useSelector((state) => state.userReducer);
 
@@ -25,43 +22,31 @@ const Header = () => {
 
   useEffect(() => {
     verifyToken();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userData]);
 
   let logDiv;
 
-// Afficher le menu
+  // Afficher le menu
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Click en dehors du menu
-  const ref = useRef()
+  const ref = useRef();
 
   useEffect(() => {
-
-    const checkIfClickedOutside = e => {
-
+    const checkIfClickedOutside = (e) => {
       if (isMenuOpen && ref.current && !ref.current.contains(e.target)) {
-
-        setIsMenuOpen(false)
-
+        setIsMenuOpen(false);
       }
+    };
 
-    }
-
-    document.addEventListener("mousedown", checkIfClickedOutside)
-
+    document.addEventListener("mousedown", checkIfClickedOutside);
 
     return () => {
-
-
-
-      document.removeEventListener("mousedown", checkIfClickedOutside)
-
-    }
-
-  }, [isMenuOpen])
-
-
-
+      document.removeEventListener("mousedown", checkIfClickedOutside);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMenuOpen]);
 
   //Affichage différent en fonction de la connexion
   if (isLogged) {
@@ -70,16 +55,16 @@ const Header = () => {
         <ul>
           <li className="header-avatar__container" ref={ref}>
             {userData[0] && (
-              <Avatar className="header-avatar"
+              <Avatar
+                className="header-avatar"
                 name={userData[0].firstname + " " + userData[0].lastname}
-                size={60} onClick={() => setIsMenuOpen((oldState) => !oldState)}
+                size={60}
+                onClick={() => setIsMenuOpen((oldState) => !oldState)}
               />
             )}
             {isMenuOpen && <MoreHeader />}
           </li>
-          <li>
-            
-          </li>
+          <li></li>
         </ul>
       </div>
     );
@@ -87,12 +72,11 @@ const Header = () => {
     logDiv = <Navigation />;
   }
 
-
-
   return (
     <header>
-      <img src="./img/logo.png" alt="logo groupomania" />
-
+      <Link to="/">
+        <img src="./img/logo.png" alt="logo groupomania" />
+      </Link>
       {logDiv}
     </header>
   );

@@ -1,11 +1,10 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import { Link, useHistory} from "react-router-dom";
-
+import { Link, useHistory } from "react-router-dom";
 
 const Login = () => {
 
-  let history = useHistory();
+  const history = useHistory();
   //Erreurs du formulaire
   const {
     register,
@@ -14,7 +13,7 @@ const Login = () => {
   } = useForm();
 
   //Afficher un message d'erreur lorsque le serveur renvoi 401
-  const [responseServer, setResponseServer] = useState('');
+  const [responseServer, setResponseServer] = useState("");
   const sayResponse = () => {
     setResponseServer(`Mot de ou passe ou Utilisateur incorrect`);
   };
@@ -30,28 +29,25 @@ const Login = () => {
     })
       .then((response) => {
         if (response.status === 401) {
-          throw new Error('Erreur de connexion')
+          throw new Error("Erreur de connexion");
         }
-        
-          
-        
         return response.json();
       })
       .then((dataFromServer) => {
         localStorage.setItem("token", dataFromServer.token);
-        history.push('/')
+        history.push("/");
+
       })
       .catch(() => {
         sayResponse();
       });
   };
 
-
-
-
   return (
     <main className="auth">
-      <div className="logo-globe"><img src="./img/icon.png" alt="logo-globe" /></div>
+      <div className="logo-globe">
+        <img src="./img/icon.png" alt="logo-globe" />
+      </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <input
           type="email"
@@ -88,8 +84,12 @@ const Login = () => {
         <input type="submit" id="login__submit"></input>
       </form>
       <div className="more__auth">
-        <p>Nouveau sur Groupomania? <Link to ="/signup" className="bluelink">Créer un compte.</Link></p>
-        
+        <p>
+          Nouveau sur Groupomania?{" "}
+          <Link to="/signup" className="bluelink">
+            Créer un compte.
+          </Link>
+        </p>
       </div>
     </main>
   );
