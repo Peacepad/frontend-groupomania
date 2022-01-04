@@ -51,7 +51,10 @@ const Posts = () => {
         authorization: "Bearer " + token,
       },
     })
-      .then(setPlayOnce(!playOnce))
+      .then(() => {
+        setPlayOnce(!playOnce);
+        setUpdateElement(!updateElement)
+      })
       .catch(console.log("Le post n'a pas pu être supprimé"));
   }
 
@@ -114,6 +117,8 @@ const Posts = () => {
     reset();
     setPreview(undefined);
     setPlayOnce(!playOnce);
+    setUpdateElement(!updateElement);
+    setSelectedFile(undefined);
   };
 
   // ---------------- UpdatePost
