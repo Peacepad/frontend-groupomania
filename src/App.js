@@ -11,6 +11,7 @@ import Profil from "./pages/Profil";
 
 
 function App() {
+
   const [uid, setUid] = useState(null);
   const dispatch = useDispatch();
 
@@ -27,6 +28,7 @@ function App() {
       })
         .then((res) => {
           setUid(res.data);
+          
         })
         .catch((err) => console.log("no token"));
     };
@@ -38,6 +40,7 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uid]);
 
+  
   return (
     
     <UidContext.Provider value={uid}>

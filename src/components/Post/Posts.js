@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faComment, faEllipsisH } from "@fortawesome/free-solid-svg-icons";
+import { faComment, faEllipsisH, faWindowClose } from "@fortawesome/free-solid-svg-icons";
 import {
   Avatar,
   Popover,
@@ -14,6 +14,7 @@ import {
 import Like from "./Like/Like";
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
+import ReactDOM from 'react-dom';
 
 const Posts = () => {
   const [data, setData] = useState([]);
@@ -53,7 +54,7 @@ const Posts = () => {
     })
       .then(() => {
         setPlayOnce(!playOnce);
-        setUpdateElement(!updateElement)
+        setUpdateElement(!updateElement);
       })
       .catch(console.log("Le post n'a pas pu être supprimé"));
   }
@@ -126,20 +127,73 @@ const Posts = () => {
 
   let postBodyDiv;
 
-  const updatePost = (post) => {
+  // ------------- EditPost ----------------------------
+const editPost = (post) => {
+
+const postId = post.post_id
+
+// fermer l'Edition --------
+function closeEdit() {
+  ReactDOM.hydrate(closeEditPost, document.getElementById(`post-card__edit${postId}`))
+}
+
+// Ouvrir l'Edition --------
+function openEdit() {
+  ReactDOM.hydrate(editPost, document.getElementById(`post-card__edit${postId}`))
+}
+
+// Envoyer la mise à jour
+const onEdit = async () => {
+  const token = localStorage.getItem("token");
+
+  let editData = new FormData(); //formdata object
+
+  editData.append("userId", token);
+  editData.append("edit-text", data.text);
+  editData.append("image", selectedFile);
+
+  axios({
+    method: "put",
+    url: `http://localhost:8000/api/post/${postId}`,
+    data: editData,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      authorization: "Bearer " + token,
+    },
+  })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (response) {
+      //handle error
+      console.log(response);
+    });
+
+    setPlayOnce(!playOnce);
     setUpdateElement(!updateElement);
-  }
+    closeEdit();
+};
 
 
-    
-  
+const editPostDom = (<div className="edit-post__container">
+  <div className="edit-post__close" onClick={() => closeEdit()}><FontAwesomeIcon icon={faWindowClose} /> </div>
+  <form className="edit-post__form" onSubmit={handleSubmit(onEdit)}>
+    <input className="edit-post__body" placeholder={post.body} {...register("edit-text")}></input>
+    <input
+                type="file"
+                {...register("edit-image")}
+              />
+              <input type="submit" className="edit-post__btn"></input>
+  </form>
+</div>)
+
+const editPost = React.createElement('div', {postId}, editPostDom);
+const closeEditPost = React.createElement('div', {postId}, null);
+
+openEdit();
 
 
-
-
-
-  
-
+}
 
   return (
     <React.Fragment>
@@ -176,15 +230,24 @@ const Posts = () => {
           {sortedData.map((post) => (
             <li key={post.post_id} id={post.post_id}>
               <div className="post-card">
+
+              <div id={`post-card__edit${post.post_id}`}></div>
+
+
+                
+
+
                 {userData[0].user_id == post.user_id && (
                   <div className="post-edit">
                     <Popover
                       className="post-edit"
-                      position={Position.BOTTOM_LEFT}
-                      content={
+                      position={Position.BOTTOM_RIGHT}
+                      content={({ close }) => (
                         <Menu>
-                          
                           <Menu.Group>
+                            <Menu.Item icon={EditIcon} intent="success" onClick={() => {editPost(post); close()}}>
+                              Éditer...
+                            </Menu.Item>
                             <Menu.Item
                               icon={TrashIcon}
                               intent="danger"
@@ -194,7 +257,7 @@ const Posts = () => {
                             </Menu.Item>
                           </Menu.Group>
                         </Menu>
-                      }
+                      )}
                     >
                       <Button className="post-edit__btn">
                         <FontAwesomeIcon icon={faEllipsisH} />
@@ -225,15 +288,15 @@ const Posts = () => {
 
                   <div className="post-comment">
                     <div className="post-comment__display">
-                      <p>
-                        0 <FontAwesomeIcon icon={faComment} />
-                      </p>
+                    <FontAwesomeIcon icon={faComment} /> 
+                        0 
+                      
                     </div>
 
-                    <div className="post-interact__comment">
-                      <p>
+                    <div className="post-comment__btn">
+                      
                         <FontAwesomeIcon icon={faComment} /> Commenter
-                      </p>
+                      
                     </div>
                   </div>
                 </div>

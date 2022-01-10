@@ -53,12 +53,12 @@
     width: 165px;
   }
   &:hover .create-post__btn {
-    background-color: darken($blue-link, 10);
+    background-color: $blue-link;
   }
 }
 
 .create-post__btn {
-  background-color: $blue-link;
+  background-color: darken($blue-link, 10);
   color: white;
   border-radius: 6px;
   border: none;
@@ -66,19 +66,29 @@
   height: 40px;
   width: 165px;
   &:hover {
-    background-color: darken($blue-link, 10);
+    background-color: $blue-link;
   }
 }
 
 .post-list {
   margin: auto;
-  width: 60%;
+  width: 100%;
   padding-left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .post-list li {
   list-style-type: none;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
+  width: 60%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
 }
 
 .post-card {
@@ -89,6 +99,7 @@
   background-color: white;
   border-radius: 6px;
   position: relative;
+  width: 100%;
   & img {
     max-width: 500px;
     max-height: 600px;
@@ -105,6 +116,7 @@
   display: flex;
   justify-content: space-between;
   position: relative;
+  height:100px;
   &::before {
     left:50%;
     content: "";
@@ -129,7 +141,7 @@
   }
 }
 
-.post-like__btn {
+.post-like__btn, .post-comment__btn {
   border-radius: 6px;
   display: flex;
   align-content: center;
@@ -183,5 +195,51 @@
     color: gray;
     display: flex;
     justify-content: center;
+  }
+}
+
+.edit-post__container {
+  display:block;
+  position: absolute;
+  left:0;
+  z-index:1;
+  background-color: rgba(68,55,57,0.9);
+  width: 100%;
+  height: 100%;
+  padding:10px;
+  border-radius: 3px;
+  & form {
+    width: 80%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 80%;
+    justify-content: space-between;
+  }
+}
+
+.edit-post__edit {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  
+}
+
+.edit-post__body {
+  resize: none;
+  width: 70%;
+  height:100px;
+  border-radius: 3px;
+  border: none;
+}
+
+.edit-post__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  & svg {
+    color: white;
   }
 }

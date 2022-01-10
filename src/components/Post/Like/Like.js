@@ -5,7 +5,6 @@ import axios from "axios";
 
 const Like = ({ post }) => {
   const [likeNumber, setLikeNumber] = useState();
-  const [data, setData] = useState([]);
   const [playOnce, setPlayOnce] = useState(true);
   const [likePut, setLikePut] = useState(0);
 
@@ -45,12 +44,12 @@ const Like = ({ post }) => {
 
   return (
     <div className="post-like">
-      <span className="post-like__display">
+      <div className="post-like__display">
         <FontAwesomeIcon icon={faThumbsUp} /> {likeNumber}
-      </span>
-      <span className="post-like__btn" onClick={() => like(post.post_id)}>
+      </div>
+      <div className="post-like__btn" onClick={() => like(post.post_id)}>
         <FontAwesomeIcon icon={faThumbsUp} className="post-like" /> J'aime
-      </span>
+      </div>
     </div>
   );
 };
