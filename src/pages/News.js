@@ -1,21 +1,22 @@
 import Header from "../components/Header/Header";
 import Posts from "../components/Post/Posts";
+import React, { Component } from 'react';
 
 
 
 
-
-const News = () => {
+class News extends Component {
   
+  render() {
+    return (
+      <div>
+        <Header />
+        <Posts/>
+      </div>
+    );
+  };
+  }
+
   
-
-  return (
-    <div>
-      <Header />
-
-      <Posts/>
-    </div>
-  );
-};
 
 export default News;

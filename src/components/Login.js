@@ -20,6 +20,7 @@ const Login = () => {
 
   //Envoyer données formulaires
   const onSubmit = async (loginData) => {
+
     fetch("http://localhost:8000/api/user/login", {
       method: "post",
       headers: {
@@ -35,12 +36,17 @@ const Login = () => {
       })
       .then((dataFromServer) => {
         localStorage.setItem("token", dataFromServer.token);
+        localStorage.setItem("userData", dataFromServer.userData)
         history.push("/");
 
       })
       .catch(() => {
         sayResponse();
       });
+
+
+
+      
   };
 
   return (

@@ -6,7 +6,7 @@ import ProfilImage from './ProfilImage';
 
 const ProfilView = () => {
 
-    const userData = useSelector((state) => state.userReducer);
+    const userData = JSON.parse(localStorage.getItem("userData"))
     const { register, handleSubmit, reset } = useForm();
 
     return (
@@ -14,21 +14,20 @@ const ProfilView = () => {
             <ProfilImage />
             <div className='profil-info'>
                 <form className='profil-edit'>
-                    <label>Prénom
-                <input
-                type="text" placeholder={userData[0].firstname}
+                    <label>Prénom : <input
+                type="text" defaultValue={userData.userFirstname}
                 {...register("firstname")}
                 
               />
               </label>
-              <label>Nom <input
-                type="text" placeholder={userData[0].lastname}
+              <label>Nom : <input
+                type="text" defaultValue={userData.userLastname}
                 {...register("lastname")}
                 
               /></label>
 
-              <label>Email <input
-                type="text" placeholder={userData[0].email}
+              <label>Email : <input
+                type="text" defaultValue={userData.userEmail}
                 {...register("email")}
                 
               /></label>

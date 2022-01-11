@@ -5,6 +5,7 @@ const MoreHeader = () => {
   // Déconnection
   const signOut = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("userData");
   };
 
   return (

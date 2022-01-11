@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useSelector } from "react-redux";
+
 import { Avatar } from "evergreen-ui";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 
 const ProfilImage = () => {
   const token = localStorage.getItem("token");
-  const userData = useSelector((state) => state.userReducer);
+  const userData = JSON.parse(localStorage.getItem('userData'));
 
   const { register, handleSubmit, reset } = useForm();
   const [selectedFile, setSelectedFile] = useState();
@@ -41,7 +41,7 @@ const ProfilImage = () => {
 
     axios({
         method: "PUT",
-        url:`http://localhost:8000/api/user/${userData[0].user_id}`,
+        url:`http://localhost:8000/api/user/${userData.userId}`,
         headers: {
             "Content-Type": "multipart/form-data",
             authorization: "Bearer " + token,
@@ -58,7 +58,7 @@ const ProfilImage = () => {
     <div className="profil-avatar">
       <Avatar
         className="profil-avatar__withoutUrl"
-        name={userData[0].firstname + " " + userData[0].lastname}
+        name={userData.userFirstname + " " + userData.userLastname}
         size={200}
       />
 

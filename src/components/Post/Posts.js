@@ -21,7 +21,8 @@ const Posts = () => {
   const [sortedData, setSortedData] = useState([]);
   const [playOnce, setPlayOnce] = useState(true);
   const token = localStorage.getItem("token");
-  const userData = useSelector((state) => state.userReducer);
+  const userData = JSON.parse(localStorage.getItem("userData"));
+  
 
   useEffect(() => {
     function getData() {
@@ -128,18 +129,29 @@ const Posts = () => {
   let postBodyDiv;
 
   // ------------- EditPost ----------------------------
+
+  const [postBody, setPostBody] = useState();
+
+
+
 const editPost = (post) => {
 
 const postId = post.post_id
 
+
+
 // fermer l'Edition --------
 function closeEdit() {
-  ReactDOM.hydrate(closeEditPost, document.getElementById(`post-card__edit${postId}`))
+  setPostBody();
+  ReactDOM.hydrate(closeEditPost, document.getElementById(`post-card__edit${postId}`));
+  
 }
 
 // Ouvrir l'Edition --------
-function openEdit() {
-  ReactDOM.hydrate(editPost, document.getElementById(`post-card__edit${postId}`))
+function openEdit(post) {
+  setPostBody(post.body);
+  ReactDOM.hydrate(editPost, document.getElementById(`post-card__edit${postId}`));
+  
 }
 
 // Envoyer la mise à jour
@@ -178,7 +190,7 @@ const onEdit = async () => {
 const editPostDom = (<div className="edit-post__container">
   <div className="edit-post__close" onClick={() => closeEdit()}><FontAwesomeIcon icon={faWindowClose} /> </div>
   <form className="edit-post__form" onSubmit={handleSubmit(onEdit)}>
-    <input className="edit-post__body" placeholder={post.body} {...register("edit-text")}></input>
+    <input className="edit-post__body" defaultValue={postBody} {...register("edit-text")}></input>
     <input
                 type="file"
                 {...register("edit-image")}
@@ -190,7 +202,7 @@ const editPostDom = (<div className="edit-post__container">
 const editPost = React.createElement('div', {postId}, editPostDom);
 const closeEditPost = React.createElement('div', {postId}, null);
 
-openEdit();
+openEdit(post);
 
 
 }
@@ -237,7 +249,7 @@ openEdit();
                 
 
 
-                {userData[0].user_id == post.user_id && (
+                {userData.userId == post.user_id && (
                   <div className="post-edit">
                     <Popover
                       className="post-edit"
