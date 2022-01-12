@@ -25,3 +25,15 @@ header {
 
     }
 }
+
+.header-avatar__container {
+    height: 60px;
+    width: 60px;
+    & img {
+        height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    object-fit: fill;
+    cursor: pointer;
+    }
+}

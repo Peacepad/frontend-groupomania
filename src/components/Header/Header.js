@@ -51,7 +51,23 @@ const Header = () => {
 
   //Affichage différent en fonction de la connexion
   if (isLogged) {
-    logDiv = (
+    let userData = JSON.parse(localStorage.getItem("userData"));
+    if(userData.userImageURL != undefined) {
+      logDiv = (
+        <div className="header-user">
+          <ul>
+            <li className="header-avatar__container" ref={ref}>
+              {localStorage.getItem("userData") && (
+                <img src={userData.userImageURL} alt="Votre image de profil" onClick={() => setIsMenuOpen((oldState) => !oldState)}/>
+              )}
+              {isMenuOpen && <MoreHeader />}
+            </li>
+            <li></li>
+          </ul>
+        </div>
+      );
+    }
+    else {logDiv = (
       <div className="header-user">
         <ul>
           <li className="header-avatar__container" ref={ref}>
@@ -68,7 +84,8 @@ const Header = () => {
           <li></li>
         </ul>
       </div>
-    );
+    );}
+    
   } else {
     logDiv = <Navigation />;
   }

@@ -1,13 +1,29 @@
 .profil-info {
-    width: 80%;
-    margin: auto;
-    display: flex;
-    justify-content: center;
-    margin-top: 50px;
+  width: 80%;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
 }
 
 .profil-edit {
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.profil-avatar__preview {
+  height: 200px;
+  width: 200px;
+  
+  position: relative;
+  & img {
+    position: absolute;
+    height: 200px;
+    width: 200px;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    object-fit:cover;
+  }
 }

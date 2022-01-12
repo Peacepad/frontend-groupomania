@@ -130,29 +130,13 @@ const Posts = () => {
 
   // ------------- EditPost ----------------------------
 
-  const [postBody, setPostBody] = useState();
-
-
-
 const editPost = (post) => {
 
 const postId = post.post_id
 
 
 
-// fermer l'Edition --------
-function closeEdit() {
-  setPostBody();
-  ReactDOM.hydrate(closeEditPost, document.getElementById(`post-card__edit${postId}`));
-  
-}
 
-// Ouvrir l'Edition --------
-function openEdit(post) {
-  setPostBody(post.body);
-  ReactDOM.hydrate(editPost, document.getElementById(`post-card__edit${postId}`));
-  
-}
 
 // Envoyer la mise à jour
 const onEdit = async () => {
@@ -187,10 +171,26 @@ const onEdit = async () => {
 };
 
 
+// fermer l'Edition --------
+function closeEdit() {
+
+  ReactDOM.hydrate(closeEditPost, document.getElementById(`post-card__edit${postId}`));
+  
+}
+
+// Ouvrir l'Edition --------
+function openEdit(post) {
+
+  ReactDOM.hydrate(editPost, document.getElementById(`post-card__edit${postId}`));
+  
+}
+
+
+
 const editPostDom = (<div className="edit-post__container">
   <div className="edit-post__close" onClick={() => closeEdit()}><FontAwesomeIcon icon={faWindowClose} /> </div>
   <form className="edit-post__form" onSubmit={handleSubmit(onEdit)}>
-    <input className="edit-post__body" defaultValue={postBody} {...register("edit-text")}></input>
+    <input className="edit-post__body"  {...register("edit-text")}></input>
     <input
                 type="file"
                 {...register("edit-image")}
@@ -199,11 +199,12 @@ const editPostDom = (<div className="edit-post__container">
   </form>
 </div>)
 
+
+
 const editPost = React.createElement('div', {postId}, editPostDom);
 const closeEditPost = React.createElement('div', {postId}, null);
 
 openEdit(post);
-
 
 }
 
@@ -278,11 +279,14 @@ openEdit(post);
                   </div>
                 )}
 
+                
                 <div className="post-user">
-                  <Avatar
+                  {post.imageURL ? <img src={post.imageURL} alt="photo de profil de l'utilisateur" /> : <Avatar
                     name={post.firstname + " " + post.lastname}
                     size={40}
-                  />
+                  />}
+                  
+
                 </div>
                 <div className="post-body" id={"post-body__" + post.post_id}>
                   {post.body}
@@ -291,7 +295,7 @@ openEdit(post);
 
                 <div className="post-image">
                   {post.imageURL != null && (
-                    <img src={post.imageURL} alt="image du Post" />
+                    <img src={post.postImageURL} alt="image du Post" />
                   )}
                 </div>
 
