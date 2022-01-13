@@ -294,7 +294,7 @@ openEdit(post);
                 </div>
 
                 <div className="post-image">
-                  {post.imageURL != null && (
+                  {post.postImageURL != null && (
                     <img src={post.postImageURL} alt="image du Post" />
                   )}
                 </div>
