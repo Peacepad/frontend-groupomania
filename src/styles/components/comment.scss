@@ -1,0 +1,55 @@
+.comment-container {
+    display:flex;
+    background-color: white;
+    width: 100%;
+    border-radius: 6px;
+    margin-top: 3px;
+    padding: 10px;
+}
+
+#comment-form {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    & textarea {
+        resize: none;
+        width: 85%;
+        background-color: lighten($back-color, 5%);
+        border-radius: 3px;
+    }
+    & input {
+        width: 14%;
+    }
+}
+
+.comments, .comments-list {
+    width: 100%;
+    padding-left: 0;
+    margin-left: 0;
+    & li {
+        width: 100%;
+        margin-top: 5px;
+        margin-bottom: 0;
+    }
+}
+.comment-card {
+    background-color: white;
+    width: 100%;
+    display:flex;
+    border-radius: 6px;
+    padding: 5px;
+}
+
+.comment-user img {
+    height: 40px;
+    width:40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.comment-body {
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

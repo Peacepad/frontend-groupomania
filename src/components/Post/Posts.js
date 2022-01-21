@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faComment, faEllipsisH, faWindowClose } from "@fortawesome/free-solid-svg-icons";
+import {
+  faComment,
+  faEllipsisH,
+  faWindowClose,
+} from "@fortawesome/free-solid-svg-icons";
 import {
   Avatar,
   Popover,
@@ -14,7 +18,8 @@ import {
 import Like from "./Like/Like";
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-import ReactDOM from 'react-dom';
+import ReactDOM from "react-dom";
+import Comment from "./Comment/Comment";
 
 const Posts = () => {
   const [data, setData] = useState([]);
@@ -22,7 +27,6 @@ const Posts = () => {
   const [playOnce, setPlayOnce] = useState(true);
   const token = localStorage.getItem("token");
   const userData = JSON.parse(localStorage.getItem("userData"));
-  
 
   useEffect(() => {
     function getData() {
@@ -32,14 +36,17 @@ const Posts = () => {
           setPlayOnce(false);
         });
 
+
         const sortedPost = () => {
           const postObj = Object.keys(data).map((i) => data[i]);
           const sortedArray = postObj.sort((a, b) => {
             return b.post_id - a.post_id;
           });
           setSortedData(sortedArray);
+          
         };
         sortedPost();
+        
       }
     }
     getData();
@@ -130,83 +137,75 @@ const Posts = () => {
 
   // ------------- EditPost ----------------------------
 
-const editPost = (post) => {
+  const editPost = (post) => {
+    const postId = post.post_id;
 
-const postId = post.post_id
+    // Envoyer la mise à jour
+    const onEdit = async () => {
+      const token = localStorage.getItem("token");
 
+      let editData = new FormData(); //formdata object
 
+      editData.append("userId", token);
+      editData.append("edit-text", data.text);
+      editData.append("image", selectedFile);
 
+      axios({
+        method: "put",
+        url: `http://localhost:8000/api/post/${postId}`,
+        data: editData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          authorization: "Bearer " + token,
+        },
+      })
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (response) {
+          //handle error
+          console.log(response);
+        });
 
+      setPlayOnce(!playOnce);
+      setUpdateElement(!updateElement);
+      closeEdit();
+    };
 
-// Envoyer la mise à jour
-const onEdit = async () => {
-  const token = localStorage.getItem("token");
+    // fermer l'Edition --------
+    function closeEdit() {
+      ReactDOM.hydrate(
+        closeEditPost,
+        document.getElementById(`post-card__edit${postId}`)
+      );
+    }
 
-  let editData = new FormData(); //formdata object
+    // Ouvrir l'Edition --------
+    function openEdit(post) {
+      ReactDOM.hydrate(
+        editPost,
+        document.getElementById(`post-card__edit${postId}`)
+      );
+    }
 
-  editData.append("userId", token);
-  editData.append("edit-text", data.text);
-  editData.append("image", selectedFile);
+    const editPostDom = (
+      <div className="edit-post__container">
+        <div className="edit-post__close" onClick={() => closeEdit()}>
+          <FontAwesomeIcon icon={faWindowClose} />{" "}
+        </div>
+        <form className="edit-post__form" onSubmit={handleSubmit(onEdit)}>
+          <input className="edit-post__body" {...register("edit-text")}></input>
+          <input type="file" {...register("edit-image")} />
+          <input type="submit" className="edit-post__btn"></input>
+        </form>
+      </div>
+    );
 
-  axios({
-    method: "put",
-    url: `http://localhost:8000/api/post/${postId}`,
-    data: editData,
-    headers: {
-      "Content-Type": "multipart/form-data",
-      authorization: "Bearer " + token,
-    },
-  })
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (response) {
-      //handle error
-      console.log(response);
-    });
+    const editPost = React.createElement("div", { postId }, editPostDom);
+    const closeEditPost = React.createElement("div", { postId }, null);
 
-    setPlayOnce(!playOnce);
-    setUpdateElement(!updateElement);
-    closeEdit();
-};
-
-
-// fermer l'Edition --------
-function closeEdit() {
-
-  ReactDOM.hydrate(closeEditPost, document.getElementById(`post-card__edit${postId}`));
-  
-}
-
-// Ouvrir l'Edition --------
-function openEdit(post) {
-
-  ReactDOM.hydrate(editPost, document.getElementById(`post-card__edit${postId}`));
-  
-}
-
-
-
-const editPostDom = (<div className="edit-post__container">
-  <div className="edit-post__close" onClick={() => closeEdit()}><FontAwesomeIcon icon={faWindowClose} /> </div>
-  <form className="edit-post__form" onSubmit={handleSubmit(onEdit)}>
-    <input className="edit-post__body"  {...register("edit-text")}></input>
-    <input
-                type="file"
-                {...register("edit-image")}
-              />
-              <input type="submit" className="edit-post__btn"></input>
-  </form>
-</div>)
-
-
-
-const editPost = React.createElement('div', {postId}, editPostDom);
-const closeEditPost = React.createElement('div', {postId}, null);
-
-openEdit(post);
-
-}
+    openEdit(post);
+  };
 
   return (
     <React.Fragment>
@@ -243,14 +242,9 @@ openEdit(post);
           {sortedData.map((post) => (
             <li key={post.post_id} id={post.post_id}>
               <div className="post-card">
+                <div id={`post-card__edit${post.post_id}`}></div>
 
-              <div id={`post-card__edit${post.post_id}`}></div>
-
-
-                
-
-
-                {userData.userId == post.user_id && (
+                {userData.userId == post.post_user_id && (
                   <div className="post-edit">
                     <Popover
                       className="post-edit"
@@ -258,7 +252,14 @@ openEdit(post);
                       content={({ close }) => (
                         <Menu>
                           <Menu.Group>
-                            <Menu.Item icon={EditIcon} intent="success" onClick={() => {editPost(post); close()}}>
+                            <Menu.Item
+                              icon={EditIcon}
+                              intent="success"
+                              onClick={() => {
+                                editPost(post);
+                                close();
+                              }}
+                            >
                               Éditer...
                             </Menu.Item>
                             <Menu.Item
@@ -279,23 +280,32 @@ openEdit(post);
                   </div>
                 )}
 
-                
                 <div className="post-user">
-                  {post.imageURL ? <img src={post.imageURL} alt="photo de profil de l'utilisateur" /> : <Avatar
-                    name={post.firstname + " " + post.lastname}
-                    size={40}
-                  />}
+                  <div className="post-user__avatar">
+                  {post.user_imageURL ? (
+                    <img
+                      src={post.user_imageURL}
+                      alt="photo de profil de l'utilisateur"
+                    />
+                  ) : (
+                    <Avatar
+                      name={post.firstname + " " + post.lastname}
+                      size={40}
+                    />
+                  )}
+                  </div>
                   
-
+                  <div className="post-user__name">{post.firstname + " " + post.lastname}</div>
+                  
                 </div>
                 <div className="post-body" id={"post-body__" + post.post_id}>
-                  {post.body}
+                  {post.post_body}
                   {postBodyDiv}
                 </div>
 
                 <div className="post-image">
-                  {post.postImageURL != null && (
-                    <img src={post.postImageURL} alt="image du Post" />
+                  {post.post_imageURL != null && (
+                    <img src={post.post_imageURL} alt="image du Post" />
                   )}
                 </div>
 
@@ -304,19 +314,19 @@ openEdit(post);
 
                   <div className="post-comment">
                     <div className="post-comment__display">
-                    <FontAwesomeIcon icon={faComment} /> 
-                        0 
-                      
+                      <FontAwesomeIcon icon={faComment} />{post.listComment.length}
                     </div>
 
                     <div className="post-comment__btn">
-                      
-                        <FontAwesomeIcon icon={faComment} /> Commenter
-                      
+                      <FontAwesomeIcon icon={faComment} /> Commenter
                     </div>
                   </div>
                 </div>
               </div>
+
+              
+
+              <Comment post={post} />
             </li>
           ))}
         </ul>
