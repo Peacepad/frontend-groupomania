@@ -38,9 +38,9 @@
 
 #login__submit, #signup__submit {
     border:none;
-    background-color: #49C9AA;
+    background-color: $blue-link;
     &:hover {
-        background-color: darken(#49C9AA, 5%);
+        background-color: darken($blue-link, 5%);
     }
 }
 

@@ -1,17 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faComment,
+  faEllipsisH,
+  faWindowClose,
+} from "@fortawesome/free-solid-svg-icons";
 import { useForm } from "react-hook-form";
 import {
-    Avatar,
+  Avatar,
+  Popover,
+  Menu,
+  Position,
+  EditIcon,
+  TrashIcon,
+  Button,
+} from "evergreen-ui";
 
-  } from "evergreen-ui";
+const Comment = ({ post, playOnce, setPlayOnce }) => {
+  const userData = JSON.parse(localStorage.getItem("userData"));
+  const { register, handleSubmit, setValue } = useForm();
 
-const Comment = ({ post }) => {
-  
-  const { register, handleSubmit, reset } = useForm();
 
-  const sendComment = async(data) => {
+  const sendComment = async (data) => {
     const token = localStorage.getItem("token");
 
     let commentData = new FormData();
@@ -22,15 +33,16 @@ const Comment = ({ post }) => {
 
     axios({
       method: "POST",
-      url: `http://localhost:8000/api/post/${post.post_id}/comment/create`,
+      url: `http://localhost:8000/api/comment/${post.post_id}`,
       data: commentData,
       headers: {
         "Content-Type": "multipart/form-data",
         authorization: "Bearer " + token,
       },
     })
-      .then(function (response) {
-        console.log(response);
+      .then(() => {
+        setPlayOnce(!playOnce);
+        setValue("text", "");
       })
       .catch(function (response) {
         //handle error
@@ -38,44 +50,94 @@ const Comment = ({ post }) => {
       });
   };
 
+  const deleteComment = (comment_id) => {
+    const token = localStorage.getItem("token");
+    axios({
+      method: "DELETE",
+      url: `http://localhost:8000/api/comment/${comment_id}`,
+      headers: {
+        authorization: "Bearer " + token,
+      },
+    })
+      .then(() => {
+        setPlayOnce(!playOnce);
+        
+        
+      })
+      .catch(console.log("Le commentaire n'a pas pu être supprimé"));
+  }
+ 
+  
+
   return (
-      <>
+    <>
+      <div
+        className="comment-container"
+        id={`comment-container__${post.post_id}`}
+      >
+        <form id="comment-form" onSubmit={handleSubmit(sendComment)}>
+          <textarea
+            {...register(`text`)}
+            placeholder="Ecrivez un commentaire ..." id={`commentForPost${post.post_id}`}
+          ></textarea>
+          <input type="submit"></input>
+        </form>
+      </div>
 
-    <div className="comments">
-                <ul className="comments-list">
-              {post.listComment.map((comment) => (
-                <li key={comment.comment_id}>
-                    <div className="comment-card">
-                        <div className="comment-user">
-                        {comment.comment_user_imageURL ? (
-                    <img
-                      src={comment.comment_user_imageURL}
-                      alt="photo de profil de l'utilisateur"
-                    />
-                  ) : (
-                    <Avatar
-                      name={comment.comment_firstname + " " + comment.comment_lastname}
-                      size={40}
-                    />
-                  )}
-                        </div>
-                        <div className="comment-body">
-                        {comment.comment_body}
-                        </div>
-                    </div>
-                  
-                </li>
-              ))}
-              </ul>
+      <div className="comments">
+        <ul className="comments-list">
+          {post.listComment.map((comment) => (
+            <li
+              key={comment.comment_id}
+              className={`comment-card comment-card${comment.comment_id}`}
+            >
+              <div className="comment-user">
+                {comment.comment_user_imageURL ? (
+                  <img
+                    src={comment.comment_user_imageURL}
+                    alt="photo de profil de l'utilisateur"
+                  />
+                ) : (
+                  <Avatar
+                    name={
+                      comment.comment_firstname + " " + comment.comment_lastname
+                    }
+                    size={40}
+                  />
+                )}
+              </div>
+              <div className="comment-body">
+                <p>{comment.comment_body}</p>
+              </div>
+
+              {userData.userId == comment.comment_user_id && (
+                <div className="comment-edit">
+                  <Popover
+                    className="comment-edit"
+                    position={Position.BOTTOM_RIGHT}
+                    content={({ close }) => (
+                      <Menu>
+                        <Menu.Group>
+                          <Menu.Item icon={EditIcon} intent="success">
+                            Éditer...
+                          </Menu.Item>
+                          <Menu.Item icon={TrashIcon} intent="danger" onClick={() => deleteComment(comment.comment_id)}>
+                            Supprimer...
+                          </Menu.Item>
+                        </Menu.Group>
+                      </Menu>
+                    )}
+                  >
+                    <Button className="comment-edit__btn">
+                      <FontAwesomeIcon icon={faEllipsisH} />
+                    </Button>
+                  </Popover>
                 </div>
-
-
-    <div className="comment-container">
-      <form id="comment-form" onSubmit={handleSubmit(sendComment)}>
-        <textarea {...register(`text`)}></textarea>
-        <input type="submit"></input>
-      </form>
-    </div>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
     </>
   );
 };

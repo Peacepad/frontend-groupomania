@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faComment,
-  faEllipsisH,
-  faWindowClose,
-} from "@fortawesome/free-solid-svg-icons";
+import { faComment, faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 import {
   Avatar,
   Popover,
@@ -16,7 +12,7 @@ import {
   Button,
 } from "evergreen-ui";
 import Like from "./Like/Like";
-import { useSelector } from "react-redux";
+
 import { useForm } from "react-hook-form";
 import ReactDOM from "react-dom";
 import Comment from "./Comment/Comment";
@@ -24,6 +20,7 @@ import Comment from "./Comment/Comment";
 const Posts = () => {
   const [data, setData] = useState([]);
   const [sortedData, setSortedData] = useState([]);
+  
   const [playOnce, setPlayOnce] = useState(true);
   const token = localStorage.getItem("token");
   const userData = JSON.parse(localStorage.getItem("userData"));
@@ -36,16 +33,15 @@ const Posts = () => {
           setPlayOnce(false);
         });
 
-
         const sortedPost = () => {
           const postObj = Object.keys(data).map((i) => data[i]);
           const sortedArray = postObj.sort((a, b) => {
             return b.post_id - a.post_id;
           });
           setSortedData(sortedArray);
-          
         };
         sortedPost();
+
         
       }
     }
@@ -191,7 +187,7 @@ const Posts = () => {
     const editPostDom = (
       <div className="edit-post__container">
         <div className="edit-post__close" onClick={() => closeEdit()}>
-          <FontAwesomeIcon icon={faWindowClose} />{" "}
+          x
         </div>
         <form className="edit-post__form" onSubmit={handleSubmit(onEdit)}>
           <input className="edit-post__body" {...register("edit-text")}></input>
@@ -205,6 +201,62 @@ const Posts = () => {
     const closeEditPost = React.createElement("div", { postId }, null);
 
     openEdit(post);
+  };
+
+  // Afficher la date sous le bon format
+
+  const showDate = (post) => {
+    let mySqlDate = post.post_date;
+
+    let mySqlDate2 = mySqlDate.replace("T", " ");
+    let mySqlDate3 = mySqlDate2.replace("Z", "");
+
+    let t = `${mySqlDate3}`.split(/[- :]/);
+
+    let mouths = [
+      "janvier",
+      "fevrier",
+      "mars",
+      "avril",
+      "mai",
+      "juin",
+      "juillet",
+      "aout",
+      "septembre",
+      "obtobre",
+      "novembre",
+      "décembre",
+    ];
+    let selectedMouth = parseInt(t[1]);
+    let goodMouth = mouths[selectedMouth];
+
+    let correctDate = `Le ${t[3]} ${goodMouth} ${t[0]} à ${t[3]}h${t[4]}`;
+
+    return correctDate;
+  };
+
+  // Afficher l'espace pour commenter
+
+  const showSendComment = (post) => {
+    const showCommentDOM = document.getElementById(
+      `comment-container__${post.post_id}`
+    );
+
+    if (showCommentDOM.style.display == "flex") {
+      if (document.getElementById(`comment-container__${post.post_id}`)) {
+        const showCommentDOM = document.getElementById(
+          `comment-container__${post.post_id}`
+        );
+        showCommentDOM.style.display = "none";
+      }
+    } else {
+      if (document.getElementById(`comment-container__${post.post_id}`)) {
+        const showCommentDOM = document.getElementById(
+          `comment-container__${post.post_id}`
+        );
+        showCommentDOM.style.display = "flex";
+      }
+    }
   };
 
   return (
@@ -240,7 +292,7 @@ const Posts = () => {
       <div className="Posts">
         <ul className="post-list">
           {sortedData.map((post) => (
-            <li key={post.post_id} id={post.post_id}>
+            <li key={post.post_id} id={post.post_id} className="post-list__li">
               <div className="post-card">
                 <div id={`post-card__edit${post.post_id}`}></div>
 
@@ -280,23 +332,27 @@ const Posts = () => {
                   </div>
                 )}
 
-                <div className="post-user">
-                  <div className="post-user__avatar">
-                  {post.user_imageURL ? (
-                    <img
-                      src={post.user_imageURL}
-                      alt="photo de profil de l'utilisateur"
-                    />
-                  ) : (
-                    <Avatar
-                      name={post.firstname + " " + post.lastname}
-                      size={40}
-                    />
-                  )}
+                <div className="post-info">
+                  <div className="post-info__avatar">
+                    {post.user_imageURL ? (
+                      <img
+                        src={post.user_imageURL}
+                        alt="avatar de l'utilisateur"
+                      />
+                    ) : (
+                      <Avatar
+                        name={post.firstname + " " + post.lastname}
+                        size={40}
+                      />
+                    )}
                   </div>
-                  
-                  <div className="post-user__name">{post.firstname + " " + post.lastname}</div>
-                  
+                  <div className="post-info__about">
+                    <div className="post-info__name">
+                      {post.firstname + " " + post.lastname}
+                    </div>
+
+                    <div className="post-info__date">{showDate(post)}</div>
+                  </div>
                 </div>
                 <div className="post-body" id={"post-body__" + post.post_id}>
                   {post.post_body}
@@ -314,19 +370,21 @@ const Posts = () => {
 
                   <div className="post-comment">
                     <div className="post-comment__display">
-                      <FontAwesomeIcon icon={faComment} />{post.listComment.length}
+                      <FontAwesomeIcon icon={faComment} />
+                      {post.listComment.length}
                     </div>
 
-                    <div className="post-comment__btn">
+                    <div
+                      className="post-comment__btn"
+                      onClick={() => showSendComment(post)}
+                    >
                       <FontAwesomeIcon icon={faComment} /> Commenter
                     </div>
                   </div>
                 </div>
               </div>
 
-              
-
-              <Comment post={post} />
+              <Comment post={post} setPlayOnce={setPlayOnce}/>
             </li>
           ))}
         </ul>

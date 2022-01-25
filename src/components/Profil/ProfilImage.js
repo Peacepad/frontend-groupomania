@@ -50,6 +50,7 @@ const ProfilImage = () => {
         let userData= JSON.parse(localStorage.getItem("userData"));
         userData.userImageURL = res.data.userImageURL;
         localStorage.setItem("userData", JSON.stringify(userData));
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);

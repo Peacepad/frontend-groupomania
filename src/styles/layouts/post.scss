@@ -13,7 +13,7 @@
   background-color: white;
   height: 175px;
   border-radius: 6px;
-  margin-bottom: 50px;
+  
   & img {
     height: 100px;
     max-width: 100px;
@@ -30,7 +30,7 @@
   padding: 5px;
   resize: none;
   font-size: 1.1em;
-  background-color: lighten($back-color, 5%);;
+  background-color: lighten($back-color, 5%);
 }
 
 .create-post__btn-container {
@@ -59,8 +59,8 @@
 }
 
 .create-post__btn {
-  background-color: darken($blue-link, 10);
-  color: white;
+  background-color: lighten($blue-link, 10);;
+  color: black;
   border-radius: 6px;
   border: none;
   font-size: 1.1em;
@@ -72,35 +72,35 @@
 }
 
 .post-list {
-  margin: auto;
-  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   padding-left: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
 }
-
-.post-list li {
-  list-style-type: none;
-  margin-bottom: 50px;
+.post-list__li{
+  margin-top: 20px;
   width: 60%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-
+  padding-left: 0;
+  list-style-type: none;
 }
+
+  
+
 
 .post-card {
+  
   display: flex;
-  flex-direction: column;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
+  flex-direction: column;
+
+  justify-content: space-around;
+
   background-color: white;
   border-radius: 6px;
   position: relative;
-  width: 100%;
+  
   & img {
     max-width: 500px;
     max-height: 600px;
@@ -109,6 +109,8 @@
 
 .post-body {
   padding: 40px;
+  max-width: 60%;
+  white-space:pre-wrap;
 }
 
 .post-interact {
@@ -117,20 +119,21 @@
   display: flex;
   justify-content: space-between;
   position: relative;
-  height:100px;
+  height: 100px;
   &::before {
-    left:50%;
+    left: 50%;
     content: "";
     width: 90%;
     transform: translate(-50%);
-    height:1px;
+    height: 1px;
     background-color: $back-color;
-    top:0px;
-    position:absolute;
+    top: 0px;
+    position: absolute;
   }
 }
 
-.post-like, .post-comment {
+.post-like,
+.post-comment {
   border-radius: 6px;
   width: 49%;
   display: flex;
@@ -142,7 +145,8 @@
   }
 }
 
-.post-like__btn, .post-comment__btn {
+.post-like__btn,
+.post-comment__btn {
   border-radius: 6px;
   display: flex;
   align-content: center;
@@ -159,11 +163,11 @@
   }
 }
 
-.post-like__display, .post-comment__display {
+.post-like__display,
+.post-comment__display {
   display: flex;
   align-content: center;
   justify-content: center;
-  
 }
 
 .post-edit {
@@ -179,25 +183,33 @@
   border-top-right-radius: 6px;
 }
 
-.post-user {
+.post-info {
   position: absolute;
   left: 20px;
   top: 20px;
   display: flex;
-  flex-direction: column;
+  flex-direction: center;
   align-items: center;
   & img {
     width: 40px;
-  height:40px;
-  border-radius: 50%;
-  object-fit: cover;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  &__about{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 10px;
   }
   &__name {
     text-transform: capitalize;
   }
+  &__date {
+    color: grey;
+    font-size: 0.8em;
+  }
 }
-
-
 
 .post-review {
   display: flex;
@@ -212,4 +224,3 @@
     justify-content: center;
   }
 }
-
