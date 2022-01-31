@@ -9,7 +9,7 @@ const ProfilView = () => {
   const token = localStorage.getItem("token");
 
   const userData = JSON.parse(localStorage.getItem("userData"));
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit} = useForm();
 
   const onSubmit = async (data) => {
     let formData = new FormData(); //formdata object
@@ -28,7 +28,7 @@ const ProfilView = () => {
       data: formData,
     })
       .then((res) => {
-        let userData= JSON.parse(localStorage.getItem("userData"));
+        let userData = JSON.parse(localStorage.getItem("userData"));
         userData.userFirstname = res.data.userFirstname;
         userData.userLastname = res.data.userLastname;
         userData.userEmail = res.data.userEmail;

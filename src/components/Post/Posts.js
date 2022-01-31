@@ -12,20 +12,30 @@ import {
   Button,
 } from "evergreen-ui";
 import Like from "./Like/Like";
-
 import { useForm } from "react-hook-form";
-import ReactDOM from "react-dom";
 import Comment from "./Comment/Comment";
+import { useHistory } from "react-router-dom";
+import EditPost from "./EditPost";
 
 const Posts = () => {
+  const history = useHistory();
   const [data, setData] = useState([]);
+ 
   const [sortedData, setSortedData] = useState([]);
-  
+
   const [playOnce, setPlayOnce] = useState(true);
   const token = localStorage.getItem("token");
   const userData = JSON.parse(localStorage.getItem("userData"));
 
   useEffect(() => {
+    const verifyToken = () => {
+      if (!token) {
+        history.push("/login");
+      }
+    };
+
+    verifyToken();
+
     function getData() {
       if (playOnce) {
         axios.get("http://localhost:8000/api/post").then((res) => {
@@ -33,17 +43,18 @@ const Posts = () => {
           setPlayOnce(false);
         });
 
-        const sortedPost = () => {
-          const postObj = Object.keys(data).map((i) => data[i]);
-          const sortedArray = postObj.sort((a, b) => {
-            return b.post_id - a.post_id;
-          });
-          setSortedData(sortedArray);
-        };
-        sortedPost();
-
         
       }
+
+      const sortedPost = () => {
+        const postObj = Object.keys(data).map((i) => data[i]);
+        const sortedArray = postObj.sort((a, b) => {
+          return b.post_id - a.post_id;
+        });
+        setSortedData(sortedArray);
+        console.log(sortedArray);
+      };
+      sortedPost();
     }
     getData();
   }, [data, playOnce]);
@@ -60,10 +71,12 @@ const Posts = () => {
         setPlayOnce(!playOnce);
         setUpdateElement(!updateElement);
       })
-      .catch(console.log("Le post n'a pas pu être supprimé"));
+      .catch(() => {
+        console.log("Le post n'a pas pu être supprimé");
+      });
   }
 
-  // Create Post
+  // ------------------------------------- Create Post ------------------
 
   // -------------- Afficher l'image choisie
   const [selectedFile, setSelectedFile] = useState();
@@ -108,6 +121,7 @@ const Posts = () => {
       data: formData,
       headers: {
         "Content-Type": "multipart/form-data",
+
         authorization: "Bearer " + token,
       },
     })
@@ -128,80 +142,13 @@ const Posts = () => {
 
   // ---------------- UpdatePost
   const [updateElement, setUpdateElement] = useState(false);
+  
 
   let postBodyDiv;
 
-  // ------------- EditPost ----------------------------
+  // ------------- EditPost ----------------------------------------------------------------------------
+  
 
-  const editPost = (post) => {
-    const postId = post.post_id;
-
-    // Envoyer la mise à jour
-    const onEdit = async () => {
-      const token = localStorage.getItem("token");
-
-      let editData = new FormData(); //formdata object
-
-      editData.append("userId", token);
-      editData.append("edit-text", data.text);
-      editData.append("image", selectedFile);
-
-      axios({
-        method: "put",
-        url: `http://localhost:8000/api/post/${postId}`,
-        data: editData,
-        headers: {
-          "Content-Type": "multipart/form-data",
-          authorization: "Bearer " + token,
-        },
-      })
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (response) {
-          //handle error
-          console.log(response);
-        });
-
-      setPlayOnce(!playOnce);
-      setUpdateElement(!updateElement);
-      closeEdit();
-    };
-
-    // fermer l'Edition --------
-    function closeEdit() {
-      ReactDOM.hydrate(
-        closeEditPost,
-        document.getElementById(`post-card__edit${postId}`)
-      );
-    }
-
-    // Ouvrir l'Edition --------
-    function openEdit(post) {
-      ReactDOM.hydrate(
-        editPost,
-        document.getElementById(`post-card__edit${postId}`)
-      );
-    }
-
-    const editPostDom = (
-      <div className="edit-post__container">
-        <div className="edit-post__close" onClick={() => closeEdit()}>
-          x
-        </div>
-        <form className="edit-post__form" onSubmit={handleSubmit(onEdit)}>
-          <input className="edit-post__body" {...register("edit-text")}></input>
-          <input type="file" {...register("edit-image")} />
-          <input type="submit" className="edit-post__btn"></input>
-        </form>
-      </div>
-    );
-
-    const editPost = React.createElement("div", { postId }, editPostDom);
-    const closeEditPost = React.createElement("div", { postId }, null);
-
-    openEdit(post);
-  };
 
   // Afficher la date sous le bon format
 
@@ -227,10 +174,13 @@ const Posts = () => {
       "novembre",
       "décembre",
     ];
-    let selectedMouth = parseInt(t[1]);
-    let goodMouth = mouths[selectedMouth];
+    let goodMouthNumber = parseInt(t[1]) - 1;
 
-    let correctDate = `Le ${t[3]} ${goodMouth} ${t[0]} à ${t[3]}h${t[4]}`;
+    let goodMouth = mouths[goodMouthNumber];
+
+    let goodHour = parseInt(t[3]) + 2;
+
+    let correctDate = `Le ${t[2]} ${goodMouth} ${t[0]} à ${goodHour}h${t[4]}`;
 
     return correctDate;
   };
@@ -259,6 +209,36 @@ const Posts = () => {
     }
   };
 
+
+  // Afficher l'espace pour modifier un post
+
+ 
+  const showEdit = (post) => {
+    const showEditDOM = document.getElementById(
+      `edit-container__${post.post_id}`
+    );
+
+    if (showEditDOM.style.display == "flex") {
+      if (document.getElementById(`edit-container__${post.post_id}`)) {
+        const showEditDOM = document.getElementById(
+          `edit-container__${post.post_id}`
+        );
+        showEditDOM.style.display = "none";
+      }
+    } else {
+      if (document.getElementById(`edit-container__${post.post_id}`)) {
+        const showEditDOM = document.getElementById(
+          `edit-container__${post.post_id}`
+        );
+        showEditDOM.style.display = "flex";
+      }
+    }
+  };
+
+
+
+
+
   return (
     <React.Fragment>
       <div className="create-post__container">
@@ -266,9 +246,7 @@ const Posts = () => {
           <div className="create-post__edit">
             <textarea
               className="create-post__text"
-              {...register("text", {
-                required: "Vous devez écrire un message",
-              })}
+              {...register("text")}
             ></textarea>
 
             {selectedFile && <img src={preview} alt="Aperçu du fichier" />}
@@ -294,7 +272,7 @@ const Posts = () => {
           {sortedData.map((post) => (
             <li key={post.post_id} id={post.post_id} className="post-list__li">
               <div className="post-card">
-                <div id={`post-card__edit${post.post_id}`}></div>
+                <EditPost post={post} setPlayOnce={setPlayOnce} />
 
                 {userData.userId == post.post_user_id && (
                   <div className="post-edit">
@@ -307,10 +285,7 @@ const Posts = () => {
                             <Menu.Item
                               icon={EditIcon}
                               intent="success"
-                              onClick={() => {
-                                editPost(post);
-                                close();
-                              }}
+                             onClick={() => {showEdit(post); close()}}
                             >
                               Éditer...
                             </Menu.Item>
@@ -355,7 +330,7 @@ const Posts = () => {
                   </div>
                 </div>
                 <div className="post-body" id={"post-body__" + post.post_id}>
-                  {post.post_body}
+                  <p>{post.post_body}</p>
                   {postBodyDiv}
                 </div>
 
@@ -384,7 +359,7 @@ const Posts = () => {
                 </div>
               </div>
 
-              <Comment post={post} setPlayOnce={setPlayOnce}/>
+              <Comment post={post} setPlayOnce={setPlayOnce} />
             </li>
           ))}
         </ul>

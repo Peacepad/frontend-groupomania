@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faComment,
+ 
   faEllipsisH,
-  faWindowClose,
+
 } from "@fortawesome/free-solid-svg-icons";
 import { useForm } from "react-hook-form";
 import {
@@ -67,7 +67,7 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
       .catch(console.log("Le commentaire n'a pas pu être supprimé"));
   }
  
-  
+
 
   return (
     <>
@@ -88,8 +88,8 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
         <ul className="comments-list">
           {post.listComment.map((comment) => (
             <li
-              key={comment.comment_id}
-              className={`comment-card comment-card${comment.comment_id}`}
+              key={comment.comment_id} id={`comment-card${comment.comment_id}`}
+              className={`comment-card`}
             >
               <div className="comment-user">
                 {comment.comment_user_imageURL ? (
@@ -110,7 +110,7 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
                 <p>{comment.comment_body}</p>
               </div>
 
-              {userData.userId == comment.comment_user_id && (
+              {userData.userId === comment.comment_user_id && (
                 <div className="comment-edit">
                   <Popover
                     className="comment-edit"

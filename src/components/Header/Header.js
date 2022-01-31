@@ -6,7 +6,7 @@ import MoreHeader from "./MoreHeader";
 
 const Header = () => {
   const token = localStorage.getItem("token");
-  const userData = JSON.parse(localStorage.getItem("userData"));
+
 
   //Verification de la connexion
   const [isLogged, setIsLogged] = useState();
@@ -50,7 +50,7 @@ const Header = () => {
   //Affichage différent en fonction de la connexion
   if (isLogged) {
     let userData = JSON.parse(localStorage.getItem("userData"));
-    if (userData.userImageURL != undefined) {
+    if (userData.userImageURL != null || userData.userImageURL != undefined) {
       logDiv = (
         <div className="header-user">
           <div className="header-avatar__container" ref={ref}>
@@ -82,7 +82,7 @@ const Header = () => {
         </div>
       );
     }
-  } else if(isLogged == undefined) {
+  } else if(isLogged === undefined) {
     // Evite d'afficher else le temps d'un instant
   }
   else {
