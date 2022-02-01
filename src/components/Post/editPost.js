@@ -1,82 +1,175 @@
 import axios from "axios";
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 
 const EditPost = ({ post, playOnce, setPlayOnce }) => {
   const { register, handleSubmit } = useForm();
+  const [fileDeleted, setFileDeleted] = useState(false);
 
   const sendEdit = (data) => {
-
     const token = localStorage.getItem("token");
 
     let editData = new FormData();
 
     editData.append("userId", token);
     editData.append(`text`, data.text);
-    editData.append("postId", post.post_id);
+    editData.append("image", selectedFile);
+    editData.append("fileDeleted", fileDeleted);
 
     axios({
-        method: "PUT",
-        url: `http://localhost:8000/api/post/${post.post_id}`,
-        data: editData,
-        headers: {
-          "Content-Type": "multipart/form-data",
-          authorization: "Bearer " + token,
-        },
+      method: "PUT",
+      url: `http://localhost:8000/api/post/${post.post_id}`,
+      data: editData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+        authorization: "Bearer " + token,
+      },
+    })
+      .then(() => {
+        setPlayOnce(!playOnce);
+        const showEditDOM = document.getElementById(
+          `edit-container__${post.post_id}`
+        );
+        showEditDOM.style.display = "none";
+        const editBackgroundDOM = document.getElementById(`edit-background__${post.post_id}`);
+        editBackgroundDOM.style.display = "none";
+        setFileDeleted(false);
+        //remettre le scroll
+        document.documentElement.style.overflow = 'scroll';
       })
-        .then(() => {
-          setPlayOnce(!playOnce);
-          const showEditDOM = document.getElementById(
-            `edit-container__${post.post_id}`
-          );
-          showEditDOM.style.display = "none";
-        })
-        .catch(function (response) {
-          //handle error
-          console.log(response);
-        });
-    };
-
-
+      .catch(function (response) {
+        //handle error
+        console.log(response);
+      });
+  };
 
   const closeEdit = () => {
     const showEditDOM = document.getElementById(
-        `edit-container__${post.post_id}`
-      );
-  
-      if (showEditDOM.style.display == "flex") {
-        if (document.getElementById(`edit-container__${post.post_id}`)) {
-          const showEditDOM = document.getElementById(
-            `edit-container__${post.post_id}`
-          );
-          showEditDOM.style.display = "none";
-        }
-      } else {
-        if (document.getElementById(`edit-container__${post.post_id}`)) {
-          const showEditDOM = document.getElementById(
-            `edit-container__${post.post_id}`
-          );
-          showEditDOM.style.display = "flex";
-        }
+      `edit-container__${post.post_id}`
+    );
+
+    if (showEditDOM.style.display == "flex") {
+      if (document.getElementById(`edit-container__${post.post_id}`)) {
+        const showEditDOM = document.getElementById(
+          `edit-container__${post.post_id}`
+        );
+        showEditDOM.style.display = "none";
+        const editBackgroundDOM = document.getElementById(`edit-background__${post.post_id}`);
+        editBackgroundDOM.style.display = "none";
+        //remettre le scroll
+        document.documentElement.style.overflow = 'scroll';
       }
+    } else {
+      if (document.getElementById(`edit-container__${post.post_id}`)) {
+        const showEditDOM = document.getElementById(
+          `edit-container__${post.post_id}`
+        );
+        showEditDOM.style.display = "flex";
+        const editBackgroundDOM = document.getElementById(`edit-background__${post.post_id}`);
+        editBackgroundDOM.style.display = "flex";
+        
+      }
+    }
   };
 
-  return (
-    <div className="edit-container" id={`edit-container__${post.post_id}`}>
-      <div className="edit-close" onClick={() => closeEdit()}>
+  const [selectedFile, setSelectedFile] = useState();
+  const [preview, setPreview] = useState();
+  const [maskImage, setMaskImage] = useState(true);
+
+  useEffect(() => {
+    if (!selectedFile) {
+      setPreview(undefined);
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(selectedFile);
+    setPreview(objectUrl);
+
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [selectedFile]);
+
+  const onSelectFile = (e) => {
+    if (!e.target.files || e.target.files.length === 0) {
+      setSelectedFile(undefined);
+      return;
+    }
+
+    setSelectedFile(e.target.files[0]);
+  };
+
+  const deleteImage = () => {
+    setMaskImage(false);
+    setPreview();
+    setFileDeleted(true);
+  };
+  useEffect(() => {
+    console.log(fileDeleted);
+  });
+
+  let editImage;
+
+  let postImage = post.post_imageURL;
+
+  editImage = (
+    <div className="edit-file">
+      <div
+        className="edit-file__close"
+        onClick={() => {
+          deleteImage();
+        }}
+      >
         x
       </div>
-      <form className="edit-form" onSubmit={handleSubmit(sendEdit)}>
-        <textarea
-          className="edit-body"
-          defaultValue={post.post_body}
-          {...register("text")}
-        ></textarea>
-        <input type="file" {...register("edit-image")} />
-        <input type="submit" className="edit-btn"></input>
-      </form>
+      <img src={postImage} />
     </div>
-  )
+  );
+
+  if (maskImage == false && !preview) {
+    editImage = (
+      <div className="edit-file">
+        <p className="edit-file__message">Votre post ne contient pas d'image</p>
+      </div>
+    );
+  }
+  if (preview) {
+    editImage = (
+      <div className="edit-file">
+        <div className="edit-file__close" onClick={() => deleteImage()}>
+          x
+        </div>
+        <img src={preview} />
+      </div>
+    );
+  }
+
+  return (
+    <div className="edit-background" id={`edit-background__${post.post_id}`}>
+      <div className="edit-container" id={`edit-container__${post.post_id}`}>
+        <div
+          className="edit-close"
+          onClick={() => {
+            closeEdit();
+            setMaskImage(true);
+          }}
+        >
+          x
+        </div>
+        <form className="edit-form" onSubmit={handleSubmit(sendEdit)}>
+          <textarea
+            className="edit-body"
+            id={`edit-body__${post.post_id}`}
+            defaultValue={post.post_body}
+            {...register("text")}
+          ></textarea>
+
+          {editImage}
+
+          <input type="file" {...register("image")} onChange={onSelectFile} />
+          <input type="submit" className="edit-btn"></input>
+        </form>
+      </div>
+    </div>
+  );
 };
 
 export default EditPost;

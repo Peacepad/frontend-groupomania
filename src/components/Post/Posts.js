@@ -41,6 +41,7 @@ const Posts = () => {
         axios.get("http://localhost:8000/api/post").then((res) => {
           setData(res.data);
           setPlayOnce(false);
+          
         });
 
         
@@ -154,6 +155,7 @@ const Posts = () => {
 
   const showDate = (post) => {
     let mySqlDate = post.post_date;
+    
 
     let mySqlDate2 = mySqlDate.replace("T", " ");
     let mySqlDate3 = mySqlDate2.replace("Z", "");
@@ -178,7 +180,7 @@ const Posts = () => {
 
     let goodMouth = mouths[goodMouthNumber];
 
-    let goodHour = parseInt(t[3]) + 2;
+    let goodHour = parseInt(t[3]);
 
     let correctDate = `Le ${t[2]} ${goodMouth} ${t[0]} à ${goodHour}h${t[4]}`;
 
@@ -218,12 +220,19 @@ const Posts = () => {
       `edit-container__${post.post_id}`
     );
 
+    const editAreaDOM = document.getElementById(`edit-body__${post.post_id}`);
+
+
     if (showEditDOM.style.display == "flex") {
       if (document.getElementById(`edit-container__${post.post_id}`)) {
         const showEditDOM = document.getElementById(
           `edit-container__${post.post_id}`
         );
         showEditDOM.style.display = "none";
+        const editBackgroundDOM = document.getElementById(`edit-background__${post.post_id}`);
+        editBackgroundDOM.style.display = "none";
+        //remettre le scroll
+        document.documentElement.style.overflow = 'scroll';
       }
     } else {
       if (document.getElementById(`edit-container__${post.post_id}`)) {
@@ -231,6 +240,20 @@ const Posts = () => {
           `edit-container__${post.post_id}`
         );
         showEditDOM.style.display = "flex";
+        const editBackgroundDOM = document.getElementById(`edit-background__${post.post_id}`);
+        editBackgroundDOM.style.display = "flex";
+        //empecher le scroll pendant l'édition
+        document.documentElement.style.overflow = 'hidden';
+      }
+      if(editAreaDOM)
+      {
+        // Mettre le focus à la fin du texte et non au début
+        editAreaDOM.focus();
+
+     
+        editAreaDOM.selectionStart = editAreaDOM.value.length;
+      
+      
       }
     }
   };

@@ -47,7 +47,7 @@ const ProfilImage = () => {
       data: formData,
     })
       .then((res) => {
-        let userData= JSON.parse(localStorage.getItem("userData"));
+        let userData = JSON.parse(localStorage.getItem("userData"));
         userData.userImageURL = res.data.userImageURL;
         localStorage.setItem("userData", JSON.stringify(userData));
         window.location.reload();
@@ -58,7 +58,7 @@ const ProfilImage = () => {
   };
 
   let profilAvatar;
-
+  
   profilAvatar = (
     <Avatar
       className="profil-avatar__withoutUrl"
@@ -66,9 +66,9 @@ const ProfilImage = () => {
       size={200}
     />
   );
-    if (userData.userImageURL) {
-      profilAvatar = <img src={userData.userImageURL} alt="votre avatar" />
-    }
+  if (userData.userImageURL) {
+    profilAvatar = <img src={userData.userImageURL} alt="votre avatar" />;
+  }
   if (userData.imageURL != undefined) {
     profilAvatar = <img src={userData.imageURL} alt="votre avatar" />;
   }
@@ -78,9 +78,7 @@ const ProfilImage = () => {
 
   return (
     <div className="profil-avatar">
-      <div className="profil-avatar__preview ">
-      {profilAvatar}
-      </div>
+      <div className="profil-avatar__preview ">{profilAvatar}</div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <input type="file" {...register("image")} onChange={onSelectFile} />
