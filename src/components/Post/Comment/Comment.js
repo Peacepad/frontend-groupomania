@@ -1,11 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
- 
-  faEllipsisH,
-
-} from "@fortawesome/free-solid-svg-icons";
+import { faEllipsisH, faImage } from "@fortawesome/free-solid-svg-icons";
 import { useForm } from "react-hook-form";
 import {
   Avatar,
@@ -19,17 +15,21 @@ import {
 
 const Comment = ({ post, playOnce, setPlayOnce }) => {
   const userData = JSON.parse(localStorage.getItem("userData"));
-  const { register, handleSubmit, setValue } = useForm();
-
+  const { register, handleSubmit, setValue, formState } = useForm({
+    mode: "onChange",
+  });
 
   const sendComment = async (data) => {
     const token = localStorage.getItem("token");
 
     let commentData = new FormData();
 
+    const image = data.image[0];
+
     commentData.append("userId", token);
     commentData.append(`text`, data.text);
     commentData.append("postId", post.post_id);
+    commentData.append("image", image);
 
     axios({
       method: "POST",
@@ -61,13 +61,9 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
     })
       .then(() => {
         setPlayOnce(!playOnce);
-        
-        
       })
       .catch(console.log("Le commentaire n'a pas pu être supprimé"));
-  }
- 
-
+  };
 
   return (
     <>
@@ -78,8 +74,21 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
         <form id="comment-form" onSubmit={handleSubmit(sendComment)}>
           <textarea
             {...register(`text`)}
-            placeholder="Ecrivez un commentaire ..." id={`commentForPost${post.post_id}`}
+            placeholder="Ecrivez un commentaire ..."
+            id={`commentForPost${post.post_id}`}
           ></textarea>
+
+          <label className="label-file">
+            {" "}
+            <FontAwesomeIcon icon={faImage} />
+            <input
+              type="file"
+              className="comment-image"
+              {...register(`image`)}
+              name="image"
+            ></input>
+          </label>
+
           <input type="submit"></input>
         </form>
       </div>
@@ -88,7 +97,8 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
         <ul className="comments-list">
           {post.listComment.map((comment) => (
             <li
-              key={comment.comment_id} id={`comment-card${comment.comment_id}`}
+              key={comment.comment_id}
+              id={`comment-card${comment.comment_id}`}
               className={`comment-card`}
             >
               <div className="comment-user">
@@ -107,7 +117,14 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
                 )}
               </div>
               <div className="comment-body">
-                <p>{comment.comment_body}</p>
+                {comment.comment_body && <p>{comment.comment_body}</p>}
+
+                {comment.comment_imageURL && (
+                  <img
+                    src={comment.comment_imageURL}
+                    alt="illustration du commentaire"
+                  />
+                )}
               </div>
 
               {userData.userId === comment.comment_user_id && (
@@ -121,7 +138,11 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
                           <Menu.Item icon={EditIcon} intent="success">
                             Éditer...
                           </Menu.Item>
-                          <Menu.Item icon={TrashIcon} intent="danger" onClick={() => deleteComment(comment.comment_id)}>
+                          <Menu.Item
+                            icon={TrashIcon}
+                            intent="danger"
+                            onClick={() => deleteComment(comment.comment_id)}
+                          >
                             Supprimer...
                           </Menu.Item>
                         </Menu.Group>

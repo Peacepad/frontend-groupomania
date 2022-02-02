@@ -33,6 +33,7 @@ const ProfilView = () => {
         userData.userLastname = res.data.userLastname;
         userData.userEmail = res.data.userEmail;
         localStorage.setItem("userData", JSON.stringify(userData));
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);
