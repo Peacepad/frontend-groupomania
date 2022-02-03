@@ -65,6 +65,42 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
       .catch(console.log("Le commentaire n'a pas pu être supprimé"));
   };
 
+    // Afficher la date sous le bon format
+
+    const showDate = (comment) => {
+      let mySqlDate = comment.comment_date;
+      
+  
+      let mySqlDate2 = mySqlDate.replace("T", " ");
+      let mySqlDate3 = mySqlDate2.replace("Z", "");
+  
+      let t = `${mySqlDate3}`.split(/[- :]/);
+  
+      let mouths = [
+        "janvier",
+        "fevrier",
+        "mars",
+        "avril",
+        "mai",
+        "juin",
+        "juillet",
+        "aout",
+        "septembre",
+        "obtobre",
+        "novembre",
+        "décembre",
+      ];
+      let goodMouthNumber = parseInt(t[1]) - 1;
+  
+      let goodMouth = mouths[goodMouthNumber];
+  
+      let goodHour = parseInt(t[3]);
+  
+      let correctDate = `Le ${t[2]} ${goodMouth} ${t[0]} à ${goodHour}h${t[4]}`;
+  
+      return correctDate;
+    };
+
   return (
     <>
       <div
@@ -79,7 +115,6 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
           ></textarea>
 
           <label className="label-file">
-            {" "}
             <FontAwesomeIcon icon={faImage} />
             <input
               type="file"
@@ -116,8 +151,17 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
                   />
                 )}
               </div>
-              <div className="comment-body">
-                {comment.comment_body && <p>{comment.comment_body}</p>}
+              <div className="comment-body__container">
+                <div className="comment-body">
+                  <div className="comment-body__user">
+                    <p>
+                      {comment.comment_firstname +
+                        " " +
+                        comment.comment_lastname}
+                    </p>
+                  </div>
+                  {comment.comment_body && <p>{comment.comment_body}</p>}
+                </div>
 
                 {comment.comment_imageURL && (
                   <img
@@ -126,7 +170,6 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
                   />
                 )}
               </div>
-
               {userData.userId === comment.comment_user_id && (
                 <div className="comment-edit">
                   <Popover
@@ -155,6 +198,8 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
                   </Popover>
                 </div>
               )}
+
+              <div className="comment-date">{showDate(comment)}</div>
             </li>
           ))}
         </ul>

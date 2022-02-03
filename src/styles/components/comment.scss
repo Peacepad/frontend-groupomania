@@ -62,31 +62,47 @@
 .comment-body {
   
   display: flex;
-  
+  flex-direction: column;
   align-items: center;
   background-color: lighten($back-color, 5%);
-  position: relative;
-  margin-left: 25px;
+  
+  
   border-radius: 6px;
   padding: 5px;
   
-  white-space:pre-wrap;
+  
   overflow: hidden;
-  max-width: 85%;
+  
   & p {
     margin:0;
     margin-left:5px;
     margin-right:5px;
-    text-overflow: ellipsis;
-    overflow: hidden;
+    
     padding-left: 5px;
     padding-right: 5px;
   }
-  & img {
-    max-width: 300px;
-    max-height: 300px;
-  }
   
+}
+
+.comment-body__container {
+  display: flex;
+  flex-direction: column;
+  max-width: 70%;
+  margin-left: 25px;
+  align-items: center;
+  & img {
+    max-width: 100px;
+    max-height: 100px;
+    border-radius: 6px;
+  }
+}
+
+.comment-body__user {
+  font-weight: 500;
+  padding-left: 5px;
+  padding-right: 5px;
+  white-space:nowrap;
+  text-transform: capitalize;
 }
 
 .label-file {
@@ -108,5 +124,13 @@
 
 .comment-image {
   display:none
+}
+
+
+
+.comment-date {
+  margin-left: 10px;
+  color: grey;
+    font-size: 0.8em;
 }
 

@@ -81,8 +81,15 @@ const ProfilImage = () => {
       <div className="profil-avatar__preview ">{profilAvatar}</div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <input type="file" {...register("image")} onChange={onSelectFile} />
-        <input type="submit"></input>
+
+      <label className="profil-label">      
+            <div className="profil-button">Ajouter une image</div>
+            <input type="file" className="profil-image" {...register("image")} onChange={onSelectFile} />
+          </label>
+
+
+        
+        <input type="submit" value="Confirmer"></input>
       </form>
     </div>
   );

@@ -53,6 +53,7 @@
     height: 40px;
     width: 165px;
   }
+  
   &:hover .create-post__btn {
     background-color: $blue-link;
   }
@@ -104,6 +105,7 @@
   & img {
     max-width: 500px;
     max-height: 600px;
+    margin-bottom: 40px;
   }
 }
 
@@ -111,6 +113,7 @@
   padding: 40px;
   max-width: 60%;
   white-space:pre-wrap;
+  margin-top: 30px;
 }
 
 .post-interact {
