@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import ProfilImage from "./ProfilImage";
 import axios from "axios";
 
 const ProfilView = () => {
-  const [data, setData] = useState([]);
+ 
 
   const token = localStorage.getItem("token");
 
@@ -46,6 +46,7 @@ const ProfilView = () => {
       <div className="profil-info">
         <h2>Vos informations</h2>
         <form className="profil-edit" onSubmit={handleSubmit(onSubmit)}>
+         <div className="profil-edit__label">
           <label>
             Prénom :{" "}
             <input
@@ -71,8 +72,9 @@ const ProfilView = () => {
               {...register("email")}
             />
           </label>
+          </div>
 
-          <input type="submit" value="Modifier"></input>
+          <input type="submit" className="profil-submit" value="Modifier"></input>
         </form>
       </div>
     </div>

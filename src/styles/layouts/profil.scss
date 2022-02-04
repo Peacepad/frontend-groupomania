@@ -1,3 +1,52 @@
+.profil-avatar {
+  width: 90%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  & form {
+      display: flex;
+      flex-direction: column;
+  }
+}
+
+.profil-image {
+  display:none
+}
+
+
+.profil-button {
+  background-color: white;
+  
+  color: black;
+  border-radius: 6px;
+  
+  font-size: 1.1em;
+  height: 40px;
+  width: 165px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+  font-size: 1em;
+  &:hover  {
+    background-color: darken(white,10%);
+  }
+}
+
+.profil-submit {
+  background-color: white;
+  border: solid 1px grey;
+  border-radius: 6px;
+  height:30px;
+  font-size: 1em;
+  width: 205px;
+  &:hover  {
+    background-color: darken(white,10%);
+  }
+}
+
 .profil-info {
   width: 80%;
   margin: auto;
@@ -5,12 +54,19 @@
   flex-direction: column;
   align-items: center;
   margin-top: 50px;
+  background-color: white;
+  border-radius: 6px;
+  padding:20px;
+  & h2 {
+    margin-top:0;
+  }
 }
 
 .profil-edit {
   width: 100%;
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  align-items:center;
 }
 
 .profil-avatar__preview {
@@ -26,5 +82,18 @@
     left: 0;
     border-radius: 50%;
     object-fit:cover;
+    border: solid 5px white;
+  }
+}
+
+.profil-edit__label {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+  & label {
+    display:flex;
+    flex-direction: column;
+    align-items:center;
   }
 }

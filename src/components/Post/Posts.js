@@ -10,6 +10,7 @@ import {
   EditIcon,
   TrashIcon,
   Button,
+  
 } from "evergreen-ui";
 import Like from "./Like/Like";
 import { useForm } from "react-hook-form";
@@ -20,7 +21,7 @@ import EditPost from "./EditPost";
 const Posts = () => {
   const history = useHistory();
   const [data, setData] = useState([]);
- 
+
   const [sortedData, setSortedData] = useState([]);
 
   const [playOnce, setPlayOnce] = useState(true);
@@ -41,10 +42,7 @@ const Posts = () => {
         axios.get("http://localhost:8000/api/post").then((res) => {
           setData(res.data);
           setPlayOnce(false);
-          
         });
-
-        
       }
 
       const sortedPost = () => {
@@ -53,7 +51,7 @@ const Posts = () => {
           return b.post_id - a.post_id;
         });
         setSortedData(sortedArray);
-        console.log(sortedArray);
+        
       };
       sortedPost();
     }
@@ -126,9 +124,11 @@ const Posts = () => {
         authorization: "Bearer " + token,
       },
     })
-      .then(function (response) {
-        console.log(response);
-      })
+      .then(() => {
+        document.getElementById("create-post__text").style.height = "40" + "px";
+        document.getElementById("create-post__text").style.overflow = "hidden";
+      }
+      )
       .catch(function (response) {
         //handle error
         console.log(response);
@@ -143,19 +143,15 @@ const Posts = () => {
 
   // ---------------- UpdatePost
   const [updateElement, setUpdateElement] = useState(false);
-  
 
   let postBodyDiv;
 
   // ------------- EditPost ----------------------------------------------------------------------------
-  
-
 
   // Afficher la date sous le bon format
 
   const showDate = (post) => {
     let mySqlDate = post.post_date;
-    
 
     let mySqlDate2 = mySqlDate.replace("T", " ");
     let mySqlDate3 = mySqlDate2.replace("Z", "");
@@ -194,12 +190,13 @@ const Posts = () => {
       `comment-container__${post.post_id}`
     );
 
-    if (showCommentDOM.style.display == "flex") {
+    if (showCommentDOM.style.display === "flex") {
       if (document.getElementById(`comment-container__${post.post_id}`)) {
         const showCommentDOM = document.getElementById(
           `comment-container__${post.post_id}`
         );
         showCommentDOM.style.display = "none";
+        
       }
     } else {
       if (document.getElementById(`comment-container__${post.post_id}`)) {
@@ -207,14 +204,15 @@ const Posts = () => {
           `comment-container__${post.post_id}`
         );
         showCommentDOM.style.display = "flex";
+        // Effacement du fichier contenu dans le input file
+        document.getElementById(`comment-form__${post.post_id}`).reset();
+        document.getElementById(`label-file__${post.post_id}`).style.backgroundColor = "rgb(239, 239, 239)";
       }
     }
   };
 
-
   // Afficher l'espace pour modifier un post
 
- 
   const showEdit = (post) => {
     const showEditDOM = document.getElementById(
       `edit-container__${post.post_id}`
@@ -222,17 +220,18 @@ const Posts = () => {
 
     const editAreaDOM = document.getElementById(`edit-body__${post.post_id}`);
 
-
-    if (showEditDOM.style.display == "flex") {
+    if (showEditDOM.style.display === "flex") {
       if (document.getElementById(`edit-container__${post.post_id}`)) {
         const showEditDOM = document.getElementById(
           `edit-container__${post.post_id}`
         );
         showEditDOM.style.display = "none";
-        const editBackgroundDOM = document.getElementById(`edit-background__${post.post_id}`);
+        const editBackgroundDOM = document.getElementById(
+          `edit-background__${post.post_id}`
+        );
         editBackgroundDOM.style.display = "none";
         //remettre le scroll
-        document.documentElement.style.overflow = 'scroll';
+        document.documentElement.style.overflow = "scroll";
       }
     } else {
       if (document.getElementById(`edit-container__${post.post_id}`)) {
@@ -240,27 +239,38 @@ const Posts = () => {
           `edit-container__${post.post_id}`
         );
         showEditDOM.style.display = "flex";
-        const editBackgroundDOM = document.getElementById(`edit-background__${post.post_id}`);
+        const editBackgroundDOM = document.getElementById(
+          `edit-background__${post.post_id}`
+        );
         editBackgroundDOM.style.display = "flex";
         //empecher le scroll pendant l'édition
-        document.documentElement.style.overflow = 'hidden';
+        document.documentElement.style.overflow = "hidden";
       }
-      if(editAreaDOM)
-      {
+      if (editAreaDOM) {
         // Mettre le focus à la fin du texte et non au début
         editAreaDOM.focus();
 
-     
         editAreaDOM.selectionStart = editAreaDOM.value.length;
-      
-      
       }
     }
   };
 
+  // function for extend textarea
+  const growTextarea = () => {
+    const textarea = document.getElementById("create-post__text");
 
+    textarea.addEventListener("input", (e) => {
+      textarea.style.height = "auto";
+      textarea.style.height = textarea.scrollHeight + "px";
 
-
+      if (textarea.clientHeight > 197) {
+        textarea.style.overflowY = "scroll";
+      }
+      if (textarea.clientHeight < 197) {
+        textarea.style.overflowY = "hidden";
+      }
+    });
+  };
 
   return (
     <React.Fragment>
@@ -268,7 +278,8 @@ const Posts = () => {
         <form className="create-post" onSubmit={handleSubmit(onSubmit)}>
           <div className="create-post__edit">
             <textarea
-              className="create-post__text"
+              onFocus={() => growTextarea()}
+              id="create-post__text"
               {...register("text")}
             ></textarea>
 
@@ -297,7 +308,7 @@ const Posts = () => {
               <div className="post-card">
                 <EditPost post={post} setPlayOnce={setPlayOnce} />
 
-                {userData.userId == post.post_user_id && (
+                {userData.userId === post.post_user_id && (
                   <div className="post-edit">
                     <Popover
                       className="post-edit"
@@ -308,7 +319,10 @@ const Posts = () => {
                             <Menu.Item
                               icon={EditIcon}
                               intent="success"
-                             onClick={() => {showEdit(post); close()}}
+                              onClick={() => {
+                                showEdit(post);
+                                close();
+                              }}
                             >
                               Éditer...
                             </Menu.Item>

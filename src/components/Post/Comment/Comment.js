@@ -12,10 +12,11 @@ import {
   TrashIcon,
   Button,
 } from "evergreen-ui";
+import EditComment from "./EditComment";
 
 const Comment = ({ post, playOnce, setPlayOnce }) => {
   const userData = JSON.parse(localStorage.getItem("userData"));
-  const { register, handleSubmit, setValue, formState } = useForm({
+  const { register, handleSubmit, setValue} = useForm({
     mode: "onChange",
   });
 
@@ -43,6 +44,8 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
       .then(() => {
         setPlayOnce(!playOnce);
         setValue("text", "");
+        document.getElementById(`comment-form__${post.post_id}`).reset();
+        document.getElementById(`label-file__${post.post_id}`).style.backgroundColor = "rgb(239, 239, 239)";
       })
       .catch(function (response) {
         //handle error
@@ -61,6 +64,8 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
     })
       .then(() => {
         setPlayOnce(!playOnce);
+        document.getElementById(`comment-form__${post.post_id}`).reset();
+        document.getElementById(`label-file__${post.post_id}`).style.backgroundColor = "rgb(239, 239, 239)";
       })
       .catch(console.log("Le commentaire n'a pas pu être supprimé"));
   };
@@ -101,25 +106,90 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
       return correctDate;
     };
 
+
+    const showEditComment = (comment) => {
+      const showEditCommentDOM = document.getElementById(
+        `edit-comment-container__${comment.comment_id}`
+      );
+  
+      const editCommentAreaDOM = document.getElementById(`edit-comment-body__${comment.comment_id}`);
+  
+      if (showEditCommentDOM.style.display === "flex") {
+        if (document.getElementById(`edit-comment-container__${comment.comment_id}`)) {
+          const showEditDOM = document.getElementById(
+            `edit-comment-container__${comment.comment_id}`
+          );
+          showEditCommentDOM.style.display = "none";
+          
+          const editCommentBackgroundDOM = document.getElementById(
+            `edit-comment-background__${comment.comment_id}`
+          );
+          editCommentBackgroundDOM.style.display = "none";
+          
+        }
+      } else {
+        if (document.getElementById(`edit-comment-container__${comment.comment_id}`)) {
+          const showEditCommentDOM = document.getElementById(
+            `edit-comment-container__${comment.comment_id}`
+          );
+          showEditCommentDOM.style.display = "flex";
+         
+          const editCommentBackgroundDOM = document.getElementById(
+            `edit-comment-background__${comment.comment_id}`
+          );
+          editCommentBackgroundDOM.style.display = "flex";
+          
+        }
+        if (editCommentAreaDOM) {
+          // Mettre le focus à la fin du texte et non au début
+          editCommentAreaDOM.focus();
+  
+          editCommentAreaDOM.selectionStart = editCommentAreaDOM.value.length;
+        }
+      }
+    };
+
+    const selectImage = () => {
+      if(document.getElementById(`comment-image__${post.post_id}`))
+      {const inputDOM = document.getElementById(`comment-image__${post.post_id}`);
+      console.log("avant " + inputDOM.files[0]);
+
+      inputDOM.addEventListener('change', () => {
+
+        
+        if(inputDOM.files[0] !== undefined){
+          console.log("après " + inputDOM.files[0]);
+          document.getElementById(`label-file__${post.post_id}`).style.backgroundColor = "#66FF99";
+          }
+        
+
+
+      })
+        
+      
+    }}
+
+
   return (
     <>
       <div
         className="comment-container"
         id={`comment-container__${post.post_id}`}
       >
-        <form id="comment-form" onSubmit={handleSubmit(sendComment)}>
+        <form className="comment-form "id={`comment-form__${post.post_id}`} onSubmit={handleSubmit(sendComment)}>
           <textarea
             {...register(`text`)}
             placeholder="Ecrivez un commentaire ..."
             id={`commentForPost${post.post_id}`}
           ></textarea>
 
-          <label className="label-file">
+          <label className="label-file" id={`label-file__${post.post_id}`}>
             <FontAwesomeIcon icon={faImage} />
             <input
               type="file"
               className="comment-image"
-              {...register(`image`)}
+              onFocus={selectImage(post.post_id)}
+              id={`comment-image__${post.post_id}`}              {...register(`image`)}
               name="image"
             ></input>
           </label>
@@ -130,12 +200,13 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
 
       <div className="comments">
         <ul className="comments-list">
-          {post.listComment.map((comment) => (
+          {post.listComment.sort((a, b) => a.comment_id - b.comment_id).map((comment) => (
             <li
               key={comment.comment_id}
               id={`comment-card${comment.comment_id}`}
               className={`comment-card`}
             >
+              <EditComment comment={comment} setPlayOnce={setPlayOnce} />
               <div className="comment-user">
                 {comment.comment_user_imageURL ? (
                   <img
@@ -178,7 +249,7 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
                     content={({ close }) => (
                       <Menu>
                         <Menu.Group>
-                          <Menu.Item icon={EditIcon} intent="success">
+                          <Menu.Item icon={EditIcon} intent="success" onClick={() => {showEditComment(comment); close()}}>
                             Éditer...
                           </Menu.Item>
                           <Menu.Item

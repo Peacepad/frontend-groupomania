@@ -5,7 +5,7 @@ import axios from "axios";
 
 const Like = ({ post }) => {
   const [likeNumber, setLikeNumber] = useState();
-  const [playOnce, setPlayOnce] = useState(true);
+  
   const [likePut, setLikePut] = useState(0);
 
   const token = localStorage.getItem("token");
@@ -34,7 +34,7 @@ const Like = ({ post }) => {
       
           setLikeNumber(res.data);
 
-          setPlayOnce(!playOnce);
+          
          
         });
     };

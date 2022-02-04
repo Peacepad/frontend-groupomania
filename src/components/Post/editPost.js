@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 const EditPost = ({ post, playOnce, setPlayOnce }) => {
@@ -52,7 +52,7 @@ const EditPost = ({ post, playOnce, setPlayOnce }) => {
       `edit-container__${post.post_id}`
     );
 
-    if (showEditDOM.style.display == "flex") {
+    if (showEditDOM.style.display === "flex") {
       if (document.getElementById(`edit-container__${post.post_id}`)) {
         const showEditDOM = document.getElementById(
           `edit-container__${post.post_id}`
@@ -108,9 +108,7 @@ const EditPost = ({ post, playOnce, setPlayOnce }) => {
     setFileDeleted(true);
     
   };
-  useEffect(() => {
-    console.log(fileDeleted);
-  });
+ 
 
   let editImage;
 
@@ -129,7 +127,7 @@ const EditPost = ({ post, playOnce, setPlayOnce }) => {
       <img src={postImage} />
     </div>
   );
-  if (maskImage == false && !preview) {
+  if (maskImage === false && !preview) {
     editImage = (
       <div className="edit-file">
         <p className="edit-file__message">Actuellement votre post ne contient pas d'image, vous pouvez en ajouter une en choissant le fichier.</p>
@@ -147,7 +145,7 @@ const EditPost = ({ post, playOnce, setPlayOnce }) => {
       </div>
     );
   }
-  if (maskImage == true && !preview && !postImage) {
+  if (maskImage === true && !preview && !postImage) {
     editImage = (
         <div className="edit-file">
           <p className="edit-file__message">Actuellement votre post ne contient pas d'image, vous pouvez en ajouter une en choissant le fichier.</p>

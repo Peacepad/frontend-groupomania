@@ -50,7 +50,7 @@ const Header = () => {
   //Affichage différent en fonction de la connexion
   if (isLogged) {
     let userData = JSON.parse(localStorage.getItem("userData"));
-    if (userData.userImageURL != null || userData.userImageURL != undefined) {
+    if (userData.userImageURL !== null || userData.userImageURL !== undefined) {
       logDiv = (
         <div className="header-user">
           <div className="header-avatar__container" ref={ref}>

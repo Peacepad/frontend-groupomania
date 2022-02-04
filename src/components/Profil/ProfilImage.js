@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { Avatar } from "evergreen-ui";
 import { useForm } from "react-hook-form";
 import axios from "axios";
@@ -7,7 +7,7 @@ const ProfilImage = () => {
   const token = localStorage.getItem("token");
   const userData = JSON.parse(localStorage.getItem("userData"));
 
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit } = useForm();
   const [selectedFile, setSelectedFile] = useState();
   const [preview, setPreview] = useState();
 
@@ -32,7 +32,7 @@ const ProfilImage = () => {
     setSelectedFile(e.target.files[0]);
   };
 
-  const onSubmit = async (event) => {
+  const onSubmit = async () => {
     let formData = new FormData(); //formdata object
 
     formData.append("image", selectedFile);
@@ -69,7 +69,7 @@ const ProfilImage = () => {
   if (userData.userImageURL) {
     profilAvatar = <img src={userData.userImageURL} alt="votre avatar" />;
   }
-  if (userData.imageURL != undefined) {
+  if (userData.imageURL !== undefined) {
     profilAvatar = <img src={userData.imageURL} alt="votre avatar" />;
   }
   if (preview) {
@@ -89,7 +89,7 @@ const ProfilImage = () => {
 
 
         
-        <input type="submit" value="Confirmer"></input>
+        <input type="submit" className="profil-submit" value="Confirmer"></input>
       </form>
     </div>
   );

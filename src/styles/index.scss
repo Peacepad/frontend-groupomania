@@ -1,5 +1,5 @@
 $back-color: #FFD7D7;
-$blue-link: #58a6ff;
+$blue-link: #01D1FD;
 
 @import "./layouts/header.scss";
 @import "./layouts/auth.scss";
@@ -8,7 +8,6 @@ $blue-link: #58a6ff;
 @import "./components/header-more.scss";
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap");
 @import "./utils/like-anim.scss";
-@import "./components/profil-avatar.scss";
 @import "./layouts/profil.scss";
 @import "./components/edit-post.scss";
 @import "./components/comment.scss";
