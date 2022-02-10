@@ -2,16 +2,20 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import ProfilImage from "./ProfilImage";
 import axios from "axios";
+import { Link, useHistory } from "react-router-dom";
+
+
+  
 
 const ProfilView = () => {
- 
+  const history = useHistory();
 
   const token = localStorage.getItem("token");
 
   const userData = JSON.parse(localStorage.getItem("userData"));
   const { register, handleSubmit} = useForm();
 
-  const onSubmit = async (data) => {
+  const onSubmit = (data) => {
     let formData = new FormData(); //formdata object
 
     formData.append("firstname", data.firstname);
@@ -39,6 +43,29 @@ const ProfilView = () => {
         console.log(err);
       });
   };
+
+  const deleteUser = (data) => {
+
+
+
+    axios({
+      method: "delete",
+      url: `http://localhost:8000/api/user/${userData.userId}`,
+      headers: {
+        "Content-Type":"multipart/form-data",
+        authorization: "Bearer " + token,
+      },
+  
+    })
+    .then(() =>
+      {localStorage.removeItem("token");
+        localStorage.removeItem("userData");
+        history.push("/login");}
+    )
+    .catch(
+      console.log("erreur")
+    )
+  }
 
   return (
     <div>
@@ -77,7 +104,13 @@ const ProfilView = () => {
           <input type="submit" className="profil-submit" value="Modifier"></input>
         </form>
       </div>
+
+    <form id="profil-delete" onSubmit={handleSubmit(deleteUser)}>
+      <input type="submit" value="Supprimer le compte" className="profil-delete__button"></input>
+    </form>
+
     </div>
+
   );
 };
 

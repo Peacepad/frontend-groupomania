@@ -116,7 +116,7 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
   
       if (showEditCommentDOM.style.display === "flex") {
         if (document.getElementById(`edit-comment-container__${comment.comment_id}`)) {
-          const showEditDOM = document.getElementById(
+          const showEditCommentDOM = document.getElementById(
             `edit-comment-container__${comment.comment_id}`
           );
           showEditCommentDOM.style.display = "none";
@@ -125,6 +125,7 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
             `edit-comment-background__${comment.comment_id}`
           );
           editCommentBackgroundDOM.style.display = "none";
+          document.getElementById(`one-comment__${comment.comment_id}`).style.display = "flex";
           
         }
       } else {
@@ -138,7 +139,7 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
             `edit-comment-background__${comment.comment_id}`
           );
           editCommentBackgroundDOM.style.display = "flex";
-          
+          document.getElementById(`one-comment__${comment.comment_id}`).style.display = "none";
         }
         if (editCommentAreaDOM) {
           // Mettre le focus à la fin du texte et non au début
@@ -169,6 +170,12 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
       
     }}
 
+
+
+
+
+
+    
 
   return (
     <>
@@ -207,6 +214,7 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
               className={`comment-card`}
             >
               <EditComment comment={comment} setPlayOnce={setPlayOnce} />
+              <div className="one-comment" id={`one-comment__${comment.comment_id}`}>
               <div className="comment-user">
                 {comment.comment_user_imageURL ? (
                   <img
@@ -234,11 +242,19 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
                   {comment.comment_body && <p>{comment.comment_body}</p>}
                 </div>
 
+
+
                 {comment.comment_imageURL && (
+                 
+
+
+
+
                   <img
-                    src={comment.comment_imageURL}
+                    src={comment.comment_imageURL} 
                     alt="illustration du commentaire"
                   />
+                
                 )}
               </div>
               {userData.userId === comment.comment_user_id && (
@@ -271,6 +287,7 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
               )}
 
               <div className="comment-date">{showDate(comment)}</div>
+              </div>
             </li>
           ))}
         </ul>

@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 
-const Like = ({ post }) => {
-  const [likeNumber, setLikeNumber] = useState();
+const Like = ({ post, playOnce, setPlayOnce }) => {
+ 
   
-  const [likePut, setLikePut] = useState(0);
+ 
 
   const token = localStorage.getItem("token");
 
@@ -20,32 +20,17 @@ const Like = ({ post }) => {
         "content-type": "application/json",
       },
     }).then(() => {
-      setLikePut(likePut + 1);
+      setPlayOnce(!playOnce);
     });
   };
 
-  useEffect(() => {
-    const getLike = () => {
-      // -------------------- Récupérer les likes pour les post
-
-      axios
-        .get(`http://localhost:8000/api/post/${post.post_id}/likes`)
-        .then((res) => {
-      
-          setLikeNumber(res.data);
-
-          
-         
-        });
-    };
-    getLike();
-  }, [likePut]);
+  
 
 
   return (
     <div className="post-like">
       <div className="post-like__display">
-        <FontAwesomeIcon icon={faThumbsUp} /> {likeNumber}
+        <FontAwesomeIcon icon={faThumbsUp} /> {post.listLike.length}
       </div>
       <div className="post-like__btn" onClick={() => like(post.post_id)}>
         <FontAwesomeIcon icon={faThumbsUp} className="post-like" /> J'aime

@@ -97,3 +97,23 @@
     align-items:center;
   }
 }
+
+#profil-delete {
+  margin:auto;
+  margin-top: 20px;
+  width: 80%;
+  display: flex;
+  justify-content: center;
+}
+
+.profil-delete__button {
+  background-color: #FD2D01;
+  border: solid 1px grey;
+  border-radius: 6px;
+  height:30px;
+  font-size: 1em;
+  width: 205px;
+  &:hover {
+    background-color: lighten(#FD2D01, 10%);
+  }
+}

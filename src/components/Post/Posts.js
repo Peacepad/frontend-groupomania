@@ -50,6 +50,7 @@ const Posts = () => {
         const sortedArray = postObj.sort((a, b) => {
           return b.post_id - a.post_id;
         });
+        console.log(sortedArray);
         setSortedData(sortedArray);
         
       };
@@ -127,6 +128,13 @@ const Posts = () => {
       .then(() => {
         document.getElementById("create-post__text").style.height = "40" + "px";
         document.getElementById("create-post__text").style.overflow = "hidden";
+
+        setPlayOnce(!playOnce);
+        reset();
+    setPreview(undefined);
+    
+    setUpdateElement(!updateElement);
+    setSelectedFile(undefined);
       }
       )
       .catch(function (response) {
@@ -134,11 +142,7 @@ const Posts = () => {
         console.log(response);
       });
 
-    reset();
-    setPreview(undefined);
-    setPlayOnce(!playOnce);
-    setUpdateElement(!updateElement);
-    setSelectedFile(undefined);
+    
   };
 
   // ---------------- UpdatePost
@@ -378,7 +382,7 @@ const Posts = () => {
                 </div>
 
                 <div className="post-interact">
-                  <Like post={post} />
+                  <Like post={post} setPlayOnce={setPlayOnce} />
 
                   <div className="post-comment">
                     <div className="post-comment__display">
