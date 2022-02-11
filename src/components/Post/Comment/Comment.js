@@ -16,13 +16,14 @@ import EditComment from "./EditComment";
 
 const Comment = ({ post, playOnce, setPlayOnce }) => {
   const userData = JSON.parse(localStorage.getItem("userData"));
+  const verifyUser = userData.isAdmin;
   const { register, handleSubmit, setValue} = useForm({
     mode: "onChange",
   });
 
   const sendComment = async (data) => {
     const token = localStorage.getItem("token");
-
+    
     let commentData = new FormData();
 
     const image = data.image[0];
@@ -153,13 +154,13 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
     const selectImage = () => {
       if(document.getElementById(`comment-image__${post.post_id}`))
       {const inputDOM = document.getElementById(`comment-image__${post.post_id}`);
-      console.log("avant " + inputDOM.files[0]);
+      
 
       inputDOM.addEventListener('change', () => {
 
         
         if(inputDOM.files[0] !== undefined){
-          console.log("après " + inputDOM.files[0]);
+          
           document.getElementById(`label-file__${post.post_id}`).style.backgroundColor = "#66FF99";
           }
         
@@ -257,7 +258,7 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
                 
                 )}
               </div>
-              {userData.userId === comment.comment_user_id && (
+              {(verifyUser == 1 || userData.userId === comment.comment_user_id) && (
                 <div className="comment-edit">
                   <Popover
                     className="comment-edit"

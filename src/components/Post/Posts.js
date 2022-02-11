@@ -21,12 +21,15 @@ import EditPost from "./EditPost";
 const Posts = () => {
   const history = useHistory();
   const [data, setData] = useState([]);
-
+  
   const [sortedData, setSortedData] = useState([]);
 
   const [playOnce, setPlayOnce] = useState(true);
   const token = localStorage.getItem("token");
   const userData = JSON.parse(localStorage.getItem("userData"));
+  const verifyUser = userData.isAdmin;
+   
+  
 
   useEffect(() => {
     const verifyToken = () => {
@@ -312,7 +315,7 @@ const Posts = () => {
               <div className="post-card">
                 <EditPost post={post} setPlayOnce={setPlayOnce} />
 
-                {userData.userId === post.post_user_id && (
+                {(verifyUser == 1 || userData.userId === post.post_user_id)  && (
                   <div className="post-edit">
                     <Popover
                       className="post-edit"
