@@ -11,7 +11,9 @@ $blue-link: #01D1FD;
 @import "./layouts/profil.scss";
 @import "./components/edit-post.scss";
 @import "./components/comment.scss";
-
+@import "./utils/form-response.scss";
+@import "./utils/button.scss";
+@import "./components/other-profil.scss";
 
 * {
   box-sizing: border-box;

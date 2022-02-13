@@ -30,6 +30,10 @@ const ProfilImage = () => {
     }
 
     setSelectedFile(e.target.files[0]);
+    if(document.getElementById(`profil-submit`))
+    {
+      document.getElementById(`profil-submit`).classList.add('pulse');
+    }
   };
 
   const onSubmit = async () => {
@@ -89,7 +93,7 @@ const ProfilImage = () => {
 
 
         
-        <input type="submit" className="profil-submit" value="Confirmer"></input>
+        <input type="submit" id="profil-submit" value="Confirmer"></input>
       </form>
     </div>
   );

@@ -13,17 +13,18 @@ import {
   Button,
 } from "evergreen-ui";
 import EditComment from "./EditComment";
+import { Link } from 'react-router-dom'
 
 const Comment = ({ post, playOnce, setPlayOnce }) => {
   const userData = JSON.parse(localStorage.getItem("userData"));
   const verifyUser = userData.isAdmin;
-  const { register, handleSubmit, setValue} = useForm({
+  const { register, handleSubmit, setValue } = useForm({
     mode: "onChange",
   });
 
   const sendComment = async (data) => {
     const token = localStorage.getItem("token");
-    
+
     let commentData = new FormData();
 
     const image = data.image[0];
@@ -46,11 +47,18 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
         setPlayOnce(!playOnce);
         setValue("text", "");
         document.getElementById(`comment-form__${post.post_id}`).reset();
-        document.getElementById(`label-file__${post.post_id}`).style.backgroundColor = "rgb(239, 239, 239)";
+        document.getElementById(`comment-for-post__${post.post_id}`).style.height = "42px";
+        document.getElementById(
+          `label-file__${post.post_id}`
+        ).style.backgroundColor = "rgb(239, 239, 239)";
       })
-      .catch(function (response) {
+      .catch(function (error) {
         //handle error
-        console.log(response);
+        console.log(error);
+        if (error.response) {
+          document.getElementById(`comment-for-post__${post.post_id}`).classList.add('shake');
+          setTimeout(`document.getElementById('comment-for-post__${post.post_id}').classList.remove('shake')`, 1000);
+        }
       });
   };
 
@@ -66,117 +74,133 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
       .then(() => {
         setPlayOnce(!playOnce);
         document.getElementById(`comment-form__${post.post_id}`).reset();
-        document.getElementById(`label-file__${post.post_id}`).style.backgroundColor = "rgb(239, 239, 239)";
+        
+        document.getElementById(
+          `label-file__${post.post_id}`
+        ).style.backgroundColor = "rgb(239, 239, 239)";
       })
       .catch(console.log("Le commentaire n'a pas pu être supprimé"));
   };
 
-    // Afficher la date sous le bon format
+  // Afficher la date sous le bon format
 
-    const showDate = (comment) => {
-      let mySqlDate = comment.comment_date;
-      
-  
-      let mySqlDate2 = mySqlDate.replace("T", " ");
-      let mySqlDate3 = mySqlDate2.replace("Z", "");
-  
-      let t = `${mySqlDate3}`.split(/[- :]/);
-  
-      let mouths = [
-        "janvier",
-        "fevrier",
-        "mars",
-        "avril",
-        "mai",
-        "juin",
-        "juillet",
-        "aout",
-        "septembre",
-        "obtobre",
-        "novembre",
-        "décembre",
-      ];
-      let goodMouthNumber = parseInt(t[1]) - 1;
-  
-      let goodMouth = mouths[goodMouthNumber];
-  
-      let goodHour = parseInt(t[3]);
-  
-      let correctDate = `Le ${t[2]} ${goodMouth} ${t[0]} à ${goodHour}h${t[4]}`;
-  
-      return correctDate;
-    };
+  const showDate = (comment) => {
+    let mySqlDate = comment.comment_date;
 
+    let mySqlDate2 = mySqlDate.replace("T", " ");
+    let mySqlDate3 = mySqlDate2.replace("Z", "");
 
-    const showEditComment = (comment) => {
-      const showEditCommentDOM = document.getElementById(
-        `edit-comment-container__${comment.comment_id}`
-      );
-  
-      const editCommentAreaDOM = document.getElementById(`edit-comment-body__${comment.comment_id}`);
-  
-      if (showEditCommentDOM.style.display === "flex") {
-        if (document.getElementById(`edit-comment-container__${comment.comment_id}`)) {
-          const showEditCommentDOM = document.getElementById(
-            `edit-comment-container__${comment.comment_id}`
-          );
-          showEditCommentDOM.style.display = "none";
-          
-          const editCommentBackgroundDOM = document.getElementById(
-            `edit-comment-background__${comment.comment_id}`
-          );
-          editCommentBackgroundDOM.style.display = "none";
-          document.getElementById(`one-comment__${comment.comment_id}`).style.display = "flex";
-          
-        }
-      } else {
-        if (document.getElementById(`edit-comment-container__${comment.comment_id}`)) {
-          const showEditCommentDOM = document.getElementById(
-            `edit-comment-container__${comment.comment_id}`
-          );
-          showEditCommentDOM.style.display = "flex";
-         
-          const editCommentBackgroundDOM = document.getElementById(
-            `edit-comment-background__${comment.comment_id}`
-          );
-          editCommentBackgroundDOM.style.display = "flex";
-          document.getElementById(`one-comment__${comment.comment_id}`).style.display = "none";
-        }
-        if (editCommentAreaDOM) {
-          // Mettre le focus à la fin du texte et non au début
-          editCommentAreaDOM.focus();
-  
-          editCommentAreaDOM.selectionStart = editCommentAreaDOM.value.length;
-        }
+    let t = `${mySqlDate3}`.split(/[- :]/);
+
+    let mouths = [
+      "janvier",
+      "fevrier",
+      "mars",
+      "avril",
+      "mai",
+      "juin",
+      "juillet",
+      "aout",
+      "septembre",
+      "obtobre",
+      "novembre",
+      "décembre",
+    ];
+    let goodMouthNumber = parseInt(t[1]) - 1;
+
+    let goodMouth = mouths[goodMouthNumber];
+
+    let goodHour = parseInt(t[3]);
+
+    let correctDate = `Le ${t[2]} ${goodMouth} ${t[0]} à ${goodHour}h${t[4]}`;
+
+    return correctDate;
+  };
+
+  const showEditComment = (comment) => {
+    const showEditCommentDOM = document.getElementById(
+      `edit-comment-container__${comment.comment_id}`
+    );
+
+    const editCommentAreaDOM = document.getElementById(
+      `edit-comment-body__${comment.comment_id}`
+    );
+
+    if (showEditCommentDOM.style.display === "flex") {
+      if (
+        document.getElementById(`edit-comment-container__${comment.comment_id}`)
+      ) {
+        const showEditCommentDOM = document.getElementById(
+          `edit-comment-container__${comment.comment_id}`
+        );
+        showEditCommentDOM.style.display = "none";
+
+        const editCommentBackgroundDOM = document.getElementById(
+          `edit-comment-background__${comment.comment_id}`
+        );
+        editCommentBackgroundDOM.style.display = "none";
+        document.getElementById(
+          `one-comment__${comment.comment_id}`
+        ).style.display = "flex";
       }
-    };
+    } else {
+      if (
+        document.getElementById(`edit-comment-container__${comment.comment_id}`)
+      ) {
+        const showEditCommentDOM = document.getElementById(
+          `edit-comment-container__${comment.comment_id}`
+        );
+        showEditCommentDOM.style.display = "flex";
 
-    const selectImage = () => {
-      if(document.getElementById(`comment-image__${post.post_id}`))
-      {const inputDOM = document.getElementById(`comment-image__${post.post_id}`);
-      
+        const editCommentBackgroundDOM = document.getElementById(
+          `edit-comment-background__${comment.comment_id}`
+        );
+        editCommentBackgroundDOM.style.display = "flex";
+        document.getElementById(
+          `one-comment__${comment.comment_id}`
+        ).style.display = "none";
+      }
+      if (editCommentAreaDOM) {
+        // Mettre le focus à la fin du texte et non au début
+        editCommentAreaDOM.focus();
 
-      inputDOM.addEventListener('change', () => {
+        editCommentAreaDOM.selectionStart = editCommentAreaDOM.value.length;
+      }
+    }
+  };
 
-        
-        if(inputDOM.files[0] !== undefined){
-          
-          document.getElementById(`label-file__${post.post_id}`).style.backgroundColor = "#66FF99";
-          }
-        
+  const selectImage = () => {
+    if (document.getElementById(`comment-image__${post.post_id}`)) {
+      const inputDOM = document.getElementById(
+        `comment-image__${post.post_id}`
+      );
 
+      inputDOM.addEventListener("change", () => {
+        if (inputDOM.files[0] !== undefined) {
+          document.getElementById(
+            `label-file__${post.post_id}`
+          ).style.backgroundColor = "#66FF99";
+        }
+      });
+    }
+  };
 
-      })
-        
-      
-    }}
+  // function for extend textarea
+  const growTextarea = (post) => {
+    const textarea = document.getElementById(`comment-for-post__${post.post_id}`);
 
+    textarea.addEventListener("input", (e) => {
+      textarea.style.height = "auto";
+      textarea.style.height = textarea.scrollHeight + "px";
 
-
-
-
-
-    
+      if (textarea.clientHeight > 97) {
+        textarea.style.overflowY = "scroll";
+      }
+      if (textarea.clientHeight < 97) {
+        textarea.style.overflowY = "hidden";
+      }
+    });
+  };
 
   return (
     <>
@@ -184,113 +208,132 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
         className="comment-container"
         id={`comment-container__${post.post_id}`}
       >
-        <form className="comment-form "id={`comment-form__${post.post_id}`} onSubmit={handleSubmit(sendComment)}>
+        <form
+          className="comment-form "
+          id={`comment-form__${post.post_id}`}
+          onSubmit={handleSubmit(sendComment)}
+        >
           <textarea
             {...register(`text`)}
             placeholder="Ecrivez un commentaire ..."
-            id={`commentForPost${post.post_id}`}
+             onFocus={() => growTextarea(post)}
+            id={`comment-for-post__${post.post_id}`}
+            
           ></textarea>
 
-          <label className="label-file" id={`label-file__${post.post_id}`}>
+          <label className="label-file button" id={`label-file__${post.post_id}`}>
+            
             <FontAwesomeIcon icon={faImage} />
             <input
               type="file"
               className="comment-image"
               onFocus={selectImage(post.post_id)}
-              id={`comment-image__${post.post_id}`}              {...register(`image`)}
+              id={`comment-image__${post.post_id}`}
+              {...register(`image`)}
               name="image"
             ></input>
           </label>
 
-          <input type="submit"></input>
+          <input type="submit" className="button"></input>
         </form>
       </div>
 
       <div className="comments">
         <ul className="comments-list">
-          {post.listComment.sort((a, b) => a.comment_id - b.comment_id).map((comment) => (
-            <li
-              key={comment.comment_id}
-              id={`comment-card${comment.comment_id}`}
-              className={`comment-card`}
-            >
-              <EditComment comment={comment} setPlayOnce={setPlayOnce} />
-              <div className="one-comment" id={`one-comment__${comment.comment_id}`}>
-              <div className="comment-user">
-                {comment.comment_user_imageURL ? (
-                  <img
-                    src={comment.comment_user_imageURL}
-                    alt="photo de profil de l'utilisateur"
-                  />
-                ) : (
-                  <Avatar
-                    name={
-                      comment.comment_firstname + " " + comment.comment_lastname
-                    }
-                    size={40}
-                  />
-                )}
-              </div>
-              <div className="comment-body__container">
-                <div className="comment-body">
-                  <div className="comment-body__user">
-                    <p>
-                      {comment.comment_firstname +
-                        " " +
-                        comment.comment_lastname}
-                    </p>
-                  </div>
-                  {comment.comment_body && <p>{comment.comment_body}</p>}
-                </div>
-
-
-
-                {comment.comment_imageURL && (
-                 
-
-
-
-
-                  <img
-                    src={comment.comment_imageURL} 
-                    alt="illustration du commentaire"
-                  />
-                
-                )}
-              </div>
-              {(verifyUser == 1 || userData.userId === comment.comment_user_id) && (
-                <div className="comment-edit">
-                  <Popover
-                    className="comment-edit"
-                    position={Position.BOTTOM_RIGHT}
-                    content={({ close }) => (
-                      <Menu>
-                        <Menu.Group>
-                          <Menu.Item icon={EditIcon} intent="success" onClick={() => {showEditComment(comment); close()}}>
-                            Éditer...
-                          </Menu.Item>
-                          <Menu.Item
-                            icon={TrashIcon}
-                            intent="danger"
-                            onClick={() => deleteComment(comment.comment_id)}
-                          >
-                            Supprimer...
-                          </Menu.Item>
-                        </Menu.Group>
-                      </Menu>
+          {post.listComment
+            .sort((a, b) => a.comment_id - b.comment_id)
+            .map((comment) => (
+              <li
+                key={comment.comment_id}
+                id={`comment-card${comment.comment_id}`}
+                className={`comment-card`}
+              >
+                <EditComment comment={comment} setPlayOnce={setPlayOnce} />
+                <div
+                  className="one-comment"
+                  id={`one-comment__${comment.comment_id}`}
+                >
+                  <div className="comment-user">
+                  <Link to={`/profil/other/?id=${comment.comment_user_id}`}>
+                    {comment.comment_user_imageURL ? (
+                      <img
+                        src={comment.comment_user_imageURL}
+                        alt="photo de profil de l'utilisateur"
+                      />
+                    ) : (
+                      <Avatar
+                        name={
+                          comment.comment_firstname +
+                          " " +
+                          comment.comment_lastname
+                        }
+                        size={40}
+                      />
                     )}
-                  >
-                    <Button className="comment-edit__btn">
-                      <FontAwesomeIcon icon={faEllipsisH} />
-                    </Button>
-                  </Popover>
-                </div>
-              )}
+  </Link>
+                  </div>
+                  <div className="comment-body__container">
+                    <div className="comment-body">
+                      <div className="comment-body__user">
+                        <p>
+                          {comment.comment_firstname +
+                            " " +
+                            comment.comment_lastname}
+                        </p>
+                      </div>
+                      {comment.comment_body && <p>{comment.comment_body}</p>}
+                    </div>
 
-              <div className="comment-date">{showDate(comment)}</div>
-              </div>
-            </li>
-          ))}
+                    {comment.comment_imageURL && (
+                      <img
+                        src={comment.comment_imageURL}
+                        alt="illustration du commentaire"
+                      />
+                    )}
+                  </div>
+                  {(verifyUser == 1 ||
+                    userData.userId === comment.comment_user_id) && (
+                    <div className="comment-edit">
+                      <Popover
+                        className="comment-edit"
+                        position={Position.BOTTOM_RIGHT}
+                        content={({ close }) => (
+                          <Menu>
+                            <Menu.Group>
+                              <Menu.Item
+                                icon={EditIcon}
+                                intent="success"
+                                onClick={() => {
+                                  showEditComment(comment);
+                                  close();
+                                }}
+                              >
+                                Éditer...
+                              </Menu.Item>
+                              <Menu.Item
+                                icon={TrashIcon}
+                                intent="danger"
+                                onClick={() =>
+                                  deleteComment(comment.comment_id)
+                                }
+                              >
+                                Supprimer...
+                              </Menu.Item>
+                            </Menu.Group>
+                          </Menu>
+                        )}
+                      >
+                        <Button className="comment-edit__btn">
+                          <FontAwesomeIcon icon={faEllipsisH} />
+                        </Button>
+                      </Popover>
+                    </div>
+                  )}
+
+                  <div className="comment-date">{showDate(comment)}</div>
+                </div>
+              </li>
+            ))}
         </ul>
       </div>
     </>

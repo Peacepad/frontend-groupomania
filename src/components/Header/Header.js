@@ -93,7 +93,7 @@ const Header = () => {
   return (
     <header>
       <Link to="/">
-        <img src="./img/logo.png" alt="logo groupomania" />
+        <img src="../../img/logo.png" alt="logo groupomania" />
       </Link>
       {logDiv}
     </header>

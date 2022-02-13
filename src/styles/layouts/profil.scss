@@ -35,7 +35,7 @@
   }
 }
 
-.profil-submit {
+#profil-submit {
   background-color: white;
   border: solid 1px grey;
   border-radius: 6px;
@@ -115,5 +115,21 @@
   width: 205px;
   &:hover {
     background-color: lighten(#FD2D01, 10%);
+  }
+}
+
+.pulse {
+  animation: pulse 500ms infinite alternate forwards;
+  &:hover {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes pulse {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.05);
   }
 }

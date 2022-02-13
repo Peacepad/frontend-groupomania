@@ -56,8 +56,6 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
   const editComment = (data) => {
     const token = localStorage.getItem("token");
 
-    
-
     let editCommentData = new FormData();
 
     if (data.image[0]) {
@@ -93,14 +91,15 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
           `one-comment__${comment.comment_id}`
         ).style.display = "flex";
         setFileDeleted(false);
-
+        
         setPreview(undefined);
         setMaskImage(true);
         setSelectedFile(undefined);
       })
-      .catch(function (response) {
+      .catch(function (error) {
         //handle error
-        console.log(response);
+        console.log(error);
+        
       });
   };
 
@@ -148,77 +147,56 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
 
   const deleteImage = () => {
     setMaskImage(false);
-    
+
     setFileDeleted(true);
   };
 
-
   let editCommentImage;
 
-  
-
-    editCommentImage = (
-    
-      <div className="edit-comment-file">
+  editCommentImage = (
+    <div className="edit-comment-file">
       <div
         className="edit-comment-file__close"
         onClick={() => {
           deleteImage();
-          
         }}
       >
         x
       </div>
       <img src={comment.comment_imageURL} alt="image du commentaire" />
     </div>
-
-      
   );
-  if(!comment.comment_imageURL) {
+  if (!comment.comment_imageURL) {
     editCommentImage = (
-    <label
-              className="label-file"
-              id={`label-file__${comment.comment_id}`}
-            >
-              <FontAwesomeIcon icon={faImage} />
-              <input
-                type="file"
-                className="comment-image"
-                onFocus={selectImage(comment.comment_id)}
-                id={`edit-comment-image__${comment.comment_id}`}
-                {...register(`image`)}
-                name="image"
-              ></input>
-
-
-            </label>)
+      <label className="label-file button" id={`label-file__${comment.comment_id}`}>
+        <FontAwesomeIcon icon={faImage} />
+        <input
+          type="file"
+          className="comment-image"
+          onFocus={selectImage(comment.comment_id)}
+          id={`edit-comment-image__${comment.comment_id}`}
+          {...register(`image`)}
+          name="image"
+        ></input>
+      </label>
+    );
   }
-    
-  if(maskImage == false) {
+
+  if (maskImage == false) {
     editCommentImage = (
-    <label
-              className="label-file"
-              id={`label-file__${comment.comment_id}`}
-            >
-              <FontAwesomeIcon icon={faImage} />
-              <input
-                type="file"
-                className="comment-image"
-                onFocus={selectImage(comment.comment_id)}
-                id={`edit-comment-image__${comment.comment_id}`}
-                {...register(`image`)}
-                name="image"
-              ></input>
-
-
-            </label>
-    )
+      <label className="label-file" id={`label-file__${comment.comment_id}`}>
+        <FontAwesomeIcon icon={faImage} />
+        <input
+          type="file"
+          className="comment-image"
+          onFocus={selectImage(comment.comment_id)}
+          id={`edit-comment-image__${comment.comment_id}`}
+          {...register(`image`)}
+          name="image"
+        ></input>
+      </label>
+    );
   }
-  
-
-
-
-
 
   return (
     <div
@@ -233,9 +211,7 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
         className="edit-comment-container"
         id={`edit-comment-container__${comment.comment_id}`}
       >
-        <div className="edit-close" onClick={() => closeEditComment()}>
-          x
-        </div>
+        
 
         <div className="edit-comment__body-container">
           <textarea
@@ -247,11 +223,13 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
             {...register("text")}
           ></textarea>
 
-      
-
           {editCommentImage}
         </div>
       </form>
+
+      <div className="edit-close__comment" onClick={() => closeEditComment()}>
+          x
+        </div>
     </div>
   );
 };

@@ -10,7 +10,6 @@ import {
   EditIcon,
   TrashIcon,
   Button,
-  
 } from "evergreen-ui";
 import Like from "./Like/Like";
 import { useForm } from "react-hook-form";
@@ -18,18 +17,15 @@ import Comment from "./Comment/Comment";
 import { useHistory } from "react-router-dom";
 import EditPost from "./EditPost";
 
+import { Link } from 'react-router-dom';
 const Posts = () => {
   const history = useHistory();
   const [data, setData] = useState([]);
-  
   const [sortedData, setSortedData] = useState([]);
-
   const [playOnce, setPlayOnce] = useState(true);
   const token = localStorage.getItem("token");
   const userData = JSON.parse(localStorage.getItem("userData"));
   const verifyUser = userData.isAdmin;
-   
-  
 
   useEffect(() => {
     const verifyToken = () => {
@@ -42,7 +38,8 @@ const Posts = () => {
 
     function getData() {
       if (playOnce) {
-        axios.get("http://localhost:8000/api/post").then((res) => {
+        axios.get("http://localhost:8000/api/post")
+        .then((res) => {
           setData(res.data);
           setPlayOnce(false);
         });
@@ -55,7 +52,6 @@ const Posts = () => {
         });
         console.log(sortedArray);
         setSortedData(sortedArray);
-        
       };
       sortedPost();
     }
@@ -128,24 +124,27 @@ const Posts = () => {
         authorization: "Bearer " + token,
       },
     })
+    
       .then(() => {
-        document.getElementById("create-post__text").style.height = "40" + "px";
+        document.getElementById("create-post__text").style.height = "40px";
         document.getElementById("create-post__text").style.overflow = "hidden";
 
         setPlayOnce(!playOnce);
         reset();
-    setPreview(undefined);
-    
-    setUpdateElement(!updateElement);
-    setSelectedFile(undefined);
-      }
-      )
-      .catch(function (response) {
-        //handle error
-        console.log(response);
-      });
+        setPreview(undefined);
 
-    
+        setUpdateElement(!updateElement);
+        setSelectedFile(undefined);
+        
+      })
+      .catch(function (error) {
+        //handle error
+        console.log(error.response);
+        if (error.response) {
+          document.getElementById('create-post__text').classList.add('shake');
+          setTimeout("document.getElementById('create-post__text').classList.remove('shake')", 1000);
+        }
+      });
   };
 
   // ---------------- UpdatePost
@@ -203,7 +202,6 @@ const Posts = () => {
           `comment-container__${post.post_id}`
         );
         showCommentDOM.style.display = "none";
-        
       }
     } else {
       if (document.getElementById(`comment-container__${post.post_id}`)) {
@@ -213,7 +211,9 @@ const Posts = () => {
         showCommentDOM.style.display = "flex";
         // Effacement du fichier contenu dans le input file
         document.getElementById(`comment-form__${post.post_id}`).reset();
-        document.getElementById(`label-file__${post.post_id}`).style.backgroundColor = "rgb(239, 239, 239)";
+        document.getElementById(
+          `label-file__${post.post_id}`
+        ).style.backgroundColor = "rgb(239, 239, 239)";
       }
     }
   };
@@ -315,7 +315,7 @@ const Posts = () => {
               <div className="post-card">
                 <EditPost post={post} setPlayOnce={setPlayOnce} />
 
-                {(verifyUser == 1 || userData.userId === post.post_user_id)  && (
+                {(verifyUser == 1 || userData.userId === post.post_user_id) && (
                   <div className="post-edit">
                     <Popover
                       className="post-edit"
@@ -352,7 +352,9 @@ const Posts = () => {
                 )}
 
                 <div className="post-info">
+                
                   <div className="post-info__avatar">
+                  <Link to={`/profil/other/?id=${post.post_user_id}`}>
                     {post.user_imageURL ? (
                       <img
                         src={post.user_imageURL}
@@ -364,7 +366,9 @@ const Posts = () => {
                         size={40}
                       />
                     )}
+                      </Link>
                   </div>
+                  
                   <div className="post-info__about">
                     <div className="post-info__name">
                       {post.firstname + " " + post.lastname}
@@ -372,6 +376,7 @@ const Posts = () => {
 
                     <div className="post-info__date">{showDate(post)}</div>
                   </div>
+
                 </div>
                 <div className="post-body" id={"post-body__" + post.post_id}>
                   <p>{post.post_body}</p>

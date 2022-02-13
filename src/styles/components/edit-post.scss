@@ -4,13 +4,13 @@
   left: 50%;
   z-index: 1;
   background-color: lighten($back-color, 5%);
-  width: 1000px;
+  width: 800px;
   height: 600px;
   padding: 20px;
   border-radius: 3px;
   transform: translate(-50%);
   bottom: 100px;
-  
+  animation: edit-appear 500ms both alternate;
   & form {
     margin: auto;
     display: flex;
@@ -101,3 +101,14 @@
 }
 
 
+@keyframes edit-appear {
+  0% {
+    left: 50%;
+    transform:scale(0) translate(-50%);
+  }
+  50% {
+    left: 50%;
+    transform:scale(1.1) translate(-50%);
+  }
+
+}
