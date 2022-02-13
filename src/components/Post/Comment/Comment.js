@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsisH, faImage } from "@fortawesome/free-solid-svg-icons";
+import { faEllipsisH, faImage, faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { useForm } from "react-hook-form";
 import {
   Avatar,
@@ -11,9 +11,10 @@ import {
   EditIcon,
   TrashIcon,
   Button,
+  TruckIcon,
 } from "evergreen-ui";
 import EditComment from "./EditComment";
-import { Link } from 'react-router-dom'
+import { Link } from "react-router-dom";
 
 const Comment = ({ post, playOnce, setPlayOnce }) => {
   const userData = JSON.parse(localStorage.getItem("userData"));
@@ -47,7 +48,9 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
         setPlayOnce(!playOnce);
         setValue("text", "");
         document.getElementById(`comment-form__${post.post_id}`).reset();
-        document.getElementById(`comment-for-post__${post.post_id}`).style.height = "42px";
+        document.getElementById(
+          `comment-for-post__${post.post_id}`
+        ).style.height = "42px";
         document.getElementById(
           `label-file__${post.post_id}`
         ).style.backgroundColor = "rgb(239, 239, 239)";
@@ -56,8 +59,13 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
         //handle error
         console.log(error);
         if (error.response) {
-          document.getElementById(`comment-for-post__${post.post_id}`).classList.add('shake');
-          setTimeout(`document.getElementById('comment-for-post__${post.post_id}').classList.remove('shake')`, 1000);
+          document
+            .getElementById(`comment-for-post__${post.post_id}`)
+            .classList.add("shake");
+          setTimeout(
+            `document.getElementById('comment-for-post__${post.post_id}').classList.remove('shake')`,
+            1000
+          );
         }
       });
   };
@@ -74,7 +82,7 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
       .then(() => {
         setPlayOnce(!playOnce);
         document.getElementById(`comment-form__${post.post_id}`).reset();
-        
+
         document.getElementById(
           `label-file__${post.post_id}`
         ).style.backgroundColor = "rgb(239, 239, 239)";
@@ -187,7 +195,9 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
 
   // function for extend textarea
   const growTextarea = (post) => {
-    const textarea = document.getElementById(`comment-for-post__${post.post_id}`);
+    const textarea = document.getElementById(
+      `comment-for-post__${post.post_id}`
+    );
 
     textarea.addEventListener("input", (e) => {
       textarea.style.height = "auto";
@@ -200,6 +210,46 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
         textarea.style.overflowY = "hidden";
       }
     });
+  };
+
+  const calculateCommentsArea = () => {
+    let el = document.getElementById(`comments-post__${post.post_id}`);
+    if (el) {
+      if (el.clientHeight < el.scrollHeight) {
+
+        const showMoreComments = () => {
+          el.style.maxHeight = "none";
+        }
+
+        return (
+          <Link
+            to="#"
+            alt="Afficher plus de commentaires"
+            className="button view-more"
+            onClick={() => showMoreComments()}
+          >
+            Afficher plus <div className="view-more__arrow"><FontAwesomeIcon icon={faArrowDown} /></div>
+          </Link>
+        );
+      }
+      else if (el.clientHeight == el.scrollHeight && el.clientHeight > 400) {
+        const showLessComments = () => {
+          el.style.maxHeight = "400px";
+        }
+  
+        return (
+          <Link
+            to="#"
+            alt="Afficher moins de commentaires"
+            className="button view-more"
+            onClick={() => showLessComments()}
+          >
+            Afficher moins <div className="view-more__arrow"><FontAwesomeIcon icon={faArrowUp} /></div>
+          </Link>
+        );
+      }
+    }
+
   };
 
   return (
@@ -216,13 +266,14 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
           <textarea
             {...register(`text`)}
             placeholder="Ecrivez un commentaire ..."
-             onFocus={() => growTextarea(post)}
+            onFocus={() => growTextarea(post)}
             id={`comment-for-post__${post.post_id}`}
-            
           ></textarea>
 
-          <label className="label-file button" id={`label-file__${post.post_id}`}>
-            
+          <label
+            className="label-file button"
+            id={`label-file__${post.post_id}`}
+          >
             <FontAwesomeIcon icon={faImage} />
             <input
               type="file"
@@ -239,7 +290,7 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
       </div>
 
       <div className="comments">
-        <ul className="comments-list">
+        <ul className="comments-list" id={`comments-post__${post.post_id}`}>
           {post.listComment
             .sort((a, b) => a.comment_id - b.comment_id)
             .map((comment) => (
@@ -254,23 +305,23 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
                   id={`one-comment__${comment.comment_id}`}
                 >
                   <div className="comment-user">
-                  <Link to={`/profil/other/?id=${comment.comment_user_id}`}>
-                    {comment.comment_user_imageURL ? (
-                      <img
-                        src={comment.comment_user_imageURL}
-                        alt="photo de profil de l'utilisateur"
-                      />
-                    ) : (
-                      <Avatar
-                        name={
-                          comment.comment_firstname +
-                          " " +
-                          comment.comment_lastname
-                        }
-                        size={40}
-                      />
-                    )}
-  </Link>
+                    <Link to={`/profil/other/?id=${comment.comment_user_id}`}>
+                      {comment.comment_user_imageURL ? (
+                        <img
+                          src={comment.comment_user_imageURL}
+                          alt="photo de profil de l'utilisateur"
+                        />
+                      ) : (
+                        <Avatar
+                          name={
+                            comment.comment_firstname +
+                            " " +
+                            comment.comment_lastname
+                          }
+                          size={40}
+                        />
+                      )}
+                    </Link>
                   </div>
                   <div className="comment-body__container">
                     <div className="comment-body">
@@ -335,6 +386,7 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
               </li>
             ))}
         </ul>
+        {calculateCommentsArea()}
       </div>
     </>
   );

@@ -50,7 +50,7 @@ const Posts = () => {
         const sortedArray = postObj.sort((a, b) => {
           return b.post_id - a.post_id;
         });
-        console.log(sortedArray);
+        
         setSortedData(sortedArray);
       };
       sortedPost();

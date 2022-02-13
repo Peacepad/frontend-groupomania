@@ -54,7 +54,7 @@ header {
   }
   &:hover {
     &::before {
-      animation: arrow-hover 500ms forwards infinite;
+      animation: arrow-hover 500ms alternate infinite;
     }
   }
 }
@@ -63,10 +63,7 @@ header {
   0% {
     transform: translateY(0);
   }
-  50% {
-    transform: translateY(2px);
-  }
   100% {
-    transform: translateY(0);
+    transform: translateY(2px);
   }
 }
