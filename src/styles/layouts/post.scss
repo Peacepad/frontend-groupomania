@@ -3,6 +3,9 @@
   background-color: white;
   width: 60%;
   border-radius: 6px;
+  @media (max-width: 768px) {
+    width: 95%;
+  }
 }
 
 .create-post {
@@ -20,7 +23,12 @@
     border-radius: 6px;
     object-fit: cover;
     margin-left: 10px;
+    @media (max-width: 768px) {
+      height: 50px;
+    max-width: 50px;
+    }
   }
+  
 }
 
 #create-post__text {
@@ -85,10 +93,13 @@
   padding-left: 0;
 }
 .post-list__li{
-  margin-top: 20px;
+  margin-bottom: 40px;
   width: 60%;
   padding-left: 0;
   list-style-type: none;
+  @media (max-width: 768px) {
+    width: 95%;
+  }
 }
 
   

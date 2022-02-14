@@ -36,7 +36,7 @@ const Posts = () => {
 
     verifyToken();
 
-    function getData() {
+    const getData = () => {
       if (playOnce) {
         axios.get("http://localhost:8000/api/post")
         .then((res) => {
@@ -58,7 +58,7 @@ const Posts = () => {
     getData();
   }, [data, playOnce]);
 
-  function deletePost(post_id) {
+  const deletePost = (post_id) => {
     axios({
       method: "DELETE",
       url: `http://localhost:8000/api/post/${post_id}`,

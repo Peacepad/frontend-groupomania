@@ -1,6 +1,6 @@
 .like-anim {
     transform:  translateX(0px) scale(1);
-    animation: like 500ms both;
+    animation: like 1s both;
 }
 
 @keyframes like {
