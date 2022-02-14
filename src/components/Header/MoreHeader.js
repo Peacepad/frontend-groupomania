@@ -8,11 +8,13 @@ const MoreHeader = () => {
     localStorage.removeItem("userData");
   };
 
+  const userData = JSON.parse(localStorage.getItem("userData"));
+
   return (
     <>
       <div className="header-more">
         <ul>
-          <Link to="/profil">
+          <Link to={`/profil/?id=${userData.userId}`}>
             <li>Afficher le profil</li>
           </Link>
 

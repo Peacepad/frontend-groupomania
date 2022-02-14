@@ -6,7 +6,21 @@
 }
 
 .other-profil__avatar {
-   
-    border: solid 5px white;
     border-radius: 50%;
+    object-fit:cover;
+    border: solid 5px white;
+    
+    
+    
+        & img {
+            
+            height: 200px;
+            width: 200px;
+            top: 0;
+            left: 0;
+            border-radius: 50%;
+            object-fit:cover;
+            
+          }
+    
 }

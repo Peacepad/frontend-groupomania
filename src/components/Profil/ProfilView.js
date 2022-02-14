@@ -6,20 +6,42 @@ import { useHistory } from "react-router-dom";
 
 const ProfilView = () => {
   const history = useHistory();
-
   const token = localStorage.getItem("token");
-
   const userData = JSON.parse(localStorage.getItem("userData"));
   const { register, handleSubmit } = useForm();
 
   const onSubmit = (data) => {
-    let formData = new FormData(); //formdata object
-
+    let formData = new FormData(); 
     formData.append("firstname", data.firstname);
     formData.append("lastname", data.lastname);
     formData.append("email", data.email);
 
-    axios({
+    
+// controle des champs du formulaire
+
+const domFirstname = document.getElementById("profil-firstname");
+const domLastname = document.getElementById("profil-lastname");
+const domEmail = document.getElementById("profil-email");
+
+let firstnameRegExp = /^[a-z '-]+$/i;
+let lastnameRegExp = /^[a-z '-]+$/i;
+let emailRegExp = /.+\@.+\..+/;
+
+const domNeedVerification = [
+  domFirstname,
+  domLastname,
+  domEmail,
+];
+
+const regex = [
+  firstnameRegExp,
+  lastnameRegExp,
+  emailRegExp,
+];
+
+
+if(firstnameRegExp.test(data.firstname) && lastnameRegExp.test(data.lastname) && emailRegExp.test(data.email))
+{    axios({
       method: "PUT",
       url: `http://localhost:8000/api/user/${userData.userId}`,
       headers: {
@@ -38,7 +60,33 @@ const ProfilView = () => {
       })
       .catch((err) => {
         console.log(err);
-      });
+      });}
+      else {
+        if(!firstnameRegExp.test(data.firstname)) {
+          document.getElementById('profil-firstname').classList.add('shake');
+          setTimeout(
+            `document.getElementById('profil-firstname').classList.remove('shake')`,
+            1000
+          );
+        }
+        if(!lastnameRegExp.test(data.lastname)){
+          document.getElementById('profil-lastname').classList.add('shake');
+          setTimeout(
+            `document.getElementById('profil-lastname').classList.remove('shake')`,
+            1000
+          );
+        }
+        if(!emailRegExp.test(data.email)) {
+          document.getElementById('profil-email').classList.add('shake');
+          setTimeout(
+            `document.getElementById('profil-email').classList.remove('shake')`,
+            1000
+          );
+        }
+      }
+
+
+
   };
 
   const deleteUser = (data) => {
@@ -56,18 +104,20 @@ const ProfilView = () => {
         history.push("/login");
       })
       .catch(console.log("erreur"));
+
+      
   };
 
   return (
     <div>
-      <ProfilImage />
+      
       <div className="profil-info">
         <h2>Vos informations</h2>
         <form className="profil-edit" onSubmit={handleSubmit(onSubmit)}>
           <div className="profil-edit__label">
             <label>
               Prénom :{" "}
-              <input
+              <input id="profil-firstname"
                 type="text"
                 defaultValue={userData.userFirstname}
                 {...register("firstname")}
@@ -77,6 +127,7 @@ const ProfilView = () => {
               Nom :{" "}
               <input
                 type="text"
+                id="profil-lastname"
                 defaultValue={userData.userLastname}
                 {...register("lastname")}
               />
@@ -86,6 +137,7 @@ const ProfilView = () => {
               Email :{" "}
               <input
                 type="text"
+                id="profil-email"
                 defaultValue={userData.userEmail}
                 {...register("email")}
               />

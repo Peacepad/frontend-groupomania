@@ -305,7 +305,7 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
                   id={`one-comment__${comment.comment_id}`}
                 >
                   <div className="comment-user">
-                    <Link to={`/profil/other/?id=${comment.comment_user_id}`}>
+                    <Link to={`/profil/?id=${comment.comment_user_id}`}>
                       {comment.comment_user_imageURL ? (
                         <img
                           src={comment.comment_user_imageURL}

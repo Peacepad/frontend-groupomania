@@ -354,7 +354,7 @@ const Posts = () => {
                 <div className="post-info">
                 
                   <div className="post-info__avatar">
-                  <Link to={`/profil/other/?id=${post.post_user_id}`}>
+                  <Link to={`/profil/?id=${post.post_user_id}`}>
                     {post.user_imageURL ? (
                       <img
                         src={post.user_imageURL}
