@@ -72,8 +72,8 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
 
     if(!data.text.trim()) {
       document.getElementById(`edit-comment-body__${comment.comment_id}`).classList.add("shake");
-          setTimeout(
-            `document.getElementById("edit-comment-body__${comment.comment_id}").classList.remove('shake')`,
+          setTimeout(() => 
+            {document.getElementById(`edit-comment-body__${comment.comment_id}`).classList.remove('shake')},
             1000
           );
     }
@@ -242,6 +242,7 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
       <div className="edit-close__comment" onClick={() => closeEditComment()}>
         x
       </div>
+      <div class="edit-comment__information">Appuyez sur entrée pour valider</div>
     </div>
   );
 };

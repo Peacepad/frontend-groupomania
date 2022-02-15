@@ -7,7 +7,7 @@ const MoreHeader = ({playOnce, setPlayOnce}) => {
     localStorage.removeItem("token");
     localStorage.removeItem("userData");
   };
-  console.log(playOnce);
+  
 
   const userData = JSON.parse(localStorage.getItem("userData"));
 

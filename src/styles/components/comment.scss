@@ -14,7 +14,7 @@
   justify-content: space-between;
   & textarea {
     resize: none;
-    width: 85%;
+    width: 70%;
     background-color: lighten($back-color, 5%);
     border-radius: 3px;
     font-size: 1em;
@@ -66,6 +66,9 @@
 
 .comment-user {
   margin-left: 20px;
+  @media (max-width: 576px) {
+    margin-left: 5px;
+  }
 }
 
 .comment-user img {
@@ -99,10 +102,17 @@
   max-width: 70%;
   margin-left: 25px;
   align-items: center;
+  @media (max-width: 576px) {
+    margin-left: 5px;
+  }
   & img {
     max-width: 200px;
     max-height: 200px;
     border-radius: 6px;
+    @media (max-width: 576px) {
+      max-width: 100px;
+      max-height: 100px;
+    }
   }
 }
 
@@ -134,6 +144,9 @@
   margin-left: 10px;
   color: grey;
   font-size: 0.8em;
+  @media (max-width: 576px) {
+    ont-size: 0.5em;
+  }
 }
 .one-comment {
   width: 100%;
@@ -214,9 +227,18 @@
   cursor: pointer;
 }
 
+.edit-comment__information {
+  position: absolute;
+  bottom: 0px;
+  left: 50px;
+  font-size: 0.7em;
+  color: grey;
+}
+
 .edit-comment-file {
   position: relative;
 }
+
 .edit-comment-file:hover .edit-comment-file__close {
   position: absolute;
   display: flex;
@@ -268,6 +290,24 @@
     animation: up-down 500ms alternate infinite;
     margin-left: 3px;
   }
+}
+
+.success {
+  position: absolute;
+  background-color: chartreuse;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  & svg {
+    margin-left: 10px;
+  }
+  animation: comment-disappear 2s none;
 }
 
 @keyframes comment-disappear {

@@ -15,7 +15,7 @@ const OtherProfil = () => {
 
   const userData = JSON.parse(localStorage.getItem("userData"));
 
-  const history = useHistory();
+  
 
   useEffect(() => {
 
@@ -24,7 +24,7 @@ const OtherProfil = () => {
         axios.get(`http://localhost:8000/api/user/${justId}`).then((res) => {
           setDataProfil(res.data);
           setPlayOnce(false);
-          console.log(res.data);
+          
         });
       
     };

@@ -19,6 +19,9 @@ header {
 
 .header-user {
   margin-right: 50px;
+  @media (max-width: 576px) {
+   margin-right:30px;
+  }
   & ul {
     padding-left: 0;
     display: flex;
@@ -26,6 +29,7 @@ header {
     align-items: center;
     width: 200px;
     justify-content: space-between;
+    
   }
   & li {
     list-style: none;

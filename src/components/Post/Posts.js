@@ -137,11 +137,11 @@ const Posts = () => {
       })
       .catch(function (error) {
         //handle error
-        console.log(error.response);
+        
         if (error.response) {
           document.getElementById("create-post__text").classList.add("shake");
-          setTimeout(
-            "document.getElementById('create-post__text').classList.remove('shake')",
+          setTimeout(() =>
+            {document.getElementById('create-post__text').classList.remove('shake')},
             1000
           );
         }

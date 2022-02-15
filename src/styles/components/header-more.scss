@@ -16,9 +16,12 @@
   border-radius: 6px;
   border-left: solid 1px $back-color;
   border-right: solid 1px $back-color;
-  
+  border-bottom: solid 1px $back-color;
   transform-origin: top;
   animation: header-more-appear 200ms forwards;
+  @media (max-width: 576px) {
+    width: 120px;
+   }
   & ul {
     width: 100%;
     height: 100%;

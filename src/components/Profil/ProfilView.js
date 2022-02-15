@@ -64,22 +64,22 @@ if(firstnameRegExp.test(data.firstname) && lastnameRegExp.test(data.lastname) &&
       else {
         if(!firstnameRegExp.test(data.firstname)) {
           document.getElementById('profil-firstname').classList.add('shake');
-          setTimeout(
-            `document.getElementById('profil-firstname').classList.remove('shake')`,
+          setTimeout(() =>
+            {document.getElementById('profil-firstname').classList.remove('shake')},
             1000
           );
         }
         if(!lastnameRegExp.test(data.lastname)){
           document.getElementById('profil-lastname').classList.add('shake');
-          setTimeout(
-            `document.getElementById('profil-lastname').classList.remove('shake')`,
+          setTimeout(() =>
+            {document.getElementById('profil-lastname').classList.remove('shake')},
             1000
           );
         }
         if(!emailRegExp.test(data.email)) {
           document.getElementById('profil-email').classList.add('shake');
-          setTimeout(
-            `document.getElementById('profil-email').classList.remove('shake')`,
+          setTimeout(() =>
+            {document.getElementById('profil-email').classList.remove('shake')},
             1000
           );
         }
@@ -90,6 +90,12 @@ if(firstnameRegExp.test(data.firstname) && lastnameRegExp.test(data.lastname) &&
   };
 
   const deleteUser = () => {
+
+
+
+
+
+    
     axios({
       method: "delete",
       url: `http://localhost:8000/api/user/${userData.userId}`,

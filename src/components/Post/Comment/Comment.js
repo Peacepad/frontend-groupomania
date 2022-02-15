@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEllipsisH,
   faImage,
   faArrowDown,
-  faArrowUp,
+  faArrowUp, faCheck
 } from "@fortawesome/free-solid-svg-icons";
 import { useForm } from "react-hook-form";
 import {
@@ -16,7 +16,7 @@ import {
   EditIcon,
   TrashIcon,
   Button,
-  TruckIcon,
+  
 } from "evergreen-ui";
 import EditComment from "./EditComment";
 import { Link } from "react-router-dom";
@@ -27,6 +27,7 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
   const { register, handleSubmit, setValue } = useForm({
     mode: "onChange",
   });
+  const [isSuccessfullySubmitted, setIsSuccessfullySubmitted] = useState(false);
 
   const sendComment = async (data) => {
     const token = localStorage.getItem("token");
@@ -59,7 +60,14 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
         document.getElementById(
           `label-file__${post.post_id}`
         ).style.backgroundColor = "rgb(239, 239, 239)";
+
+        setIsSuccessfullySubmitted(true);
         
+        setTimeout(() => {
+          setIsSuccessfullySubmitted(false)},
+          1500
+        );
+
       })
       .catch(function (error) {
         //handle error
@@ -68,12 +76,16 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
           document
             .getElementById(`comment-for-post__${post.post_id}`)
             .classList.add("shake");
-          setTimeout(
-            `document.getElementById('comment-for-post__${post.post_id}').classList.remove('shake')`,
+          setTimeout(() => {
+            document.getElementById(`comment-for-post__${post.post_id}`).classList.remove('shake')
+          }
+            ,
             1000
           );
         }
       });
+
+      
   };
 
   const deleteComment = (comment_id) => {
@@ -237,7 +249,7 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
             </div>
           </Link>
         );
-      } else if (el.clientHeight == el.scrollHeight && el.clientHeight > 400) {
+      } else if (el.clientHeight === el.scrollHeight && el.clientHeight > 400) {
         const showLessComments = () => {
           el.style.maxHeight = "400px";
         };
@@ -275,6 +287,7 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
             placeholder="Ecrivez un commentaire ..."
             onFocus={() => growTextarea(post)}
             id={`comment-for-post__${post.post_id}`}
+            className="comment-for-post"
           ></textarea>
 
           <label
@@ -293,6 +306,10 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
           </label>
 
           <input type="submit" className="button"></input>
+
+          {isSuccessfullySubmitted === true && (
+            <div className="success">Le commentaire a été envoyé avec succès <FontAwesomeIcon icon={faCheck} /></div>
+          )}
         </form>
       </div>
 
@@ -349,7 +366,7 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
                       />
                     )}
                   </div>
-                  {(verifyUser == 1 ||
+                  {(verifyUser === 1 ||
                     userData.userId === comment.comment_user_id) && (
                     <div className="comment-edit">
                       <Popover
