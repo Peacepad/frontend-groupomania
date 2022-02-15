@@ -7,6 +7,7 @@ const MoreHeader = ({playOnce, setPlayOnce}) => {
     localStorage.removeItem("token");
     localStorage.removeItem("userData");
   };
+  console.log(playOnce);
 
   const userData = JSON.parse(localStorage.getItem("userData"));
 
@@ -14,7 +15,7 @@ const MoreHeader = ({playOnce, setPlayOnce}) => {
     <>
       <div className="header-more">
         <ul>
-          <Link to={`/profil/?id=${userData.userId}`} onClick={() => {setPlayOnce(!playOnce)}}>
+          <Link to={`/profil/?id=${userData.userId}`} onClick={() => {if(setPlayOnce){setPlayOnce(!playOnce)}}}>
             <li>Afficher le profil</li>
           </Link>
 

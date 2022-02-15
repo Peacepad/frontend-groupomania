@@ -5,9 +5,9 @@ import { Link } from "react-router-dom";
 import MoreHeader from "./MoreHeader";
 
 
-const Header = ({playOnce, setPlayOnce}) => {
+const Header = ({setPlayOnce}) => {
   const token = localStorage.getItem("token");
-
+  
 
   //Verification de la connexion
   const [isLogged, setIsLogged] = useState();

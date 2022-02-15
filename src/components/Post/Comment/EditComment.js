@@ -63,44 +63,56 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
       editCommentData.append("image", image);
     }
 
+    
+
     editCommentData.append("userId", token);
     editCommentData.append("text", data.text);
     editCommentData.append("userId", token);
     editCommentData.append("fileDeleted", fileDeleted);
 
-    axios({
-      method: "PUT",
-      url: `http://localhost:8000/api/comment/${comment.comment_id}`,
-      data: editCommentData,
-      headers: {
-        "Content-Type": "multipart/form-data",
-        authorization: "Bearer " + token,
-      },
-    })
-      .then(() => {
-        setPlayOnce(!playOnce);
-        const showEditCommentDOM = document.getElementById(
-          `edit-comment-container__${comment.comment_id}`
-        );
-        showEditCommentDOM.style.display = "none";
-        const editCommentBackgroundDOM = document.getElementById(
-          `edit-comment-background__${comment.comment_id}`
-        );
-        editCommentBackgroundDOM.style.display = "none";
-        document.getElementById(
-          `one-comment__${comment.comment_id}`
-        ).style.display = "flex";
-        setFileDeleted(false);
-
-        setPreview(undefined);
-        setMaskImage(true);
-        setSelectedFile(undefined);
+    if(!data.text.trim()) {
+      document.getElementById(`edit-comment-body__${comment.comment_id}`).classList.add("shake");
+          setTimeout(
+            `document.getElementById("edit-comment-body__${comment.comment_id}").classList.remove('shake')`,
+            1000
+          );
+    }
+    else {
+      axios({
+        method: "PUT",
+        url: `http://localhost:8000/api/comment/${comment.comment_id}`,
+        data: editCommentData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          authorization: "Bearer " + token,
+        },
       })
-      .catch(function (error) {
-        //handle error
-        console.log(error);
-      });
-  };
+        .then(() => {
+          setPlayOnce(!playOnce);
+          const showEditCommentDOM = document.getElementById(
+            `edit-comment-container__${comment.comment_id}`
+          );
+          showEditCommentDOM.style.display = "none";
+          const editCommentBackgroundDOM = document.getElementById(
+            `edit-comment-background__${comment.comment_id}`
+          );
+          editCommentBackgroundDOM.style.display = "none";
+          document.getElementById(
+            `one-comment__${comment.comment_id}`
+          ).style.display = "flex";
+          setFileDeleted(false);
+  
+          setPreview(undefined);
+          setMaskImage(true);
+          setSelectedFile(undefined);
+        })
+        .catch(function (error) {
+          //handle error
+          console.log(error);
+        });
+    };
+    }
+    
 
   const handleUserKeyPress = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {

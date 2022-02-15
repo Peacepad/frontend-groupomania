@@ -59,6 +59,7 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
         document.getElementById(
           `label-file__${post.post_id}`
         ).style.backgroundColor = "rgb(239, 239, 239)";
+        
       })
       .catch(function (error) {
         //handle error
@@ -392,7 +393,7 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
               </li>
             ))}
         </ul>
-        {calculateCommentsArea()}
+        {calculateCommentsArea(post)}
       </div>
     </>
   );
