@@ -8,10 +8,16 @@
   }
 }
 
+.create-post__edit {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
 .create-post {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   background-color: white;
   padding-top: 40px;
@@ -25,10 +31,9 @@
     margin-left: 10px;
     @media (max-width: 768px) {
       height: 50px;
-    max-width: 50px;
+      max-width: 50px;
     }
   }
-  
 }
 
 #create-post__text {
@@ -44,19 +49,28 @@
   background-color: lighten($back-color, 5%);
   max-height: 200px;
   margin-bottom: 10px;
+  @media (max-width: 576px) {
+    width: 90%;
+  }
 }
 
-.create-post__btn-container {
+.button-container {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   width: 400px;
+  @media (max-width: 576px) {
+    width: 90%;
+  }
 }
 
-.create-post__btn-img {
+.button-add  {
   display: inline-block;
   position: relative;
   overflow: hidden;
+  @media (max-width: 576px) {
+    width: 40%;
+  }
   & input[type="file"] {
     left: 0;
     top: 0;
@@ -65,21 +79,44 @@
     font-size: 90px;
     height: 40px;
     width: 165px;
+    @media (max-width: 576px) {
+      width: 100%;
+    }
   }
-  
-  &:hover .create-post__btn {
+
+  &:hover .button-add__real {
+    background-color: $blue-link;
+    
+  }
+}
+
+.button-add__real {
+  background-color: lighten($blue-link, 10);
+  color: black;
+  border-radius: 6px;
+  border: none;
+  font-size: 1.1em;
+  height: 40px;
+  width: 100%;
+  @media (max-width: 576px) {
+    width: 100%;
+  }
+  &:hover {
     background-color: $blue-link;
   }
 }
 
-.create-post__btn {
-  background-color: lighten($blue-link, 10);;
+.button-send {
+  background-color: lighten($blue-link, 10);
   color: black;
   border-radius: 6px;
   border: none;
   font-size: 1.1em;
   height: 40px;
   width: 165px;
+  @media (max-width: 576px) {
+    width: 40%;
+  }
   &:hover {
     background-color: $blue-link;
   }
@@ -92,7 +129,7 @@
   flex-direction: column;
   padding-left: 0;
 }
-.post-list__li{
+.post-list__li {
   margin-bottom: 40px;
   width: 60%;
   padding-left: 0;
@@ -102,11 +139,7 @@
   }
 }
 
-  
-
-
 .post-card {
-  
   display: flex;
   justify-content: center;
   align-items: center;
@@ -117,7 +150,7 @@
   background-color: white;
   border-radius: 6px;
   position: relative;
-  
+
   & img {
     max-width: 500px;
     max-height: 600px;
@@ -128,7 +161,7 @@
 .post-body {
   padding: 40px;
   max-width: 60%;
-  white-space:pre-wrap;
+  white-space: pre-wrap;
   margin-top: 30px;
 }
 
@@ -218,7 +251,7 @@
     border-radius: 50%;
     object-fit: cover;
   }
-  &__about{
+  &__about {
     display: flex;
     flex-direction: column;
     align-items: center;

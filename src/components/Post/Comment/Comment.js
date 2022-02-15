@@ -1,7 +1,12 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsisH, faImage, faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEllipsisH,
+  faImage,
+  faArrowDown,
+  faArrowUp,
+} from "@fortawesome/free-solid-svg-icons";
 import { useForm } from "react-hook-form";
 import {
   Avatar,
@@ -178,10 +183,8 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
   };
 
   const selectImage = () => {
-    if (document.getElementById(`comment-image__${post.post_id}`)) {
-      const inputDOM = document.getElementById(
-        `comment-image__${post.post_id}`
-      );
+    if (document.getElementById(`comment-file__${post.post_id}`)) {
+      const inputDOM = document.getElementById(`comment-file__${post.post_id}`);
 
       inputDOM.addEventListener("change", () => {
         if (inputDOM.files[0] !== undefined) {
@@ -216,10 +219,9 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
     let el = document.getElementById(`comments-post__${post.post_id}`);
     if (el) {
       if (el.clientHeight < el.scrollHeight) {
-
         const showMoreComments = () => {
           el.style.maxHeight = "none";
-        }
+        };
 
         return (
           <Link
@@ -228,15 +230,17 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
             className="button view-more"
             onClick={() => showMoreComments()}
           >
-            Afficher plus <div className="view-more__arrow"><FontAwesomeIcon icon={faArrowDown} /></div>
+            Afficher plus{" "}
+            <div className="view-more__arrow">
+              <FontAwesomeIcon icon={faArrowDown} />
+            </div>
           </Link>
         );
-      }
-      else if (el.clientHeight == el.scrollHeight && el.clientHeight > 400) {
+      } else if (el.clientHeight == el.scrollHeight && el.clientHeight > 400) {
         const showLessComments = () => {
           el.style.maxHeight = "400px";
-        }
-  
+        };
+
         return (
           <Link
             to="#"
@@ -244,12 +248,14 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
             className="button view-more"
             onClick={() => showLessComments()}
           >
-            Afficher moins <div className="view-more__arrow"><FontAwesomeIcon icon={faArrowUp} /></div>
+            Afficher moins{" "}
+            <div className="view-more__arrow">
+              <FontAwesomeIcon icon={faArrowUp} />
+            </div>
           </Link>
         );
       }
     }
-
   };
 
   return (
@@ -277,9 +283,9 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
             <FontAwesomeIcon icon={faImage} />
             <input
               type="file"
-              className="comment-image"
+              className="comment-file"
               onFocus={selectImage(post.post_id)}
-              id={`comment-image__${post.post_id}`}
+              id={`comment-file__${post.post_id}`}
               {...register(`image`)}
               name="image"
             ></input>

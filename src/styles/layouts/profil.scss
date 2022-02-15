@@ -87,6 +87,10 @@
     object-fit:cover;
     border: solid 5px white;
   }
+  & div {
+    border: solid 5px white;
+    border-radius: 50%;
+  }
 }
 
 .profil-edit__label {

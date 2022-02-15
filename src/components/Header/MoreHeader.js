@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const MoreHeader = () => {
+const MoreHeader = ({playOnce, setPlayOnce}) => {
   // Déconnection
   const signOut = () => {
     localStorage.removeItem("token");
@@ -14,7 +14,7 @@ const MoreHeader = () => {
     <>
       <div className="header-more">
         <ul>
-          <Link to={`/profil/?id=${userData.userId}`}>
+          <Link to={`/profil/?id=${userData.userId}`} onClick={() => {setPlayOnce(!playOnce)}}>
             <li>Afficher le profil</li>
           </Link>
 

@@ -9,7 +9,7 @@ import ProfilView from "../components/Profil/ProfilView";
 const OtherProfil = () => {
   const params = new URL(document.location).searchParams;
   const justId = params.get("id");
-  
+
   const [dataProfil, setDataProfil] = useState([]);
   const [playOnce, setPlayOnce] = useState(true);
 
@@ -18,21 +18,24 @@ const OtherProfil = () => {
   const history = useHistory();
 
   useEffect(() => {
+
     const searchUserInfo = () => {
-      if (playOnce) {
+      
         axios.get(`http://localhost:8000/api/user/${justId}`).then((res) => {
           setDataProfil(res.data);
           setPlayOnce(false);
           console.log(res.data);
         });
-      }
+      
     };
     searchUserInfo();
+    
+    
   }, [playOnce]);
 
   return (
     <div>
-      <Header />
+      <Header setPlayOnce={setPlayOnce}/>
 
       {dataProfil[0] !== undefined &&
         dataProfil[0].user_id == userData.userId && <ProfilImage />}

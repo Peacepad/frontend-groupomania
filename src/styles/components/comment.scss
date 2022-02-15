@@ -31,7 +31,6 @@
   width: 100%;
   padding-left: 0;
   border-radius: 6px;
-  
 }
 
 .comments {
@@ -41,7 +40,6 @@
 }
 
 .comments-list {
-  
   max-height: 400px;
   overflow: hidden;
 }
@@ -123,13 +121,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
   width: 40px;
   height: 25.49px;
   margin: auto;
 }
 
-.comment-image {
+.comment-file {
   display: none;
 }
 
@@ -256,16 +253,16 @@
 .view-more {
   position: absolute;
   bottom: -29px;
-  cursor:pointer;
-  padding:3px;
-  left:50%;
-  transform:translateX(-50%);
-  height:29px;
+  cursor: pointer;
+  padding: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 29px;
   display: flex;
-  align-items:center;
+  align-items: center;
   text-decoration: none;
   font-size: 0.8em;
-  
+
   &__arrow {
     font-size: 0.8em;
     animation: up-down 500ms alternate infinite;

@@ -4,7 +4,8 @@ import { Avatar } from "evergreen-ui";
 import { Link } from "react-router-dom";
 import MoreHeader from "./MoreHeader";
 
-const Header = () => {
+
+const Header = ({playOnce, setPlayOnce}) => {
   const token = localStorage.getItem("token");
 
 
@@ -62,7 +63,7 @@ const Header = () => {
                 onClick={() => setIsMenuOpen((oldState) => !oldState)}
               />
             )}
-            {isMenuOpen && <MoreHeader />}
+            {isMenuOpen && <MoreHeader setPlayOnce={setPlayOnce}/>}
           </div>
         </div>
       );
@@ -78,7 +79,7 @@ const Header = () => {
                 onClick={() => setIsMenuOpen((oldState) => !oldState)}
               />
             )}
-            {isMenuOpen && <MoreHeader />}
+            {isMenuOpen && <MoreHeader setPlayOnce={setPlayOnce}/>}
           </div>
         </div>
       );

@@ -89,7 +89,7 @@ if(firstnameRegExp.test(data.firstname) && lastnameRegExp.test(data.lastname) &&
 
   };
 
-  const deleteUser = (data) => {
+  const deleteUser = () => {
     axios({
       method: "delete",
       url: `http://localhost:8000/api/user/${userData.userId}`,

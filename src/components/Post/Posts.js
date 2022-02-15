@@ -17,7 +17,7 @@ import Comment from "./Comment/Comment";
 import { useHistory } from "react-router-dom";
 import EditPost from "./EditPost";
 
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 const Posts = () => {
   const history = useHistory();
   const [data, setData] = useState([]);
@@ -25,7 +25,8 @@ const Posts = () => {
   const [playOnce, setPlayOnce] = useState(true);
   const token = localStorage.getItem("token");
   const userData = JSON.parse(localStorage.getItem("userData"));
-  const verifyUser = userData.isAdmin;
+  
+  const verifyUser = userData && userData.isAdmin;
 
   useEffect(() => {
     const verifyToken = () => {
@@ -38,8 +39,7 @@ const Posts = () => {
 
     const getData = () => {
       if (playOnce) {
-        axios.get("http://localhost:8000/api/post")
-        .then((res) => {
+        axios.get("http://localhost:8000/api/post").then((res) => {
           setData(res.data);
           setPlayOnce(false);
         });
@@ -50,11 +50,11 @@ const Posts = () => {
         const sortedArray = postObj.sort((a, b) => {
           return b.post_id - a.post_id;
         });
-        
+
         setSortedData(sortedArray);
       };
       sortedPost();
-    }
+    };
     getData();
   }, [data, playOnce]);
 
@@ -73,7 +73,7 @@ const Posts = () => {
       .catch(() => {
         console.log("Le post n'a pas pu être supprimé");
       });
-  }
+  };
 
   // ------------------------------------- Create Post ------------------
 
@@ -124,7 +124,6 @@ const Posts = () => {
         authorization: "Bearer " + token,
       },
     })
-    
       .then(() => {
         document.getElementById("create-post__text").style.height = "40px";
         document.getElementById("create-post__text").style.overflow = "hidden";
@@ -135,14 +134,16 @@ const Posts = () => {
 
         setUpdateElement(!updateElement);
         setSelectedFile(undefined);
-        
       })
       .catch(function (error) {
         //handle error
         console.log(error.response);
         if (error.response) {
-          document.getElementById('create-post__text').classList.add('shake');
-          setTimeout("document.getElementById('create-post__text').classList.remove('shake')", 1000);
+          document.getElementById("create-post__text").classList.add("shake");
+          setTimeout(
+            "document.getElementById('create-post__text').classList.remove('shake')",
+            1000
+          );
         }
       });
   };
@@ -293,9 +294,9 @@ const Posts = () => {
             {selectedFile && <img src={preview} alt="Aperçu du fichier" />}
           </div>
 
-          <div className="create-post__btn-container">
-            <div className="create-post__btn-img">
-              <button className="create-post__btn">Ajouter une image</button>
+          <div className="button-container">
+            <div className="button-add">
+              <button className="button-add__real">Ajouter une image</button>
               <input
                 type="file"
                 {...register("image")}
@@ -303,7 +304,7 @@ const Posts = () => {
               />
             </div>
 
-            <input type="submit" className="create-post__btn"></input>
+            <input type="submit" className="button-send"></input>
           </div>
         </form>
       </div>
@@ -352,23 +353,22 @@ const Posts = () => {
                 )}
 
                 <div className="post-info">
-                
                   <div className="post-info__avatar">
-                  <Link to={`/profil/?id=${post.post_user_id}`}>
-                    {post.user_imageURL ? (
-                      <img
-                        src={post.user_imageURL}
-                        alt="avatar de l'utilisateur"
-                      />
-                    ) : (
-                      <Avatar
-                        name={post.firstname + " " + post.lastname}
-                        size={40}
-                      />
-                    )}
-                      </Link>
+                    <Link to={`/profil/?id=${post.post_user_id}`}>
+                      {post.user_imageURL ? (
+                        <img
+                          src={post.user_imageURL}
+                          alt="avatar de l'utilisateur"
+                        />
+                      ) : (
+                        <Avatar
+                          name={post.firstname + " " + post.lastname}
+                          size={40}
+                        />
+                      )}
+                    </Link>
                   </div>
-                  
+
                   <div className="post-info__about">
                     <div className="post-info__name">
                       {post.firstname + " " + post.lastname}
@@ -376,7 +376,6 @@ const Posts = () => {
 
                     <div className="post-info__date">{showDate(post)}</div>
                   </div>
-
                 </div>
                 <div className="post-body" id={"post-body__" + post.post_id}>
                   <p>{post.post_body}</p>

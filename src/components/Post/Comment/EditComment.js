@@ -91,7 +91,7 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
           `one-comment__${comment.comment_id}`
         ).style.display = "flex";
         setFileDeleted(false);
-        
+
         setPreview(undefined);
         setMaskImage(true);
         setSelectedFile(undefined);
@@ -99,7 +99,6 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
       .catch(function (error) {
         //handle error
         console.log(error);
-        
       });
   };
 
@@ -130,9 +129,9 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
   };
 
   const selectImage = () => {
-    if (document.getElementById(`edit-comment-image__${comment.comment_id}`)) {
+    if (document.getElementById(`edit-comment-file__${comment.comment_id}`)) {
       const inputDOM = document.getElementById(
-        `edit-comment-image__${comment.comment_id}`
+        `edit-comment-file__${comment.comment_id}`
       );
 
       inputDOM.addEventListener("change", () => {
@@ -168,13 +167,16 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
   );
   if (!comment.comment_imageURL) {
     editCommentImage = (
-      <label className="label-file button" id={`label-file__${comment.comment_id}`}>
+      <label
+        className="label-file button"
+        id={`label-file__${comment.comment_id}`}
+      >
         <FontAwesomeIcon icon={faImage} />
         <input
           type="file"
-          className="comment-image"
+          className="comment-file"
           onFocus={selectImage(comment.comment_id)}
-          id={`edit-comment-image__${comment.comment_id}`}
+          id={`edit-comment-file__${comment.comment_id}`}
           {...register(`image`)}
           name="image"
         ></input>
@@ -188,9 +190,9 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
         <FontAwesomeIcon icon={faImage} />
         <input
           type="file"
-          className="comment-image"
+          className="comment-file"
           onFocus={selectImage(comment.comment_id)}
-          id={`edit-comment-image__${comment.comment_id}`}
+          id={`edit-comment-file__${comment.comment_id}`}
           {...register(`image`)}
           name="image"
         ></input>
@@ -211,8 +213,6 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
         className="edit-comment-container"
         id={`edit-comment-container__${comment.comment_id}`}
       >
-        
-
         <div className="edit-comment__body-container">
           <textarea
             className="edit-comment-body"
@@ -228,8 +228,8 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
       </form>
 
       <div className="edit-close__comment" onClick={() => closeEditComment()}>
-          x
-        </div>
+        x
+      </div>
     </div>
   );
 };
