@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Header from "../components/Header/Header";
 import { Avatar } from "evergreen-ui";
-import { useHistory } from "react-router-dom";
+
 import ProfilImage from "../components/Profil/ProfilImage";
 import ProfilView from "../components/Profil/ProfilView";
 
@@ -12,9 +12,8 @@ const OtherProfil = () => {
 
   const [dataProfil, setDataProfil] = useState([]);
   const [playOnce, setPlayOnce] = useState(true);
-
   const userData = JSON.parse(localStorage.getItem("userData"));
-
+  const verifyUser = userData && userData.isAdmin;
   
 
   useEffect(() => {
@@ -31,16 +30,16 @@ const OtherProfil = () => {
     searchUserInfo();
     
     
-  }, [playOnce]);
+  }, [playOnce, justId]);
 
   return (
     <div>
       <Header setPlayOnce={setPlayOnce}/>
 
       {dataProfil[0] !== undefined &&
-        dataProfil[0].user_id == userData.userId && <ProfilImage />}
+        dataProfil[0].user_id === userData.userId && <ProfilImage />}
 
-      {dataProfil[0] !== undefined && dataProfil[0].user_id != userData.userId && (
+      {dataProfil[0] !== undefined && dataProfil[0].user_id !== userData.userId && (
         <main className="other-profil__container">
           <div className="other-profil__avatar">
             {dataProfil[0].user_imageUrl ? (
@@ -58,10 +57,11 @@ const OtherProfil = () => {
           
         </main>
       )}
+      
       {dataProfil[0] !== undefined &&
-        dataProfil[0].user_id == userData.userId && <ProfilView/>}
+        (dataProfil[0].user_id === userData.userId || verifyUser === 1)&& <ProfilView/>}
 
-    {dataProfil[0] !== undefined && dataProfil[0].user_id != userData.userId && (
+    {(dataProfil[0] !== undefined && dataProfil[0].user_id !== userData.userId && verifyUser !== 1) && (
       <div className="profil-info">
         <h2>Informations</h2>
         <div>Prénom: {dataProfil[0].firstname}</div>

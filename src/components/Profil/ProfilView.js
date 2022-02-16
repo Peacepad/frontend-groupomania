@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import ProfilImage from "./ProfilImage";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 
@@ -8,94 +9,78 @@ const ProfilView = () => {
   const history = useHistory();
   const token = localStorage.getItem("token");
   const userData = JSON.parse(localStorage.getItem("userData"));
+  const [isSuccessfullySubmitted, setIsSuccessfullySubmitted] = useState(false);
   const { register, handleSubmit } = useForm();
 
+
   const onSubmit = (data) => {
-    let formData = new FormData(); 
+    let formData = new FormData();
     formData.append("firstname", data.firstname);
     formData.append("lastname", data.lastname);
     formData.append("email", data.email);
 
-    
-// controle des champs du formulaire
+    // controle des champs du formulaire
 
-const domFirstname = document.getElementById("profil-firstname");
-const domLastname = document.getElementById("profil-lastname");
-const domEmail = document.getElementById("profil-email");
-
-let firstnameRegExp = /^[a-z '-]+$/i;
-let lastnameRegExp = /^[a-z '-]+$/i;
-let emailRegExp = /.+\@.+\..+/;
-
-const domNeedVerification = [
-  domFirstname,
-  domLastname,
-  domEmail,
-];
-
-const regex = [
-  firstnameRegExp,
-  lastnameRegExp,
-  emailRegExp,
-];
+  
+    let firstnameRegExp = /^[a-z '-]+$/i;
+    let lastnameRegExp = /^[a-z '-]+$/i;
+    let emailRegExp = /.+\@.+\..+/; //eslint-disable-line
 
 
-if(firstnameRegExp.test(data.firstname) && lastnameRegExp.test(data.lastname) && emailRegExp.test(data.email))
-{    axios({
-      method: "PUT",
-      url: `http://localhost:8000/api/user/${userData.userId}`,
-      headers: {
-        "Content-Type": "multipart/form-data",
-        authorization: "Bearer " + token,
-      },
-      data: formData,
-    })
-      .then((res) => {
-        let userData = JSON.parse(localStorage.getItem("userData"));
-        userData.userFirstname = res.data.userFirstname;
-        userData.userLastname = res.data.userLastname;
-        userData.userEmail = res.data.userEmail;
-        localStorage.setItem("userData", JSON.stringify(userData));
-        window.location.reload();
+
+    if (
+      firstnameRegExp.test(data.firstname) &&
+      lastnameRegExp.test(data.lastname) &&
+      emailRegExp.test(data.email)
+    ) {
+      axios({
+        method: "PUT",
+        url: `http://localhost:8000/api/user/${userData.userId}`,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          authorization: "Bearer " + token,
+        },
+        data: formData,
       })
-      .catch((err) => {
-        console.log(err);
-      });}
-      else {
-        if(!firstnameRegExp.test(data.firstname)) {
-          document.getElementById('profil-firstname').classList.add('shake');
-          setTimeout(() =>
-            {document.getElementById('profil-firstname').classList.remove('shake')},
+        .then((res) => {
+          let userData = JSON.parse(localStorage.getItem("userData"));
+          userData.userFirstname = res.data.userFirstname;
+          userData.userLastname = res.data.userLastname;
+          userData.userEmail = res.data.userEmail;
+          localStorage.setItem("userData", JSON.stringify(userData));
+          setIsSuccessfullySubmitted(true);
+          setTimeout(() => {
+            window.location.reload()},
             1000
           );
-        }
-        if(!lastnameRegExp.test(data.lastname)){
-          document.getElementById('profil-lastname').classList.add('shake');
-          setTimeout(() =>
-            {document.getElementById('profil-lastname').classList.remove('shake')},
-            1000
-          );
-        }
-        if(!emailRegExp.test(data.email)) {
-          document.getElementById('profil-email').classList.add('shake');
-          setTimeout(() =>
-            {document.getElementById('profil-email').classList.remove('shake')},
-            1000
-          );
-        }
+          
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      if (!firstnameRegExp.test(data.firstname)) {
+        document.getElementById("profil-firstname").classList.add("shake");
+        setTimeout(() => {
+          document.getElementById("profil-firstname").classList.remove("shake");
+        }, 1000);
       }
-
-
-
+      if (!lastnameRegExp.test(data.lastname)) {
+        document.getElementById("profil-lastname").classList.add("shake");
+        setTimeout(() => {
+          document.getElementById("profil-lastname").classList.remove("shake");
+        }, 1000);
+      }
+      if (!emailRegExp.test(data.email)) {
+        document.getElementById("profil-email").classList.add("shake");
+        setTimeout(() => {
+          document.getElementById("profil-email").classList.remove("shake");
+        }, 1000);
+      }
+    }
   };
 
   const deleteUser = () => {
-
-
-
-
-
-    
     axios({
       method: "delete",
       url: `http://localhost:8000/api/user/${userData.userId}`,
@@ -110,20 +95,18 @@ if(firstnameRegExp.test(data.firstname) && lastnameRegExp.test(data.lastname) &&
         history.push("/login");
       })
       .catch(console.log("erreur"));
-
-      
   };
 
   return (
     <div>
-      
       <div className="profil-info">
         <h2>Vos informations</h2>
         <form className="profil-edit" onSubmit={handleSubmit(onSubmit)}>
           <div className="profil-edit__label">
             <label>
               Prénom :{" "}
-              <input id="profil-firstname"
+              <input
+                id="profil-firstname"
                 type="text"
                 defaultValue={userData.userFirstname}
                 {...register("firstname")}
@@ -155,6 +138,12 @@ if(firstnameRegExp.test(data.firstname) && lastnameRegExp.test(data.lastname) &&
             className="profil-submit"
             value="Modifier"
           ></input>
+          {isSuccessfullySubmitted === true && (
+            <div className="success">
+              Le commentaire a été envoyé avec succès{" "}
+              <FontAwesomeIcon icon={faCheck} />
+            </div>
+          )}
         </form>
       </div>
 

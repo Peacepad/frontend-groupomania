@@ -5,7 +5,8 @@ import {
   faEllipsisH,
   faImage,
   faArrowDown,
-  faArrowUp, faCheck
+  faArrowUp,
+  faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import { useForm } from "react-hook-form";
 import {
@@ -16,14 +17,13 @@ import {
   EditIcon,
   TrashIcon,
   Button,
-  
 } from "evergreen-ui";
 import EditComment from "./EditComment";
 import { Link } from "react-router-dom";
 
 const Comment = ({ post, playOnce, setPlayOnce }) => {
   const userData = JSON.parse(localStorage.getItem("userData"));
-  const verifyUser = userData.isAdmin;
+  const verifyUser = userData && userData.isAdmin;
   const { register, handleSubmit, setValue } = useForm({
     mode: "onChange",
   });
@@ -41,51 +41,58 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
     commentData.append("postId", post.post_id);
     commentData.append("image", image);
 
-    axios({
-      method: "POST",
-      url: `http://localhost:8000/api/comment/${post.post_id}`,
-      data: commentData,
-      headers: {
-        "Content-Type": "multipart/form-data",
-        authorization: "Bearer " + token,
-      },
-    })
-      .then(() => {
-        setPlayOnce(!playOnce);
-        setValue("text", "");
-        document.getElementById(`comment-form__${post.post_id}`).reset();
-        document.getElementById(
-          `comment-for-post__${post.post_id}`
-        ).style.height = "42px";
-        document.getElementById(
-          `label-file__${post.post_id}`
-        ).style.backgroundColor = "rgb(239, 239, 239)";
-
-        setIsSuccessfullySubmitted(true);
-        
-        setTimeout(() => {
-          setIsSuccessfullySubmitted(false)},
-          1500
-        );
-
+    if (data.text.trim() === false) {
+      // Empêche l'envoi d'un champ vide
+      document
+        .getElementById(`comment-for-post__${post.post_id}`)
+        .classList.add("shake");
+      setTimeout(() => {
+        document
+          .getElementById(`comment-for-post__${post.post_id}`)
+          .classList.remove("shake");
+      }, 1000);
+    } else {
+      axios({
+        method: "POST",
+        url: `http://localhost:8000/api/comment/${post.post_id}`,
+        data: commentData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          authorization: "Bearer " + token,
+        },
       })
-      .catch(function (error) {
-        //handle error
-        console.log(error);
-        if (error.response) {
-          document
-            .getElementById(`comment-for-post__${post.post_id}`)
-            .classList.add("shake");
-          setTimeout(() => {
-            document.getElementById(`comment-for-post__${post.post_id}`).classList.remove('shake')
-          }
-            ,
-            1000
-          );
-        }
-      });
+        .then(() => {
+          setPlayOnce(!playOnce);
+          setValue("text", "");
+          document.getElementById(`comment-form__${post.post_id}`).reset();
+          document.getElementById(
+            `comment-for-post__${post.post_id}`
+          ).style.height = "42px";
+          document.getElementById(
+            `label-file__${post.post_id}`
+          ).style.backgroundColor = "rgb(239, 239, 239)";
 
-      
+          setIsSuccessfullySubmitted(true);
+
+          setTimeout(() => {
+            setIsSuccessfullySubmitted(false);
+          }, 1500);
+        })
+        .catch(function (error) {
+          //handle error
+          console.log(error);
+          if (error.response) {
+            document
+              .getElementById(`comment-for-post__${post.post_id}`)
+              .classList.add("shake");
+            setTimeout(() => {
+              document
+                .getElementById(`comment-for-post__${post.post_id}`)
+                .classList.remove("shake");
+            }, 1000);
+          }
+        });
+    }
   };
 
   const deleteComment = (comment_id) => {
@@ -100,10 +107,6 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
       .then(() => {
         setPlayOnce(!playOnce);
         document.getElementById(`comment-form__${post.post_id}`).reset();
-
-        document.getElementById(
-          `label-file__${post.post_id}`
-        ).style.backgroundColor = "rgb(239, 239, 239)";
       })
       .catch(console.log("Le commentaire n'a pas pu être supprimé"));
   };
@@ -201,15 +204,16 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
 
       inputDOM.addEventListener("change", () => {
         if (inputDOM.files[0] !== undefined) {
+          // Changement de couleur du bouton pour selectionner un fichier
           document.getElementById(
             `label-file__${post.post_id}`
-          ).style.backgroundColor = "#66FF99";
+          ).style.backgroundColor = "rgb(78, 199, 174)";
         }
       });
     }
   };
 
-  // function for extend textarea
+  // Agrandir le champ d'écriture
   const growTextarea = (post) => {
     const textarea = document.getElementById(
       `comment-for-post__${post.post_id}`
@@ -228,7 +232,9 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
     });
   };
 
+  // Permet d'afficher "Afficher plus" s'il y a beaucoup de commentaires
   const calculateCommentsArea = () => {
+    
     let el = document.getElementById(`comments-post__${post.post_id}`);
     if (el) {
       if (el.clientHeight < el.scrollHeight) {
@@ -308,7 +314,10 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
           <input type="submit" className="button"></input>
 
           {isSuccessfullySubmitted === true && (
-            <div className="success">Le commentaire a été envoyé avec succès <FontAwesomeIcon icon={faCheck} /></div>
+            <div className="success">
+              Le commentaire a été envoyé avec succès{" "}
+              <FontAwesomeIcon icon={faCheck} />
+            </div>
           )}
         </form>
       </div>

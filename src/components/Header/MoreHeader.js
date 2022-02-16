@@ -15,11 +15,11 @@ const MoreHeader = ({playOnce, setPlayOnce}) => {
     <>
       <div className="header-more">
         <ul>
-          <Link to={`/profil/?id=${userData.userId}`} onClick={() => {if(setPlayOnce){setPlayOnce(!playOnce)}}}>
+          <Link alt="Afficher le profil" to={`/profil/?id=${userData.userId}`} onClick={() => {if(setPlayOnce){setPlayOnce(!playOnce)}}}>
             <li>Afficher le profil</li>
           </Link>
 
-          <Link to="/login" onClick={() => signOut()}>
+          <Link to="/login" alt="Se déconnecter" onClick={() => signOut()}>
             <li>Se déconnecter</li>
           </Link>
         </ul>

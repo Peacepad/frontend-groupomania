@@ -16,19 +16,20 @@ import { useForm } from "react-hook-form";
 import Comment from "./Comment/Comment";
 import { useHistory } from "react-router-dom";
 import EditPost from "./EditPost";
-
 import { Link } from "react-router-dom";
+
 const Posts = () => {
-  const history = useHistory();
+  
+  const history = useHistory(); 
   const [data, setData] = useState([]);
   const [sortedData, setSortedData] = useState([]);
   const [playOnce, setPlayOnce] = useState(true);
   const token = localStorage.getItem("token");
   const userData = JSON.parse(localStorage.getItem("userData"));
-  
   const verifyUser = userData && userData.isAdmin;
 
   useEffect(() => {
+    // Si l'utilisateur n'est pas connecté il est redirigé vers la page login
     const verifyToken = () => {
       if (!token) {
         history.push("/login");
@@ -37,6 +38,7 @@ const Posts = () => {
 
     verifyToken();
 
+    // Obtenir les données des Posts
     const getData = () => {
       if (playOnce) {
         axios.get("http://localhost:8000/api/post").then((res) => {
@@ -45,6 +47,7 @@ const Posts = () => {
         });
       }
 
+      // Tri des posts pour les afficher dans le bon ordre
       const sortedPost = () => {
         const postObj = Object.keys(data).map((i) => data[i]);
         const sortedArray = postObj.sort((a, b) => {
@@ -56,8 +59,9 @@ const Posts = () => {
       sortedPost();
     };
     getData();
-  }, [data, playOnce]);
+  }, [data, playOnce, token, history]);
 
+  // Supprimer un post
   const deletePost = (post_id) => {
     axios({
       method: "DELETE",
@@ -67,8 +71,7 @@ const Posts = () => {
       },
     })
       .then(() => {
-        setPlayOnce(!playOnce);
-        setUpdateElement(!updateElement);
+        setPlayOnce(!playOnce); // Actualisation du contenu
       })
       .catch(() => {
         console.log("Le post n'a pas pu être supprimé");
@@ -106,8 +109,7 @@ const Posts = () => {
   const { register, handleSubmit, reset } = useForm();
 
   const onSubmit = async (data) => {
-    const token = localStorage.getItem("token");
-
+  
     let formData = new FormData(); //formdata object
 
     formData.append("userId", token);
@@ -125,31 +127,30 @@ const Posts = () => {
       },
     })
       .then(() => {
+        // On remet le champ à sa taille de base
         document.getElementById("create-post__text").style.height = "40px";
         document.getElementById("create-post__text").style.overflow = "hidden";
 
         setPlayOnce(!playOnce);
+        // On remet les champs à zéro
         reset();
         setPreview(undefined);
-
-        setUpdateElement(!updateElement);
         setSelectedFile(undefined);
       })
       .catch(function (error) {
         //handle error
-        
         if (error.response) {
           document.getElementById("create-post__text").classList.add("shake");
-          setTimeout(() =>
-            {document.getElementById('create-post__text').classList.remove('shake')},
-            1000
-          );
+          setTimeout(() => {
+            document
+              .getElementById("create-post__text")
+              .classList.remove("shake");
+          }, 1000);
         }
       });
   };
 
   // ---------------- UpdatePost
-  const [updateElement, setUpdateElement] = useState(false);
 
   let postBodyDiv;
 
@@ -159,7 +160,6 @@ const Posts = () => {
 
   const showDate = (post) => {
     let mySqlDate = post.post_date;
-
     let mySqlDate2 = mySqlDate.replace("T", " ");
     let mySqlDate3 = mySqlDate2.replace("Z", "");
 
@@ -238,7 +238,7 @@ const Posts = () => {
           `edit-background__${post.post_id}`
         );
         editBackgroundDOM.style.display = "none";
-        //remettre le scroll
+        // remettre le scroll
         document.documentElement.style.overflow = "scroll";
       }
     } else {
@@ -251,7 +251,7 @@ const Posts = () => {
           `edit-background__${post.post_id}`
         );
         editBackgroundDOM.style.display = "flex";
-        //empecher le scroll pendant l'édition
+        // empecher le scroll pendant l'édition
         document.documentElement.style.overflow = "hidden";
       }
       if (editAreaDOM) {
@@ -263,7 +263,7 @@ const Posts = () => {
     }
   };
 
-  // function for extend textarea
+  // fAgrandir la zone de texte en fonction de ce qui est écrit
   const growTextarea = () => {
     const textarea = document.getElementById("create-post__text");
 
@@ -309,14 +309,14 @@ const Posts = () => {
         </form>
       </div>
 
-      <div className="Posts">
+      <main className="Posts">
         <ul className="post-list">
           {sortedData.map((post) => (
             <li key={post.post_id} id={post.post_id} className="post-list__li">
-              <div className="post-card">
+              <article className="post-card">
                 <EditPost post={post} setPlayOnce={setPlayOnce} />
 
-                {(verifyUser == 1 || userData.userId === post.post_user_id) && (
+                {(verifyUser === 1 || userData.userId === post.post_user_id) && (
                   <div className="post-edit">
                     <Popover
                       className="post-edit"
@@ -405,13 +405,13 @@ const Posts = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </article>
 
               <Comment post={post} setPlayOnce={setPlayOnce} />
             </li>
           ))}
         </ul>
-      </div>
+      </main>
     </React.Fragment>
   );
 };

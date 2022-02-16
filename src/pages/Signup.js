@@ -74,7 +74,7 @@ const Signup = () => {
           <input
             type="email"
             id="signup__email"
-            defaultValue="moira@email.com"
+            
             placeholder="Adresse Email"
             name="email"
             {...register("email", {
@@ -87,7 +87,7 @@ const Signup = () => {
           <input
             type="text"
             id="signup__firstname"
-            defaultValue="Admin"
+            
             placeholder="Prénom"
             name="firstname"
             {...register("firstname", {
@@ -104,8 +104,8 @@ const Signup = () => {
           <input
             type="text"
             id="signup__lastname"
-            defaultValue="moira"
-            placeholder="test"
+            
+            placeholder="Nom"
             name="lastname"
             {...register("lastname", {
               required: "Vous devez préciser un nom.",
@@ -120,7 +120,7 @@ const Signup = () => {
           )}
           <input
             type="password"
-            defaultValue="Moira26"
+            
             id="signup__password"
             placeholder="Mot de passe"
             name="password"

@@ -7,7 +7,7 @@ import axios from "axios";
 const EditComment = ({ comment, playOnce, setPlayOnce }) => {
   const { register, handleSubmit } = useForm();
 
-  const closeEditComment = () => {
+  const closeEditComment = () => { // Fermer l'édition de commentaire en appuyant sur la croix
     const showEditCommentDOM = document.getElementById(
       `edit-comment-container__${comment.comment_id}`
     );
@@ -48,36 +48,38 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
       }
     }
   };
+  /* eslint-disable no-unused-vars */
   const [fileDeleted, setFileDeleted] = useState(false);
   const [selectedFile, setSelectedFile] = useState();
   const [preview, setPreview] = useState();
   const [maskImage, setMaskImage] = useState(true);
+  /* eslint-enable no-unused-vars */
 
   const editComment = (data) => {
     const token = localStorage.getItem("token");
 
     let editCommentData = new FormData();
 
-    if (data.image[0]) {
+    if (data.image[0]) { // Ajouter image seulement si une image a été choisie
       const image = data.image[0];
       editCommentData.append("image", image);
     }
-
-    
 
     editCommentData.append("userId", token);
     editCommentData.append("text", data.text);
     editCommentData.append("userId", token);
     editCommentData.append("fileDeleted", fileDeleted);
 
-    if(!data.text.trim()) {
-      document.getElementById(`edit-comment-body__${comment.comment_id}`).classList.add("shake");
-          setTimeout(() => 
-            {document.getElementById(`edit-comment-body__${comment.comment_id}`).classList.remove('shake')},
-            1000
-          );
-    }
-    else {
+    if (!data.text.trim()) {
+      document
+        .getElementById(`edit-comment-body__${comment.comment_id}`)
+        .classList.add("shake");
+      setTimeout(() => {
+        document
+          .getElementById(`edit-comment-body__${comment.comment_id}`)
+          .classList.remove("shake");
+      }, 1000);
+    } else {
       axios({
         method: "PUT",
         url: `http://localhost:8000/api/comment/${comment.comment_id}`,
@@ -100,8 +102,9 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
           document.getElementById(
             `one-comment__${comment.comment_id}`
           ).style.display = "flex";
+
+          //remise des valeurs à zéro
           setFileDeleted(false);
-  
           setPreview(undefined);
           setMaskImage(true);
           setSelectedFile(undefined);
@@ -110,10 +113,10 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
           //handle error
           console.log(error);
         });
-    };
     }
-    
+  };
 
+  // Envoyer en appuyant sur la touche entrée
   const handleUserKeyPress = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -122,7 +125,7 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
   };
 
   // function for extend textarea
-  const growTextarea = () => {
+  const growTextarea = async() => {
     const textarea = document.getElementById(
       `edit-comment-body__${comment.comment_id}`
     );
@@ -150,7 +153,7 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
         if (inputDOM.files[0] !== undefined) {
           document.getElementById(
             `label-file__${comment.comment_id}`
-          ).style.backgroundColor = "#66FF99";
+          ).style.backgroundColor = "rgb(78,199,174)";
         }
       });
     }
@@ -158,7 +161,7 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
 
   const deleteImage = () => {
     setMaskImage(false);
-
+    // Permet d'indiquer qu'on supprime une image par rapport au commentaire original
     setFileDeleted(true);
   };
 
@@ -196,9 +199,9 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
     );
   }
 
-  if (maskImage == false) {
+  if (maskImage === false) {
     editCommentImage = (
-      <label className="label-file" id={`label-file__${comment.comment_id}`}>
+      <label className="label-file button" id={`label-file__${comment.comment_id}`}>
         <FontAwesomeIcon icon={faImage} />
         <input
           type="file"
@@ -242,7 +245,9 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
       <div className="edit-close__comment" onClick={() => closeEditComment()}>
         x
       </div>
-      <div class="edit-comment__information">Appuyez sur entrée pour valider</div>
+      <div class="edit-comment__information">
+        Appuyez sur entrée pour valider
+      </div>
     </div>
   );
 };

@@ -5,20 +5,20 @@ import { Link, useHistory } from "react-router-dom";
 const Login = () => {
 
   const history = useHistory();
-  //Erreurs du formulaire
+  
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  //Afficher un message d'erreur lorsque le serveur renvoi 401
+  // Afficher un message d'erreur lorsque le serveur renvoi 401
   const [responseServer, setResponseServer] = useState("");
   const sayResponse = () => {
     setResponseServer(`Mot de ou passe ou Utilisateur incorrect`);
   };
 
-  //Envoyer données formulaires
+  // Envoyer données formulaires
   const onSubmit = async (loginData) => {
 
     fetch("http://localhost:8000/api/user/login", {
@@ -38,7 +38,6 @@ const Login = () => {
         localStorage.setItem("token", dataFromServer.token);
         localStorage.setItem("userData", dataFromServer.userData)
         history.push("/");
-
       })
       .catch(() => {
         sayResponse();
@@ -58,7 +57,7 @@ const Login = () => {
         <input
           type="email"
           id="login__email"
-          defaultValue="moira@email.com"
+          
           placeholder="Adresse Email"
           name="email"
           {...register("email", {
@@ -70,7 +69,7 @@ const Login = () => {
         )}
         <input
           type="password"
-          defaultValue="Moira26"
+          
           id="login__password"
           placeholder="Mot de passe"
           name="password"

@@ -126,7 +126,7 @@ const EditPost = ({ post, playOnce, setPlayOnce }) => {
       >
         x
       </div>
-      <img src={postImage} />
+      <img src={postImage} alt="image du post"/>
     </div>
   );
   if (maskImage === false && !preview) {
@@ -152,7 +152,7 @@ const EditPost = ({ post, playOnce, setPlayOnce }) => {
         >
           x
         </div>
-        <img src={preview} />
+        <img src={preview} alt="Prévisualisation de l'image du post"/>
       </div>
     );
   }
