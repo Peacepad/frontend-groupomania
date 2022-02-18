@@ -5,6 +5,10 @@ import Signup from "./pages/Signup";
 import News from "./pages/News";
 import Profil from "./pages/Profil";
 
+
+
+
+
 function App() {
   return (
     <BrowserRouter>

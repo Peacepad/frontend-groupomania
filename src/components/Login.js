@@ -3,9 +3,8 @@ import { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 
 const Login = () => {
-
   const history = useHistory();
-  
+
   const {
     register,
     handleSubmit,
@@ -20,8 +19,7 @@ const Login = () => {
 
   // Envoyer données formulaires
   const onSubmit = async (loginData) => {
-
-    fetch("http://localhost:8000/api/user/login", {
+    fetch(`${process.env.REACT_APP_API_HOST}/api/user/login`, {
       method: "post",
       headers: {
         "Content-Type": "application/json",
@@ -36,16 +34,12 @@ const Login = () => {
       })
       .then((dataFromServer) => {
         localStorage.setItem("token", dataFromServer.token);
-        localStorage.setItem("userData", dataFromServer.userData)
+        localStorage.setItem("userData", dataFromServer.userData);
         history.push("/");
       })
       .catch(() => {
         sayResponse();
       });
-
-
-
-      
   };
 
   return (
@@ -57,7 +51,6 @@ const Login = () => {
         <input
           type="email"
           id="login__email"
-          
           placeholder="Adresse Email"
           name="email"
           {...register("email", {
@@ -69,7 +62,6 @@ const Login = () => {
         )}
         <input
           type="password"
-          
           id="login__password"
           placeholder="Mot de passe"
           name="password"

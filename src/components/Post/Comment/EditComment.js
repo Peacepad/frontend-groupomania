@@ -7,7 +7,8 @@ import axios from "axios";
 const EditComment = ({ comment, playOnce, setPlayOnce }) => {
   const { register, handleSubmit } = useForm();
 
-  const closeEditComment = () => { // Fermer l'édition de commentaire en appuyant sur la croix
+  const closeEditComment = () => {
+    // Fermer l'édition de commentaire en appuyant sur la croix
     const showEditCommentDOM = document.getElementById(
       `edit-comment-container__${comment.comment_id}`
     );
@@ -60,7 +61,8 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
 
     let editCommentData = new FormData();
 
-    if (data.image[0]) { // Ajouter image seulement si une image a été choisie
+    if (data.image[0]) {
+      // Ajouter image seulement si une image a été choisie
       const image = data.image[0];
       editCommentData.append("image", image);
     }
@@ -82,7 +84,7 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
     } else {
       axios({
         method: "PUT",
-        url: `http://localhost:8000/api/comment/${comment.comment_id}`,
+        url: `${process.env.REACT_APP_API_HOST}/api/comment/${comment.comment_id}`,
         data: editCommentData,
         headers: {
           "Content-Type": "multipart/form-data",
@@ -125,7 +127,7 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
   };
 
   // function for extend textarea
-  const growTextarea = async() => {
+  const growTextarea = async () => {
     const textarea = document.getElementById(
       `edit-comment-body__${comment.comment_id}`
     );
@@ -201,7 +203,10 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
 
   if (maskImage === false) {
     editCommentImage = (
-      <label className="label-file button" id={`label-file__${comment.comment_id}`}>
+      <label
+        className="label-file button"
+        id={`label-file__${comment.comment_id}`}
+      >
         <FontAwesomeIcon icon={faImage} />
         <input
           type="file"

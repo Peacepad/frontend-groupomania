@@ -18,7 +18,7 @@ const EditPost = ({ post, playOnce, setPlayOnce }) => {
 
     axios({
       method: "PUT",
-      url: `http://localhost:8000/api/post/${post.post_id}`,
+      url: `${process.env.REACT_APP_API_HOST}/api/post/${post.post_id}`,
       data: editData,
       headers: {
         "Content-Type": "multipart/form-data",
@@ -126,7 +126,7 @@ const EditPost = ({ post, playOnce, setPlayOnce }) => {
       >
         x
       </div>
-      <img src={postImage} alt="image du post"/>
+      <img src={postImage} alt="image du post" />
     </div>
   );
   if (maskImage === false && !preview) {
@@ -152,7 +152,7 @@ const EditPost = ({ post, playOnce, setPlayOnce }) => {
         >
           x
         </div>
-        <img src={preview} alt="Prévisualisation de l'image du post"/>
+        <img src={preview} alt="Prévisualisation de l'image du post" />
       </div>
     );
   }
@@ -189,14 +189,14 @@ const EditPost = ({ post, playOnce, setPlayOnce }) => {
 
           {editImage}
           <label className="edit-file">
-          <div className="button">Ajouter une image</div>
-          <input
-            type="file"
-            className="edit-file__input"
-            id={`edit-file__input-${post.post_id}`}
-            {...register("image")}
-            onChange={onSelectFile}
-          />
+            <div className="button">Ajouter une image</div>
+            <input
+              type="file"
+              className="edit-file__input"
+              id={`edit-file__input-${post.post_id}`}
+              {...register("image")}
+              onChange={onSelectFile}
+            />
           </label>
 
           <input type="submit" className="edit-btn button"></input>

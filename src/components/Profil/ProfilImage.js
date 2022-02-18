@@ -30,9 +30,8 @@ const ProfilImage = () => {
     }
 
     setSelectedFile(e.target.files[0]);
-    if(document.getElementById(`profil-submit`))
-    {
-      document.getElementById(`profil-submit`).classList.add('pulse');
+    if (document.getElementById(`profil-submit`)) {
+      document.getElementById(`profil-submit`).classList.add("pulse");
     }
   };
 
@@ -43,7 +42,7 @@ const ProfilImage = () => {
 
     axios({
       method: "PUT",
-      url: `http://localhost:8000/api/user/${userData.userId}`,
+      url: `${process.env.REACT_APP_API_HOST}/api/user/${userData.userId}`,
       headers: {
         "Content-Type": "multipart/form-data",
         authorization: "Bearer " + token,
@@ -62,7 +61,7 @@ const ProfilImage = () => {
   };
 
   let profilAvatar;
-  
+
   profilAvatar = (
     <Avatar
       className="profil-avatar__withoutUrl"
@@ -85,14 +84,16 @@ const ProfilImage = () => {
       <div className="profil-avatar__preview ">{profilAvatar}</div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
+        <label className="profil-label">
+          <div className="profil-button">Ajouter une image</div>
+          <input
+            type="file"
+            className="profil-image"
+            {...register("image")}
+            onChange={onSelectFile}
+          />
+        </label>
 
-      <label className="profil-label">      
-            <div className="profil-button">Ajouter une image</div>
-            <input type="file" className="profil-image" {...register("image")} onChange={onSelectFile} />
-          </label>
-
-
-        
         <input type="submit" id="profil-submit" value="Confirmer"></input>
       </form>
     </div>

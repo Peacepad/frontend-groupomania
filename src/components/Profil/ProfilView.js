@@ -12,7 +12,6 @@ const ProfilView = () => {
   const [isSuccessfullySubmitted, setIsSuccessfullySubmitted] = useState(false);
   const { register, handleSubmit } = useForm();
 
-
   const onSubmit = (data) => {
     let formData = new FormData();
     formData.append("firstname", data.firstname);
@@ -21,12 +20,9 @@ const ProfilView = () => {
 
     // controle des champs du formulaire
 
-  
     let firstnameRegExp = /^[a-z '-]+$/i;
     let lastnameRegExp = /^[a-z '-]+$/i;
     let emailRegExp = /.+\@.+\..+/; //eslint-disable-line
-
-
 
     if (
       firstnameRegExp.test(data.firstname) &&
@@ -35,7 +31,7 @@ const ProfilView = () => {
     ) {
       axios({
         method: "PUT",
-        url: `http://localhost:8000/api/user/${userData.userId}`,
+        url: `${process.env.REACT_APP_API_HOST}/api/user/${userData.userId}`,
         headers: {
           "Content-Type": "multipart/form-data",
           authorization: "Bearer " + token,
@@ -50,10 +46,8 @@ const ProfilView = () => {
           localStorage.setItem("userData", JSON.stringify(userData));
           setIsSuccessfullySubmitted(true);
           setTimeout(() => {
-            window.location.reload()},
-            1000
-          );
-          
+            window.location.reload();
+          }, 1000);
         })
         .catch((err) => {
           console.log(err);
@@ -81,18 +75,25 @@ const ProfilView = () => {
   };
 
   const deleteUser = () => {
+    const params = new URL(document.location).searchParams;
+  const justId = params.get("id");
     axios({
       method: "delete",
-      url: `http://localhost:8000/api/user/${userData.userId}`,
+      url: `${process.env.REACT_APP_API_HOST}/api/user/${justId}`,
       headers: {
         "Content-Type": "multipart/form-data",
         authorization: "Bearer " + token,
       },
     })
       .then(() => {
-        localStorage.removeItem("token");
+        
+        if(justId == userData.userId){
+          localStorage.removeItem("token");
         localStorage.removeItem("userData");
-        history.push("/login");
+        history.push("/login");}
+        else {
+          history.push("/")
+        }
       })
       .catch(console.log("erreur"));
   };

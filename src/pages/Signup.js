@@ -16,28 +16,24 @@ const Signup = () => {
   //Afficher un message d'erreur lorsque le serveur renvoi 401
   const [responseServer, setResponseServer] = useState("");
   const sayResponse = () => {
-   setResponseServer("Le compte existe déjà")
+    setResponseServer("Le compte existe déjà");
   };
 
-  const [classServer, setClassServer] = useState('');
+  const [classServer, setClassServer] = useState("");
   const sayClassServer = () => {
-    setClassServer('invalid-feedback')
+    setClassServer("invalid-feedback");
   };
-  
+
   const sayGoodResponse = () => {
-    setResponseServer("Le compte a été créé avec succès !")
+    setResponseServer("Le compte a été créé avec succès !");
   };
 
   const sayGoodClassServer = () => {
-    setClassServer('valid-feedback')
+    setClassServer("valid-feedback");
   };
 
-
-
-
-
   const onSubmit = async (signupData) => {
-    fetch("http://localhost:8000/api/user/signup", {
+    fetch(`${process.env.REACT_APP_API_HOST}/api/user/signup`, {
       method: "post",
       headers: {
         "Content-Type": "application/json",
@@ -46,21 +42,20 @@ const Signup = () => {
     })
       .then((response) => {
         if (response.status === 401) {
-          throw new Error('ça marche pas')
-        }
-        else{
+          throw new Error("ça marche pas");
+        } else {
           sayGoodResponse();
           sayGoodClassServer();
           setTimeout(() => {
-            history.push('/login')
+            history.push("/login");
           }, 3000);
         }
-       
+
         return response.json();
       })
-      .catch(function(error){
+      .catch(function (error) {
         sayResponse();
-        sayClassServer()
+        sayClassServer();
       });
   };
 
@@ -68,13 +63,13 @@ const Signup = () => {
     <div>
       <Header />
       <main className="auth">
-          <div className="logo-globe"><img src="./img/icon.png" alt="logo-globe" /></div>
+        <div className="logo-globe">
+          <img src="./img/icon.png" alt="logo-globe" />
+        </div>
         <form id="signup__form" onSubmit={handleSubmit(onSubmit)}>
-            
           <input
             type="email"
             id="signup__email"
-            
             placeholder="Adresse Email"
             name="email"
             {...register("email", {
@@ -87,7 +82,6 @@ const Signup = () => {
           <input
             type="text"
             id="signup__firstname"
-            
             placeholder="Prénom"
             name="firstname"
             {...register("firstname", {
@@ -104,7 +98,6 @@ const Signup = () => {
           <input
             type="text"
             id="signup__lastname"
-            
             placeholder="Nom"
             name="lastname"
             {...register("lastname", {
@@ -120,7 +113,6 @@ const Signup = () => {
           )}
           <input
             type="password"
-            
             id="signup__password"
             placeholder="Mot de passe"
             name="password"

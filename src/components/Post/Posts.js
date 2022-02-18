@@ -19,8 +19,7 @@ import EditPost from "./EditPost";
 import { Link } from "react-router-dom";
 
 const Posts = () => {
-  
-  const history = useHistory(); 
+  const history = useHistory();
   const [data, setData] = useState([]);
   const [sortedData, setSortedData] = useState([]);
   const [playOnce, setPlayOnce] = useState(true);
@@ -41,7 +40,7 @@ const Posts = () => {
     // Obtenir les données des Posts
     const getData = () => {
       if (playOnce) {
-        axios.get("http://localhost:8000/api/post").then((res) => {
+        axios.get(`${process.env.REACT_APP_API_HOST}/api/post`).then((res) => {
           setData(res.data);
           setPlayOnce(false);
         });
@@ -65,7 +64,7 @@ const Posts = () => {
   const deletePost = (post_id) => {
     axios({
       method: "DELETE",
-      url: `http://localhost:8000/api/post/${post_id}`,
+      url: `${process.env.REACT_APP_API_HOST}/api/post/${post_id}`,
       headers: {
         authorization: "Bearer " + token,
       },
@@ -107,47 +106,57 @@ const Posts = () => {
   // ------------
 
   const { register, handleSubmit, reset } = useForm();
-
+  // Envoi d'un post
   const onSubmit = async (data) => {
-  
     let formData = new FormData(); //formdata object
 
     formData.append("userId", token);
     formData.append("text", data.text);
     formData.append("image", selectedFile);
 
-    axios({
-      method: "post",
-      url: "http://localhost:8000/api/post/create",
-      data: formData,
-      headers: {
-        "Content-Type": "multipart/form-data",
 
-        authorization: "Bearer " + token,
-      },
-    })
-      .then(() => {
-        // On remet le champ à sa taille de base
-        document.getElementById("create-post__text").style.height = "40px";
-        document.getElementById("create-post__text").style.overflow = "hidden";
+    
+    if (data.text.trim() == false) {
+      // Empêche l'envoi d'un champ vide
+      document.getElementById(`create-post__text`).classList.add("shake");
+      setTimeout(() => {
+        document.getElementById(`create-post__text`).classList.remove("shake");
+      }, 1000);
+    } else {
+      axios({
+        method: "post",
+        url: `${process.env.REACT_APP_API_HOST}/api/post/create`,
+        data: formData,
+        headers: {
+          "Content-Type": "multipart/form-data",
 
-        setPlayOnce(!playOnce);
-        // On remet les champs à zéro
-        reset();
-        setPreview(undefined);
-        setSelectedFile(undefined);
+          authorization: "Bearer " + token,
+        },
       })
-      .catch(function (error) {
-        //handle error
-        if (error.response) {
-          document.getElementById("create-post__text").classList.add("shake");
-          setTimeout(() => {
-            document
-              .getElementById("create-post__text")
-              .classList.remove("shake");
-          }, 1000);
-        }
-      });
+        .then(() => {
+          // On remet le champ à sa taille de base
+          document.getElementById("create-post__text").style.height = "40px";
+          document.getElementById("create-post__text").style.overflow =
+            "hidden";
+
+          setPlayOnce(!playOnce);
+          // On remet les champs à zéro
+          reset();
+          setPreview(undefined);
+          setSelectedFile(undefined);
+        })
+        .catch(function (error) {
+          //handle error
+          if (error.response) {
+            document.getElementById("create-post__text").classList.add("shake");
+            setTimeout(() => {
+              document
+                .getElementById("create-post__text")
+                .classList.remove("shake");
+            }, 1000);
+          }
+        });
+    }
   };
 
   // ---------------- UpdatePost
@@ -316,7 +325,8 @@ const Posts = () => {
               <article className="post-card">
                 <EditPost post={post} setPlayOnce={setPlayOnce} />
 
-                {(verifyUser === 1 || userData.userId === post.post_user_id) && (
+                {(verifyUser === 1 ||
+                  userData.userId === post.post_user_id) && (
                   <div className="post-edit">
                     <Popover
                       className="post-edit"

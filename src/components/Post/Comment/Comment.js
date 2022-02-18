@@ -54,7 +54,7 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
     } else {
       axios({
         method: "POST",
-        url: `http://localhost:8000/api/comment/${post.post_id}`,
+        url: `${process.env.REACT_APP_API_HOST}/api/comment/${post.post_id}`,
         data: commentData,
         headers: {
           "Content-Type": "multipart/form-data",
@@ -99,7 +99,7 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
     const token = localStorage.getItem("token");
     axios({
       method: "DELETE",
-      url: `http://localhost:8000/api/comment/${comment_id}`,
+      url: `${process.env.REACT_APP_API_HOST}/api/comment/${comment_id}`,
       headers: {
         authorization: "Bearer " + token,
       },
@@ -234,7 +234,6 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
 
   // Permet d'afficher "Afficher plus" s'il y a beaucoup de commentaires
   const calculateCommentsArea = () => {
-    
     let el = document.getElementById(`comments-post__${post.post_id}`);
     if (el) {
       if (el.clientHeight < el.scrollHeight) {
