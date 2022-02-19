@@ -41,7 +41,7 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
     commentData.append("postId", post.post_id);
     commentData.append("image", image);
 
-    if (data.text.trim() === false) {
+    if (data.text.trim() == false) {
       // Empêche l'envoi d'un champ vide
       document
         .getElementById(`comment-for-post__${post.post_id}`)

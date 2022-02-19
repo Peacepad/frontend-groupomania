@@ -9,7 +9,7 @@ import ProfilView from "../components/Profil/ProfilView";
 const OtherProfil = () => {
   const params = new URL(document.location).searchParams;
   const justId = params.get("id");
-
+  const token = localStorage.getItem("token");
   const [dataProfil, setDataProfil] = useState([]);
   const [playOnce, setPlayOnce] = useState(true);
   const userData = JSON.parse(localStorage.getItem("userData"));
@@ -18,14 +18,17 @@ const OtherProfil = () => {
   useEffect(() => {
     const searchUserInfo = () => {
       axios
-        .get(`${process.env.REACT_APP_API_HOST}/api/user/${justId}`)
+        ({method:"GET", url:`${process.env.REACT_APP_API_HOST}/api/user/${justId}`,
+        headers: {
+          authorization: "Bearer " + token,
+        }})
         .then((res) => {
           setDataProfil(res.data);
           setPlayOnce(false);
         });
     };
     searchUserInfo();
-  }, [playOnce, justId]);
+  }, [playOnce, justId, token]);
 
   return (
     <div>

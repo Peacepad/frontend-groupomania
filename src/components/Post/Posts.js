@@ -40,10 +40,15 @@ const Posts = () => {
     // Obtenir les données des Posts
     const getData = () => {
       if (playOnce) {
-        axios.get(`${process.env.REACT_APP_API_HOST}/api/post`).then((res) => {
+        axios({method: "Get", url:`${process.env.REACT_APP_API_HOST}/api/post`,
+        headers: {
+          authorization: "Bearer " + token,
+        }})
+        .then((res) => {
           setData(res.data);
           setPlayOnce(false);
-        });
+        })
+        
       }
 
       // Tri des posts pour les afficher dans le bon ordre

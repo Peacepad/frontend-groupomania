@@ -61,7 +61,7 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
 
     let editCommentData = new FormData();
 
-    if (data.image[0]) {
+    if (data.image && data.image[0]) {
       // Ajouter image seulement si une image a été choisie
       const image = data.image[0];
       editCommentData.append("image", image);
@@ -109,7 +109,8 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
           setFileDeleted(false);
           setPreview(undefined);
           setMaskImage(true);
-          setSelectedFile(undefined);
+          setSelectedFile();
+          document.getElementById(`edit-comment-container__${comment.comment_id}`).reset();
         })
         .catch(function (error) {
           //handle error
@@ -250,7 +251,7 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
       <div className="edit-close__comment" onClick={() => closeEditComment()}>
         x
       </div>
-      <div class="edit-comment__information">
+      <div className="edit-comment__information">
         Appuyez sur entrée pour valider
       </div>
     </div>
