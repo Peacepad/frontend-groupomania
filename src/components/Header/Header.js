@@ -7,14 +7,15 @@ import MoreHeader from "./MoreHeader";
 
 const Header = ({setPlayOnce}) => {
   const token = localStorage.getItem("token");
-  
+  const userData = JSON.parse(localStorage.getItem("userData")) && JSON.parse(localStorage.getItem("userData"));
 
   //Verification de la connexion
   const [isLogged, setIsLogged] = useState();
 
   const verifyToken = () => {
     if (!token) {
-      setIsLogged(false);
+      if (!userData){
+      setIsLogged(false);}
     } else {
       setIsLogged(true);
     }
@@ -50,7 +51,7 @@ const Header = ({setPlayOnce}) => {
 
   //Affichage différent en fonction de la connexion
   if (isLogged) {
-    let userData = JSON.parse(localStorage.getItem("userData"));
+    
     
     if (userData.userImageURL !== null) {
       logDiv = (

@@ -76,7 +76,7 @@ const ProfilView = () => {
 
   const deleteUser = () => {
     const params = new URL(document.location).searchParams;
-  const justId = params.get("id");
+    const justId = params.get("id");
     axios({
       method: "delete",
       url: `${process.env.REACT_APP_API_HOST}/api/user/${justId}`,
@@ -86,13 +86,12 @@ const ProfilView = () => {
       },
     })
       .then(() => {
-        
-        if(justId == userData.userId){
+        if (justId == userData.userId) {
           localStorage.removeItem("token");
-        localStorage.removeItem("userData");
-        history.push("/login");}
-        else {
-          history.push("/")
+          localStorage.removeItem("userData");
+          history.push("/login");
+        } else {
+          history.push("/");
         }
       })
       .catch(console.log("erreur"));

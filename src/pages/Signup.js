@@ -43,14 +43,19 @@ const Signup = () => {
       .then((response) => {
         if (response.status === 401) {
           throw new Error("ça marche pas");
-        } else {
+        } 
+        else if(response.status === 402) {
+            setResponseServer("Le compte n'a pas pu être crée car un champ n'est pas correctement complété");
+            setClassServer("invalid-feedback");
+        }
+        else {
           sayGoodResponse();
           sayGoodClassServer();
           setTimeout(() => {
             history.push("/login");
           }, 3000);
         }
-
+        
         return response.json();
       })
       .catch(function (error) {

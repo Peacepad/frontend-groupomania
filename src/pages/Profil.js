@@ -2,9 +2,10 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Header from "../components/Header/Header";
 import { Avatar } from "evergreen-ui";
-
+import { useHistory } from "react-router-dom";
 import ProfilImage from "../components/Profil/ProfilImage";
 import ProfilView from "../components/Profil/ProfilView";
+import { useForm } from "react-hook-form";
 
 const OtherProfil = () => {
   const params = new URL(document.location).searchParams;
@@ -14,6 +15,8 @@ const OtherProfil = () => {
   const [playOnce, setPlayOnce] = useState(true);
   const userData = JSON.parse(localStorage.getItem("userData"));
   const verifyUser = userData && userData.isAdmin;
+  const { register, handleSubmit } = useForm();
+  const history = useHistory();
 
   useEffect(() => {
     const searchUserInfo = () => {
@@ -28,7 +31,30 @@ const OtherProfil = () => {
         });
     };
     searchUserInfo();
-  }, [playOnce, justId, token]);
+  }, [playOnce, justId]);
+
+  const deleteUser = () => {
+    const params = new URL(document.location).searchParams;
+    const justId = params.get("id");
+    axios({
+      method: "delete",
+      url: `${process.env.REACT_APP_API_HOST}/api/user/${justId}`,
+      headers: {
+        "Content-Type": "multipart/form-data",
+        authorization: "Bearer " + token,
+      },
+    })
+      .then(() => {
+        if (justId == userData.userId) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("userData");
+          history.push("/login");
+        } else {
+          history.push("/");
+        }
+      })
+      .catch(console.log("erreur"));
+  };
 
   return (
     <div>
@@ -59,13 +85,14 @@ const OtherProfil = () => {
         )}
 
       {dataProfil[0] !== undefined &&
-        (dataProfil[0].user_id === userData.userId || verifyUser === 1) && (
+        (dataProfil[0].user_id === userData.userId) && (
           <ProfilView />
         )}
 
+
+
       {dataProfil[0] !== undefined &&
-        dataProfil[0].user_id !== userData.userId &&
-        verifyUser !== 1 && (
+        dataProfil[0].user_id !== userData.userId  && (
           <div className="profil-info">
             <h2>Informations</h2>
             <div>Prénom: {dataProfil[0].firstname}</div>
@@ -73,6 +100,16 @@ const OtherProfil = () => {
             <div>Email: {dataProfil[0].email}</div>
           </div>
         )}
+
+
+        {dataProfil[0] !== undefined && verifyUser ==1 && dataProfil[0].user_id !== userData.userId && 
+        <form id="profil-delete" onSubmit={handleSubmit(deleteUser)}>
+        <input
+          type="submit"
+          value="Supprimer le compte"
+          className="profil-delete__button"
+        ></input>
+      </form>}
     </div>
   );
 };

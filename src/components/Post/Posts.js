@@ -23,15 +23,16 @@ const Posts = () => {
   const [data, setData] = useState([]);
   const [sortedData, setSortedData] = useState([]);
   const [playOnce, setPlayOnce] = useState(true);
-  const token = localStorage.getItem("token");
-  const userData = JSON.parse(localStorage.getItem("userData"));
+  const token = localStorage.getItem("token") && localStorage.getItem("token");
+  const userData = JSON.parse(localStorage.getItem("userData")) && JSON.parse(localStorage.getItem("userData"));
   const verifyUser = userData && userData.isAdmin;
 
   useEffect(() => {
     // Si l'utilisateur n'est pas connecté il est redirigé vers la page login
     const verifyToken = () => {
       if (!token) {
-        history.push("/login");
+        if(!userData){
+        history.push("/login");}
       }
     };
 
@@ -40,15 +41,16 @@ const Posts = () => {
     // Obtenir les données des Posts
     const getData = () => {
       if (playOnce) {
-        axios({method: "Get", url:`${process.env.REACT_APP_API_HOST}/api/post`,
-        headers: {
-          authorization: "Bearer " + token,
-        }})
-        .then((res) => {
+        axios({
+          method: "Get",
+          url: `${process.env.REACT_APP_API_HOST}/api/post`,
+          headers: {
+            authorization: "Bearer " + token,
+          },
+        }).then((res) => {
           setData(res.data);
           setPlayOnce(false);
-        })
-        
+        });
       }
 
       // Tri des posts pour les afficher dans le bon ordre
@@ -115,12 +117,12 @@ const Posts = () => {
   const onSubmit = async (data) => {
     let formData = new FormData(); //formdata object
 
-    formData.append("userId", token);
+    formData.append("token", token);
     formData.append("text", data.text);
     formData.append("image", selectedFile);
-
-
+    formData.append("userId", userData.userId);
     
+
     if (data.text.trim() == false) {
       // Empêche l'envoi d'un champ vide
       document.getElementById(`create-post__text`).classList.add("shake");
