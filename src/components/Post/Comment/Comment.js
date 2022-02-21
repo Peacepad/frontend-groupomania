@@ -68,9 +68,7 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
           document.getElementById(
             `comment-for-post__${post.post_id}`
           ).style.height = "42px";
-          document.getElementById(
-            `label-file__${post.post_id}`
-          ).style.backgroundColor = "rgb(239, 239, 239)";
+          
 
           setIsSuccessfullySubmitted(true);
 
@@ -108,7 +106,7 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
         setPlayOnce(!playOnce);
         document.getElementById(`comment-form__${post.post_id}`).reset();
       })
-      .catch(console.log("Le commentaire n'a pas pu être supprimé"));
+      .catch(() => console.log("Le commentaire n'a pas pu être supprimé"));
   };
 
   // Afficher la date sous le bon format
@@ -198,20 +196,7 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
     }
   };
 
-  const selectImage = () => {
-    if (document.getElementById(`comment-file__${post.post_id}`)) {
-      const inputDOM = document.getElementById(`comment-file__${post.post_id}`);
 
-      inputDOM.addEventListener("change", () => {
-        if (inputDOM.files[0] !== undefined) {
-          // Changement de couleur du bouton pour selectionner un fichier
-          document.getElementById(
-            `label-file__${post.post_id}`
-          ).style.backgroundColor = "rgb(78, 199, 174)";
-        }
-      });
-    }
-  };
 
   // Agrandir le champ d'écriture
   const growTextarea = (post) => {
@@ -296,14 +281,14 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
           ></textarea>
 
           <label
-            className="label-file button"
+            className="label-file"
             id={`label-file__${post.post_id}`}
           >
             <FontAwesomeIcon icon={faImage} />
             <input
               type="file"
               className="comment-file"
-              onFocus={selectImage(post.post_id)}
+              
               id={`comment-file__${post.post_id}`}
               {...register(`image`)}
               name="image"
@@ -344,7 +329,7 @@ const Comment = ({ post, playOnce, setPlayOnce }) => {
                           alt="photo de profil de l'utilisateur"
                         />
                       ) : (
-                        <Avatar
+                        <Avatar color='red'
                           name={
                             comment.comment_firstname +
                             " " +

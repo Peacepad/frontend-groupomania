@@ -12,7 +12,9 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  position:relative;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
 }
 
 .create-post {
@@ -25,14 +27,11 @@
   border-radius: 6px;
   padding-bottom: 40px;
   & img {
-   
-    
-    
     height: 100px;
     max-width: 100px;
     border-radius: 6px;
     object-fit: cover;
-    margin-left: 10px;
+    margin-bottom: 10px;
     @media (max-width: 768px) {
       height: 50px;
       max-width: 50px;
@@ -68,7 +67,7 @@
   }
 }
 
-.button-add  {
+.button-add {
   display: inline-block;
   position: relative;
   overflow: hidden;
@@ -89,14 +88,13 @@
   }
 
   &:hover .button-add__real {
-    background-color: $blue-link;
-    
+    background-color: darken($red-link,10%);
   }
 }
 
 .button-add__real {
-  background-color: lighten($blue-link, 10);
-  color: black;
+  background-color: $red-link;
+  color: white;
   border-radius: 6px;
   border: none;
   font-size: 1.1em;
@@ -107,13 +105,13 @@
     height: 50px;
   }
   &:hover {
-    background-color: $blue-link;
+    background-color: darken($red-link,10%);
   }
 }
 
 .button-send {
-  background-color: lighten($blue-link, 10);
-  color: black;
+  background-color: $red-link;
+  color: white;
   border-radius: 6px;
   border: none;
   font-size: 1.1em;
@@ -124,7 +122,7 @@
     height: 50px;
   }
   &:hover {
-    background-color: $blue-link;
+    background-color: darken($red-link,10%);
   }
 }
 
@@ -158,10 +156,9 @@
   position: relative;
 
   & img {
-    max-width:85%;
+    max-width: 85%;
     max-height: 600px;
     margin-bottom: 40px;
-    
   }
 }
 
@@ -175,6 +172,7 @@
   max-width: 60%;
   white-space: pre-wrap;
   margin-top: 30px;
+  word-break: break-word;
 }
 
 .post-interact {
@@ -215,12 +213,13 @@
   display: flex;
   align-content: center;
   justify-content: center;
-  background-color: lighten($blue-link, 10);
+  color: white;
+  background-color: $red-link;
   cursor: pointer;
   width: 120px;
   padding: 5px;
   &:hover {
-    background-color: $blue-link;
+    background-color: darken($red-link,10%);
   }
   &:active {
     background-color: white;
@@ -258,7 +257,7 @@
     height: 40px;
   }
   & img {
-    width: 40px;
+    min-width: 40px;
     height: 40px;
     border-radius: 50%;
     object-fit: cover;
@@ -274,7 +273,7 @@
     font-weight: 500;
   }
   &__date {
-    color: grey;
+    color: darken(grey, 10%);
     font-size: 0.8em;
   }
 }

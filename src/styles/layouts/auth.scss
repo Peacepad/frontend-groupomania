@@ -5,8 +5,17 @@
   background-color: white;
   border-radius: 6px;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
   @media (max-width: 768px) {
     width: 95%;
+    
+  }
+  & #auth-logo {
+    width: 80%;
+    margin-bottom: 20px;
   }
   & form {
     display: flex;
@@ -25,6 +34,9 @@
       padding-right: 10px;
     }
   }
+  & p {
+    text-align: center;
+  }
 }
 
 #login-submit {
@@ -42,9 +54,10 @@
 #login__submit,
 #signup__submit {
   border: none;
-  background-color: $blue-link;
+  background-color: $red-link;
+  color: white;
   &:hover {
-    background-color: darken($blue-link, 5%);
+    background-color: darken($red-link, 5%);
   }
 }
 
@@ -94,6 +107,7 @@
     animation: rotation 10s linear infinite, apparition 1s;
   }
 }
+
 
 @keyframes apparition {
   from {

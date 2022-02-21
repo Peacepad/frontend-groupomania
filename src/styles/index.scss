@@ -1,5 +1,5 @@
-$back-color: #FFD7D7;
-$blue-link: #01D1FD;
+$back-color: #ffd7d7;
+$red-link: #FD2D01;
 
 @import "./layouts/header.scss";
 @import "./layouts/auth.scss";
@@ -22,12 +22,12 @@ $blue-link: #01D1FD;
 
 body {
   background-color: $back-color;
-  width:100%;
-  margin:0;
+  width: 100%;
+  margin: 0;
 }
 
-.bluelink {
-  color: $blue-link;
+.redlink {
+  color: $red-link;
   text-decoration: none;
   cursor: pointer;
   &:hover {

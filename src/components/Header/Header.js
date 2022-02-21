@@ -56,7 +56,7 @@ const Header = ({setPlayOnce}) => {
     if (userData.userImageURL !== null) {
       logDiv = (
         <div className="header-user">
-          <nav className="header-avatar__container" role="button" onClick={() => setIsMenuOpen((oldState) => !oldState)} tabIndex="2" aria-label="Menu utilisateur" >
+          <nav className="header-avatar__container" role="button" onClick={() => setIsMenuOpen((oldState) => !oldState)} tabIndex="0" aria-label="Menu utilisateur" >
             {localStorage.getItem("userData") && (
               <img
                 src={userData.userImageURL}
@@ -71,9 +71,9 @@ const Header = ({setPlayOnce}) => {
     } else {
       logDiv = (
         <div className="header-user">
-          <nav className="header-avatar__container"  onClick={() => setIsMenuOpen((oldState) => !oldState)} tabIndex="2" aria-label="Menu utilisateur" >
+          <nav className="header-avatar__container"  onClick={() => setIsMenuOpen((oldState) => !oldState)} tabIndex="0" aria-label="Menu utilisateur" >
             {localStorage.getItem("userData") && (
-              <Avatar
+              <Avatar color='red'
                 className="header-avatar"
                 name={userData.userFirstname + " " + userData.userLastname}
                 size={60}
@@ -94,7 +94,7 @@ const Header = ({setPlayOnce}) => {
 
   return (
     <header>
-      <Link to="/" aria-label="Aller à l'accueil" tabIndex="1">
+      <Link to="/" aria-label="Aller à l'accueil" tabIndex="0">
         <img src="../../img/logo.png" alt="logo groupomania" />
       </Link>
       {logDiv}

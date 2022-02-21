@@ -146,21 +146,7 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
     });
   };
 
-  const selectImage = () => {
-    if (document.getElementById(`edit-comment-file__${comment.comment_id}`)) {
-      const inputDOM = document.getElementById(
-        `edit-comment-file__${comment.comment_id}`
-      );
 
-      inputDOM.addEventListener("change", () => {
-        if (inputDOM.files[0] !== undefined) {
-          document.getElementById(
-            `label-file__${comment.comment_id}`
-          ).style.backgroundColor = "rgb(78,199,174)";
-        }
-      });
-    }
-  };
 
   const deleteImage = () => {
     setMaskImage(false);
@@ -193,7 +179,7 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
         <input
           type="file"
           className="comment-file"
-          onFocus={selectImage(comment.comment_id)}
+          
           id={`edit-comment-file__${comment.comment_id}`}
           {...register(`image`)}
           name="image"
@@ -212,7 +198,7 @@ const EditComment = ({ comment, playOnce, setPlayOnce }) => {
         <input
           type="file"
           className="comment-file"
-          onFocus={selectImage(comment.comment_id)}
+          
           id={`edit-comment-file__${comment.comment_id}`}
           {...register(`image`)}
           name="image"

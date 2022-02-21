@@ -15,7 +15,7 @@ const OtherProfil = () => {
   const [playOnce, setPlayOnce] = useState(true);
   const userData = JSON.parse(localStorage.getItem("userData"));
   const verifyUser = userData && userData.isAdmin;
-  const { register, handleSubmit } = useForm();
+  const { handleSubmit } = useForm();
   const history = useHistory();
 
   useEffect(() => {

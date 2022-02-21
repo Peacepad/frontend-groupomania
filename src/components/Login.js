@@ -46,7 +46,11 @@ const Login = () => {
     <main className="auth">
       <div className="logo-globe">
         <img src="./img/icon.png" alt="logo-globe" />
+        
       </div>
+     
+      
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <input
           type="email"
@@ -83,11 +87,12 @@ const Login = () => {
       <div className="more__auth">
         <p>
           Nouveau sur Groupomania?{" "}
-          <Link to="/signup" className="bluelink">
+          <Link to="/signup" className="redlink">
             Créer un compte.
           </Link>
         </p>
       </div>
+      <img src="./img/groupomania.png" alt="logo de groupomania" id="auth-logo" />
     </main>
   );
 };

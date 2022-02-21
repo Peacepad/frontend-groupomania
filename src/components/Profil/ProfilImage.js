@@ -63,7 +63,7 @@ const ProfilImage = () => {
   let profilAvatar;
 
   profilAvatar = (
-    <Avatar
+    <Avatar color="red"
       className="profil-avatar__withoutUrl"
       name={userData.userFirstname + " " + userData.userLastname}
       size={200}

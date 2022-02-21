@@ -43,19 +43,19 @@ const Signup = () => {
       .then((response) => {
         if (response.status === 401) {
           throw new Error("ça marche pas");
-        } 
-        else if(response.status === 402) {
-            setResponseServer("Le compte n'a pas pu être crée car un champ n'est pas correctement complété");
-            setClassServer("invalid-feedback");
-        }
-        else {
+        } else if (response.status === 402) {
+          setResponseServer(
+            "Le compte n'a pas pu être crée car un champ n'est pas correctement complété"
+          );
+          setClassServer("invalid-feedback");
+        } else {
           sayGoodResponse();
           sayGoodClassServer();
           setTimeout(() => {
             history.push("/login");
           }, 3000);
         }
-        
+
         return response.json();
       })
       .catch(function (error) {
@@ -71,7 +71,11 @@ const Signup = () => {
         <div className="logo-globe">
           <img src="./img/icon.png" alt="logo-globe" />
         </div>
+
+       
+
         <form id="signup__form" onSubmit={handleSubmit(onSubmit)}>
+        
           <input
             type="email"
             id="signup__email"
@@ -139,10 +143,11 @@ const Signup = () => {
         <div className="more__auth">
           <p>
             Vous possédez déjà un compte ?{" "}
-            <Link to="/" className="bluelink">
-              Connectez vous.
+            <Link to="/" className="redlink">
+              Connectez-vous.
             </Link>
           </p>
+          <img src="./img/groupomania.png" alt="logo de groupomania" id="auth-logo" />
         </div>
       </main>
     </div>

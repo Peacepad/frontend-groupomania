@@ -301,6 +301,7 @@ const Posts = () => {
       <div className="create-post__container">
         <form className="create-post" onSubmit={handleSubmit(onSubmit)}>
           <div className="create-post__edit">
+            <label for="create-post__text">Créer un post:</label>
             <textarea
               onFocus={() => growTextarea()}
               id="create-post__text"
@@ -311,14 +312,14 @@ const Posts = () => {
           </div>
 
           <div className="button-container">
-            <div className="button-add">
+            <label className="button-add">
               <button className="button-add__real">Ajouter une image</button>
               <input
                 type="file"
                 {...register("image")}
                 onChange={onSelectFile}
               />
-            </div>
+            </label>
 
             <input type="submit" className="button-send"></input>
           </div>
@@ -335,7 +336,9 @@ const Posts = () => {
                 {(verifyUser === 1 ||
                   userData.userId === post.post_user_id) && (
                   <div className="post-edit">
+                    
                     <Popover
+                    
                       className="post-edit"
                       position={Position.BOTTOM_RIGHT}
                       content={({ close }) => (
@@ -366,6 +369,7 @@ const Posts = () => {
                         <FontAwesomeIcon icon={faEllipsisH} />
                       </Button>
                     </Popover>
+
                   </div>
                 )}
 
@@ -378,7 +382,7 @@ const Posts = () => {
                           alt="avatar de l'utilisateur"
                         />
                       ) : (
-                        <Avatar
+                        <Avatar color='red'
                           name={post.firstname + " " + post.lastname}
                           size={40}
                         />

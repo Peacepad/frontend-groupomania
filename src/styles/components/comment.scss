@@ -12,6 +12,9 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
+  & label {
+    background-color: $red-link !important;
+  }
   & textarea {
     resize: none;
     width: 70%;
@@ -19,6 +22,9 @@
     border-radius: 3px;
     font-size: 1em;
     height: 42px;
+    @media (max-width: 576px) {
+      width: 65%;
+    }
   }
   & input {
     margin: auto;
@@ -93,6 +99,7 @@
     margin-right: 5px;
     padding-left: 5px;
     padding-right: 5px;
+    word-break: break-word;;
   }
 }
 
@@ -104,7 +111,9 @@
   align-items: center;
   @media (max-width: 576px) {
     margin-left: 5px;
+    max-width: 200px;
   }
+  
   & img {
     max-width: 200px;
     max-height: 200px;
@@ -122,6 +131,11 @@
   padding-right: 5px;
   white-space: nowrap;
   text-transform: capitalize;
+  text-overflow: ellipsis;
+  @media (max-width: 576px) {
+    padding-left: 0px;
+  padding-right: 0px;
+  }
 }
 
 .label-file {
@@ -135,6 +149,9 @@
   height: 25.49px;
   margin: auto;
   
+  border-radius: 6px;
+  background-color: $red-link;
+  color:white;
 }
 
 .comment-file {
@@ -143,7 +160,7 @@
 
 .comment-date {
   margin-left: 10px;
-  color: grey;
+  color: darken(grey,10%);
   font-size: 0.8em;
   @media (max-width: 576px) {
     ont-size: 0.5em;

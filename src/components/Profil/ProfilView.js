@@ -140,7 +140,7 @@ const ProfilView = () => {
           ></input>
           {isSuccessfullySubmitted === true && (
             <div className="success">
-              Le commentaire a été envoyé avec succès{" "}
+              Le profil a été modifé avec succès{" "}
               <FontAwesomeIcon icon={faCheck} />
             </div>
           )}
